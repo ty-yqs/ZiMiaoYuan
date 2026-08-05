@@ -4,7 +4,7 @@
  * 展示猫咪完整信息：图片、档案、健康状态、发现记录
  */
 import { apiGetCatDetail, apiAdminUpdateCat, apiUploadRecord } from '../../../utils/api';
-import { formatDate, showToast, showLoading, hideLoading } from '../../../utils/util';
+import { formatDate, showToast, showLoading, hideLoading, requireProfile } from '../../../utils/util';
 import { ROUTES } from '../../../utils/constants';
 import { getCachedImageUrls } from '../../../utils/imageCache';
 
@@ -72,6 +72,16 @@ Page({
 
     if (res.code === 0) {
       const { cat, records } = res.data;
+
+      // 年龄段中文映射
+      const AGE_LABEL_MAP: Record<string, string> = {
+        kitten: '幼猫',
+        adult: '成年猫',
+        elderly: '老年猫',
+        unknown: '未知年龄',
+      };
+      cat.ageLabel = AGE_LABEL_MAP[cat.age] || '未知年龄';
+
       const allRecords = records || [];
       const photoRecords = allRecords.filter((r: IRecord) => !r.type || r.type !== 'note');
       const noteRecords = allRecords.filter((r: IRecord) => r.type === 'note');
@@ -159,6 +169,7 @@ Page({
 
   /** 跳转上传记录页 */
   onUploadRecord() {
+    if (!requireProfile()) return;
     const { catId } = this.data;
     wx.navigateTo({
       url: `/pages/upload/upload?catId=${catId}`,
@@ -230,6 +241,7 @@ Page({
 
   /** 提交便利贴 */
   async onSubmitStickyNote() {
+    if (!requireProfile()) return;
     const text = this.data.stickyNoteText.trim();
     if (!text) return;
     if (this.data.submitNoteLoading) return;

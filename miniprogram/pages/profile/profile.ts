@@ -6,7 +6,7 @@
 import { ROUTES } from '../../utils/constants';
 import { apiGetUserStats } from '../../utils/api';
 import { getCachedImageUrl, getCacheSize, clearImageCache } from '../../utils/imageCache';
-import { showToast, showConfirm } from '../../utils/util';
+import { showToast, showConfirm, requireProfile } from '../../utils/util';
 
 const app = getApp<IAppOption>();
 
@@ -38,6 +38,9 @@ Page({
   },
 
   onShow() {
+    // 检查是否已设置昵称和头像
+    if (!requireProfile()) return;
+
     // 每次显示时刷新
     const { userInfo, isAdmin } = app.globalData;
     if (userInfo) {
@@ -141,6 +144,11 @@ Page({
     } catch (err) {
       console.error('[Profile] 头像上传失败:', err);
     }
+  },
+
+  /** 点击头像或昵称，跳转编辑个人信息 */
+  onEditProfile() {
+    wx.navigateTo({ url: ROUTES.LOGIN });
   },
 
   /** 清除图片缓存 */

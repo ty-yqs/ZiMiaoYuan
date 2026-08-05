@@ -8,7 +8,7 @@
  * - 保存到数据库
  */
 import { apiAddCat, apiUploadRecord } from '../../utils/api';
-import { showToast, showLoading, hideLoading, chooseImage } from '../../utils/util';
+import { showToast, showLoading, hideLoading, chooseImage, requireProfile } from '../../utils/util';
 const config = require('../../config/index');
 
 Page({
@@ -93,6 +93,9 @@ Page({
 
   /** 提交表单 */
   async onSubmit() {
+    // 检查是否已设置昵称和头像
+    if (!requireProfile()) return;
+
     // 验证：图片和位置始终必填
     if (this.data.photos.length === 0) {
       showToast('请至少选择一张图片', 'error');

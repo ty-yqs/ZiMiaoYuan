@@ -1,0 +1,49 @@
+<!--
+  登录引导页
+-->
+<view class="page-container">
+
+  <!-- Logo & 欢迎文案 -->
+  <view class="hero">
+    <image class="hero-logo" src="/images/banner-cat.png" mode="aspectFit" />
+    <text class="hero-title">欢迎加入深理猫谱</text>
+    <text class="hero-sub">设置昵称和头像，开始记录校园猫咪吧</text>
+  </view>
+
+  <!-- 头像选择 -->
+  <view class="avatar-section">
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image
+        class="avatar-preview"
+        src="{{avatarUrl || '/images/avatar.png'}}"
+        mode="aspectFill"
+      />
+      <text class="avatar-hint">{{avatarUrl ? '点击更换头像' : '点击选择头像'}}</text>
+    </button>
+  </view>
+
+  <!-- 昵称输入 -->
+  <view class="nickname-section">
+    <view class="nickname-label">昵称</view>
+    <input
+      class="nickname-input"
+      type="nickname"
+      placeholder="输入你的昵称"
+      value="{{nickname}}"
+      bind:input="onNicknameInput"
+      bind:blur="onNicknameBlur"
+      maxlength="20"
+    />
+  </view>
+
+  <!-- 按钮 -->
+  <view class="btn-group">
+    <button class="submit-btn" bind:tap="onSubmit" disabled="{{!canSubmit}}" loading="{{submitting}}">
+      {{submitting ? '保存中...' : '完成设置'}}
+    </button>
+    <view class="skip-btn" bind:tap="onSkip">
+      <text>稍后设置</text>
+    </view>
+  </view>
+
+</view>

@@ -51,7 +51,7 @@
 
     <!-- 性别分布 -->
     <view class="card distro-card">
-      <text class="section-title">⚧ 性别分布</text>
+      <text class="section-title">🐱 性别分布</text>
       <view class="distro-list">
         <view class="distro-item" wx:for="{{catsByGender}}" wx:key="name">
           <text class="distro-name">{{item.label}}</text>

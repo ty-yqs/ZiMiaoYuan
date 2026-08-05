@@ -23,8 +23,6 @@ Page({
     // 快捷入口
     quickEntries: [
       { icon: '📸', label: '发现猫咪', url: ROUTES.UPLOAD },
-      { icon: '📋', label: '猫咪档案', url: ROUTES.CAT_LIST },
-      { icon: '👤', label: '我的', url: ROUTES.PROFILE },
     ],
   },
 

@@ -40,7 +40,7 @@
   top: 20rpx;
   width: 150rpx;
   height: 150rpx;
-  opacity: 0.5;
+  opacity: 0.9;
   z-index: 0;
 }
 
@@ -66,15 +66,13 @@
 
 /* ========== 快捷入口 ========== */
 .quick-entries {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-sm);
   padding: 0 var(--spacing-md);
 }
 
 .entry-item {
   padding: var(--spacing-md) var(--spacing-xs);
   margin: 0;
+  border-radius: var(--radius-md);
 }
 
 .entry-item:active {

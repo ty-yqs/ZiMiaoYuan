@@ -7,7 +7,7 @@
   <view class="profile-header card">
     <view class="user-info flex-row">
       <!-- 头像 -->
-      <view class="avatar-wrapper">
+      <view class="avatar-wrapper" bind:tap="onEditProfile">
         <image
           class="user-avatar"
           src="{{cachedAvatar || userInfo.avatar || '/images/avatar.png'}}"
@@ -16,7 +16,7 @@
       </view>
 
       <!-- 昵称和角色 -->
-      <view class="user-meta flex-1">
+      <view class="user-meta flex-1" bind:tap="onEditProfile">
         <view class="flex-row">
           <text class="user-name text-ellipsis">{{userInfo.nickname || '猫友'}}</text>
           <van-tag
@@ -55,7 +55,7 @@
     </van-cell-group>
 
     <!-- 管理员入口 -->
-    <van-cell-group wx:if="{{isAdmin}}" title="⚙️ 管理功能">
+    <van-cell-group wx:if="{{isAdmin}}" title="管理功能">
       <van-cell
         title="🔧 管理后台"
         label="审核猫咪、管理数据"
@@ -64,7 +64,7 @@
       />
     </van-cell-group>
 
-    <van-cell-group title="ℹ️ 其他">
+    <van-cell-group title="其他">
       <van-cell
         title="💡 关于深理猫谱"
         is-link

@@ -51,7 +51,7 @@
 
 .info-icon {
   font-size: var(--font-sm);
-  margin-right: 4rpx;
+  margin-right: 12rpx;
 }
 
 .info-text {

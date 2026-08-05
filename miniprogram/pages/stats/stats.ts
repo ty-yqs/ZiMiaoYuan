@@ -94,4 +94,10 @@ Page({
       });
     }
   },
+
+  /** 下拉刷新 */
+  async onPullDownRefresh() {
+    await this.loadStats();
+    wx.stopPullDownRefresh();
+  },
 });

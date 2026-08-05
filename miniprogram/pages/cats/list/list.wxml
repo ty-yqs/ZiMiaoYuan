@@ -4,41 +4,44 @@
 -->
 <view class="page-container">
 
-  <!-- ==================== 搜索栏 ==================== -->
-  <view class="search-bar">
-    <van-search
-      value="{{searchKeyword}}"
-      placeholder="搜索猫咪名字、毛色..."
-      bind:search="onSearch"
-      bind:clear="onSearch"
-      shape="round"
-      background="#FFF8EC"
-    />
+  <!-- ==================== 顶部固定区 ==================== -->
+  <view class="sticky-header">
+    <view class="search-bar">
+      <van-search
+        value="{{searchKeyword}}"
+        placeholder="搜索猫咪名字、毛色..."
+        bind:search="onSearch"
+        bind:clear="onSearch"
+        shape="round"
+        background="#FFF8EC"
+      />
+    </view>
+    <view class="filter-bar">
+      <van-dropdown-menu active-color="#7EC8A8">
+        <van-dropdown-item
+          options="{{colorOptions}}"
+          value="{{filterColor}}"
+          bind:change="onFilterColor"
+          title="毛色"
+        />
+        <van-dropdown-item
+          options="{{genderOptions}}"
+          value="{{filterGender}}"
+          bind:change="onFilterGender"
+          title="性别"
+        />
+        <van-dropdown-item
+          options="{{ageOptions}}"
+          value="{{filterAge}}"
+          bind:change="onFilterAge"
+          title="年龄"
+        />
+      </van-dropdown-menu>
+    </view>
   </view>
 
-  <!-- ==================== 筛选栏 ==================== -->
-  <view class="filter-bar">
-    <van-dropdown-menu active-color="#7EC8A8">
-      <van-dropdown-item
-        options="{{colorOptions}}"
-        value="{{filterColor}}"
-        bind:change="onFilterColor"
-        title="毛色"
-      />
-      <van-dropdown-item
-        options="{{genderOptions}}"
-        value="{{filterGender}}"
-        bind:change="onFilterGender"
-        title="性别"
-      />
-      <van-dropdown-item
-        options="{{ageOptions}}"
-        value="{{filterAge}}"
-        bind:change="onFilterAge"
-        title="年龄"
-      />
-    </van-dropdown-menu>
-  </view>
+  <!-- 占位，防止被 fixed 头部遮挡 -->
+  <view class="list-spacer" />
 
   <!-- ==================== 猫咪列表 ==================== -->
   <block wx:if="{{cats.length > 0}}">

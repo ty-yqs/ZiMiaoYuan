@@ -2,21 +2,28 @@
  * 猫咪档案列表页样式
  */
 
-/* ========== 搜索栏 ========== */
-.search-bar {
-  position: sticky;
+/* ========== 顶部固定区 ========== */
+.sticky-header {
+  position: fixed;
   top: 0;
-  z-index: 10;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+.search-bar {
   background: var(--color-bg);
 }
 
-/* ========== 筛选栏 ========== */
 .filter-bar {
-  position: sticky;
-  top: 54px;
-  z-index: 10;
   background: var(--color-bg-card);
   border-bottom: 1rpx solid var(--color-border);
+}
+
+
+/* header 占位，防止列表内容被 fixed 头部遮挡 */
+.list-spacer {
+  height: 200rpx;
 }
 
 /* ========== 加载更多 ========== */

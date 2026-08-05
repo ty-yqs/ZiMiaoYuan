@@ -8,6 +8,10 @@
   flex-direction: row;
   padding: 20rpx;
   margin: 16rpx 24rpx;
+  background: #fffffffa;
+  border: 2rpx solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
   transition: transform 0.15s ease;
 }
 
