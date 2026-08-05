@@ -8,13 +8,14 @@
     "pages/profile/profile",
     "pages/admin/admin",
     "pages/stats/stats",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/feedback/feedback"
   ],
   "window": {
     "backgroundColor": "#FFF8EC",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FFFFFF",
-    "navigationBarTitleText": "深理猫谱",
+    "navigationBarTitleText": "紫喵园",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {

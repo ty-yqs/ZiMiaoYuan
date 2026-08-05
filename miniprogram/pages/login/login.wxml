@@ -6,7 +6,7 @@
   <!-- Logo & 欢迎文案 -->
   <view class="hero">
     <image class="hero-logo" src="/images/banner-cat.png" mode="aspectFit" />
-    <text class="hero-title">欢迎加入深理猫谱</text>
+    <text class="hero-title">欢迎加入紫喵园</text>
     <text class="hero-sub">设置昵称和头像，开始记录校园猫咪吧</text>
   </view>
 

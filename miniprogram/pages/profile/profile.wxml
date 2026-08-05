@@ -66,9 +66,15 @@
 
     <van-cell-group title="其他">
       <van-cell
-        title="💡 关于深理猫谱"
+        title="💡 关于紫喵园"
         is-link
         bind:click="onAbout"
+      />
+      <van-cell
+        title="💬 反馈与建议"
+        label="提交修改反馈与建议"
+        is-link
+        bind:click="onFeedback"
       />
       <van-cell
         title="🗑️ 清除图片缓存"
@@ -85,7 +91,7 @@
 
   <!-- ==================== 底部品牌 ==================== -->
   <view class="brand-footer">
-    <text class="brand-text">🐱 深理猫谱 · 发现校园里的每一只猫</text>
+    <text class="brand-text">🐱 紫喵园 · 发现校园里的每一只猫</text>
   </view>
 
 </view>

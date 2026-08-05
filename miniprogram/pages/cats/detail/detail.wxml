@@ -82,7 +82,7 @@
     <!-- ==================== 便利贴 ==================== -->
     <view class="card notes-card" wx:if="{{notes.length > 0}}">
       <view class="section-title-row">
-        <text class="section-title-sm">📝 便利贴 ({{totalNotes}})</text>
+        <text class="section-title-sm">📑 便利贴 ({{totalNotes}})</text>
         <text class="section-more" wx:if="{{hasMoreNotes}}" data-type="note" bind:tap="onTapMoreRecords">查看更多 ›</text>
       </view>
 

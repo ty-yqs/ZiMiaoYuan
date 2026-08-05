@@ -187,6 +187,11 @@ Page({
     }
   },
 
+  /** 跳转反馈与建议页 */
+  onFeedback() {
+    wx.navigateTo({ url: ROUTES.FEEDBACK });
+  },
+
   /** 跳转管理员页面 */
   onGoAdmin() {
     wx.navigateTo({ url: ROUTES.ADMIN });
@@ -195,8 +200,8 @@ Page({
   /** 关于小程序 */
   onAbout() {
     wx.showModal({
-      title: '关于深理猫谱',
-      content: '深理猫谱 — 校园猫咪数字档案平台\n\n记录校园里每一只可爱的猫咪 🐱\n\nVersion 1.0.0',
+      title: '关于紫喵园',
+      content: '紫喵园 — 校园猫咪数字档案平台\n\n记录校园里每一只可爱的猫咪 🐱\n\nVersion 1.0.0',
       showCancel: false,
     });
   },

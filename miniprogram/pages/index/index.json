@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "深理猫谱",
+  "navigationBarTitleText": "紫喵园",
   "usingComponents": {
     "cat-card": "/components/cat-card/cat-card",
     "van-search": "@vant/weapp/search/index",

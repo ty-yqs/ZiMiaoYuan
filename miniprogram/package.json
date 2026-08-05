@@ -1,7 +1,7 @@
 {
   "name": "suatcat-miniprogram",
   "version": "1.0.0",
-  "description": "深理猫谱 - 校园猫咪数字档案平台",
+  "description": "紫喵园 - 校园猫咪数字档案平台",
   "main": "app.ts",
   "scripts": {
     "tsc": "tsc --noEmit"
