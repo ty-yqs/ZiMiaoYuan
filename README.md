@@ -1,4 +1,4 @@
-# 🐱 紫喵园 (SUATCat)
+# 🐱 紫喵园 (ZiMiaoYuan)
 
 ![Shen Xiao Li](miniprogram/images/banner-cat.png)
 
