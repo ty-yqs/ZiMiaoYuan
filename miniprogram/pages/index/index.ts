@@ -39,15 +39,22 @@ Page({
     }
   },
 
-  /** 加载推荐猫咪（按最新时间排序，取前5只） */
+  /** 加载推荐猫咪（随机推荐2只） */
   async loadFeaturedCats() {
     this.setData({ loading: true, error: '' });
 
-    const res = await apiGetCats({ page: 1, pageSize: 5 });
+    // 获取所有已审核猫咪（校园猫数量有限，全量拉取再随机取2只）
+    const res = await apiGetCats({ page: 1, pageSize: 50 });
 
     if (res.code === 0) {
+      const cats = res.data.cats || [];
+      // Fisher-Yates 洗牌后取前 2 只
+      for (let i = cats.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cats[i], cats[j]] = [cats[j], cats[i]];
+      }
       this.setData({
-        featuredCats: res.data.cats || [],
+        featuredCats: cats.slice(0, 2),
         loading: false,
       });
     } else {

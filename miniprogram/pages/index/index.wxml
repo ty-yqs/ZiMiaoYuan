@@ -24,7 +24,7 @@
 
     <!-- 加载骨架 -->
     <block wx:if="{{loading}}">
-      <view class="card" wx:for="{{[1,2,3]}}" wx:key="*this">
+      <view class="card" wx:for="{{[1,2]}}" wx:key="*this">
         <van-skeleton row="{{2}}" />
       </view>
     </block>

@@ -9,6 +9,8 @@
 - **猫咪详情** — 查看猫咪完整档案：照片、信息、健康状态
 - **发现记录** — 为已有猫咪上传新照片，记录相遇时刻
 - **便利贴** — 给猫咪贴上文字便签，分享你的观察与心情
+- **数据统计** — 在册数量、绝育率、疫苗率、毛色/性别/年龄分布、访问量
+- **图片缓存** — 云端图片自动缓存到本地，二次查看秒开，支持一键清除
 - **管理审核** — 管理员审批新猫咪、更新健康状态
 
 ## 🛠 技术栈
@@ -27,25 +29,27 @@
 ```
 SUATCat/
 ├── miniprogram/               # 小程序前端
-│   ├── app.ts                 # 入口：云开发初始化、登录
-│   ├── app.json               # 路由配置、tabBar
+│   ├── app.ts                 # 入口：云开发初始化、登录、访问记录
+│   ├── app.json               # 路由配置、tabBar（4 个 tab）
 │   ├── app.wxss               # 全局样式
 │   ├── config/index.js        # 全局配置（环境ID、枚举、常量）
 │   ├── utils/
 │   │   ├── api.js             # 云函数调用封装
 │   │   ├── constants.js       # 路由、存储键、云函数名
+│   │   ├── imageCache.js      # 图片缓存工具（下载、缓存、清除、大小查询）
 │   │   └── util.js            # 工具函数
 │   ├── styles/theme.wxss      # 主题色彩、CSS 变量、工具类
 │   ├── components/
-│   │   └── cat-card/          # 猫咪卡片组件
+│   │   └── cat-card/          # 猫咪卡片组件（含图片缓存转换）
 │   ├── pages/
 │   │   ├── index/             # 首页：Banner + 推荐猫咪 + 快捷入口
 │   │   ├── cats/list/         # 档案列表：搜索 + 毛色/性别/年龄筛选
-│   │   ├── cats/detail/       # 猫咪详情：照片、信息、健康、记录、便利贴
-│   │   ├── cats/records/      # 记录/便利贴完整列表
+│   │   ├── cats/detail/       # 猫咪详情：照片、信息、健康、记录、便利贴（含图片缓存）
+│   │   ├── cats/records/      # 记录/便利贴完整列表（含图片缓存）
 │   │   ├── upload/            # 上传：新建猫咪 / 添加记录
-│   │   ├── profile/           # 个人中心
-│   │   └── admin/             # 管理审核面板
+│   │   ├── profile/           # 个人中心：用户信息、贡献统计、清除缓存
+│   │   ├── stats/             # 数据统计：在册数量、绝育率、分布图、访问量
+│   │   └── admin/             # 管理审核面板（含图片缓存）
 │   └── typings/index.d.ts     # TypeScript 类型定义
 ├── cloudfunctions/            # 云函数
 │   ├── login/                 # 用户登录与自动注册
@@ -53,7 +57,10 @@ SUATCat/
 │   ├── getCatDetail/          # 猫咪详情 + 关联记录
 │   ├── addCat/                # 新建猫咪档案
 │   ├── uploadRecord/          # 上传发现记录 / 便利贴
-│   └── adminUpdateCat/        # 管理员审批、更新、删除
+│   ├── adminUpdateCat/        # 管理员审批、更新、删除
+│   ├── getUserStats/          # 用户贡献统计（发现猫咪数、记录数）
+│   ├── getStats/              # 全局统计（数量、绝育率、分布、访问量）
+│   └── trackVisit/            # 记录当日小程序访问量
 ├── tsconfig.json
 └── project.config.json        # 微信开发者工具配置
 ```
@@ -79,6 +86,16 @@ SUATCat/
 | `users` | 用户信息（openid、昵称、角色） |
 | `cats` | 猫咪档案（名字、照片、毛色、年龄、性别、健康、状态、位置） |
 | `records` | 发现记录 & 便利贴（猫咪关联、照片、内容、发布者） |
+| `dailyVisits` | 每日访问量（date、count，首次访问时自动创建） |
+
+### 图片缓存机制
+
+`cloud://` 格式的云存储图片无法直接在 `<image>` 标签渲染，需先转换为临时 HTTPS 链接。`imageCache.js` 工具模块在此转换基础上额外做了本地持久化缓存：
+
+1. 检查 `imageCacheMap`（Storage 中维护的 `cloud://` → 本地路径 映射表）
+2. 缓存命中 → 直接使用本地路径，**无需网络请求**
+3. 缓存未命中 → `getTempFileURL` 转换 → `downloadFile` 下载 → `saveFile` 持久化到 `USER_DATA_PATH`
+4. 用户可在「我的」页面查看缓存大小并一键清除
 
 ### 用户角色
 
