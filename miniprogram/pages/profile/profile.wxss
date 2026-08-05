@@ -1,0 +1,91 @@
+/**
+ * 个人中心样式
+ */
+
+/* ========== 用户头部 ========== */
+.profile-header {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md);
+  background: linear-gradient(135deg, #fff 0%, var(--color-bg-warm) 100%);
+}
+
+.avatar-wrapper {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: var(--radius-round);
+  overflow: hidden;
+  border: 4rpx solid var(--color-primary-light);
+  background: var(--color-bg-warm);
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.user-meta {
+  margin-left: var(--spacing-md);
+}
+
+.user-name {
+  font-size: var(--font-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  max-width: 300rpx;
+  margin-right: var(--spacing-sm);
+}
+
+.user-id {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 4rpx;
+}
+
+/* ========== 统计行 ========== */
+.stats-row {
+  margin: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-md) 0;
+}
+
+.stat-item {
+  flex: 1;
+  padding: var(--spacing-xs) 0;
+}
+
+.stat-number {
+  font-size: var(--font-xxl);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.stat-label {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 4rpx;
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: var(--color-border);
+}
+
+/* ========== 菜单 ========== */
+.menu-section {
+  margin-top: var(--spacing-md);
+}
+
+/* ========== 底部品牌 ========== */
+.brand-footer {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.brand-text {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}

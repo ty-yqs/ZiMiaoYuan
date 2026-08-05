@@ -1,0 +1,73 @@
+<!--
+  首页 — 深理猫谱
+  1. Banner 区域
+  2. 今日猫咪推荐
+  3. 快捷入口
+-->
+<view class="page-container">
+
+  <!-- ==================== Banner 区域 ==================== -->
+  <view class="banner">
+    <view class="banner-content">
+      <text class="banner-title">{{bannerTitle}}</text>
+      <text class="banner-subtitle">{{bannerSubtitle}}</text>
+    </view>
+    <image class="banner-decor" src="/images/banner-cat.png" mode="aspectFit" />
+  </view>
+
+  <!-- ==================== 今日猫咪推荐 ==================== -->
+  <view class="section">
+    <view class="section-header flex-between">
+      <text class="section-title">🐾 今日猫咪推荐</text>
+      <text class="section-more" bind:tap="onTapAllCats">查看全部 ›</text>
+    </view>
+
+    <!-- 加载骨架 -->
+    <block wx:if="{{loading}}">
+      <view class="card" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <van-skeleton row="{{2}}" />
+      </view>
+    </block>
+
+    <!-- 猫咪卡片列表 -->
+    <block wx:elif="{{featuredCats.length > 0}}">
+      <cat-card
+        wx:for="{{featuredCats}}"
+        wx:key="_id"
+        cat="{{item}}"
+        showRecentTime="{{true}}"
+        showLocation="{{false}}"
+      />
+    </block>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">🐱</text>
+      <text class="empty-text">还没有猫咪档案，快来发现第一只猫吧！</text>
+    </view>
+  </view>
+
+  <!-- ==================== 快捷入口 ==================== -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">⚡ 快捷入口</text>
+    </view>
+
+    <view class="quick-entries">
+      <view
+        class="entry-item card flex-column flex-center"
+        wx:for="{{quickEntries}}"
+        wx:key="label"
+        data-url="{{item.url}}"
+        bind:tap="onTapEntry"
+      >
+        <text class="entry-icon">{{item.icon}}</text>
+        <text class="entry-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view class="safe-bottom-spacer" />
+
+</view>

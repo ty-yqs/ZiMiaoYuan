@@ -1,0 +1,167 @@
+<!--
+  上传发现猫咪页
+-->
+<view class="page-container">
+
+  <!-- ==================== 图片上传 ==================== -->
+  <view class="card">
+    <view class="section-title">📸 选择照片</view>
+    <view class="photo-grid">
+      <view
+        class="photo-item"
+        wx:for="{{photos}}"
+        wx:key="*this"
+      >
+        <image class="photo-img" src="{{item}}" mode="aspectFill" />
+        <view class="photo-delete" data-index="{{index}}" catch:tap="onDeleteImage">✕</view>
+      </view>
+      <view
+        class="photo-add"
+        wx:if="{{photos.length < 3}}"
+        bind:tap="onChooseImage"
+      >
+        <text class="add-icon">+</text>
+        <text class="add-text">{{photos.length}}/3</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== 猫咪信息表单 ==================== -->
+  <view class="card" wx:if="{{!targetCatId}}">
+    <view class="section-title">🐱 猫咪信息</view>
+
+    <!-- 名字 -->
+    <van-field
+      value="{{cat_name}}"
+      placeholder="给猫咪起个名字（可选）"
+      border="{{false}}"
+      bind:change="onFieldChange"
+      data-field="cat_name"
+    />
+
+    <!-- 毛色 -->
+    <van-field
+      value="{{color}}"
+      placeholder="选择毛色"
+      readonly
+      right-icon="arrow"
+      border="{{false}}"
+      bind:click-input="onShowColorPicker"
+    />
+
+    <!-- 性别 -->
+    <van-field
+      value="{{gender === 'male' ? '公猫 ♂' : gender === 'female' ? '母猫 ♀' : ''}}"
+      placeholder="选择性别"
+      readonly
+      right-icon="arrow"
+      border="{{false}}"
+      bind:click-input="onShowGenderPicker"
+    />
+
+    <!-- 年龄 -->
+    <van-field
+      value="{{age === 'kitten' ? '幼猫 (<1岁)' : age === 'adult' ? '成年猫' : age === 'elderly' ? '老年猫' : ''}}"
+      placeholder="选择年龄段"
+      readonly
+      right-icon="arrow"
+      border="{{false}}"
+      bind:click-input="onShowAgePicker"
+    />
+  </view>
+
+  <!-- ==================== 位置 ==================== -->
+  <view class="card">
+    <view class="section-title">📍 发现地点</view>
+    <view class="location-picker" bind:tap="onChooseLocation">
+      <text class="location-text">{{location.name || '点击选择位置'}}</text>
+      <text class="location-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- ==================== 描述 ==================== -->
+  <view class="card">
+    <van-field
+      value="{{description}}"
+      type="textarea"
+      placeholder="描述一下遇见这只猫咪的情况..."
+      autosize
+      border="{{false}}"
+      bind:change="onFieldChange"
+      data-field="description"
+    />
+  </view>
+
+  <!-- ==================== 提交按钮 ==================== -->
+  <view class="submit-area safe-bottom">
+    <van-button
+      type="primary"
+      block
+      round
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      color="#7EC8A8"
+      bind:click="onSubmit"
+    >
+      {{targetCatId ? '提交记录' : '提交发现'}}
+    </van-button>
+  </view>
+
+  <!-- ==================== 毛色选择器 ==================== -->
+  <van-action-sheet
+    show="{{showColorPicker}}"
+    title="选择毛色"
+    bind:close="onCloseColorPicker"
+  >
+    <view class="picker-grid">
+      <view
+        class="picker-item {{color === item.value ? 'active' : ''}}"
+        wx:for="{{colorOptions}}"
+        wx:key="value"
+        data-value="{{item.value}}"
+        bind:tap="onSelectColor"
+      >
+        <text>{{item.text}}</text>
+      </view>
+    </view>
+  </van-action-sheet>
+
+  <!-- ==================== 性别选择器 ==================== -->
+  <van-action-sheet
+    show="{{showGenderPicker}}"
+    title="选择性别"
+    bind:close="onCloseGenderPicker"
+  >
+    <view class="picker-list">
+      <view
+        class="picker-item {{gender === item.value ? 'active' : ''}}"
+        wx:for="{{genderOptions}}"
+        wx:key="value"
+        data-value="{{item.value}}"
+        bind:tap="onSelectGender"
+      >
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+  </van-action-sheet>
+
+  <!-- ==================== 年龄选择器 ==================== -->
+  <van-action-sheet
+    show="{{showAgePicker}}"
+    title="选择年龄段"
+    bind:close="onCloseAgePicker"
+  >
+    <view class="picker-list">
+      <view
+        class="picker-item {{age === item.value ? 'active' : ''}}"
+        wx:for="{{ageOptions}}"
+        wx:key="value"
+        data-value="{{item.value}}"
+        bind:tap="onSelectAge"
+      >
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+  </van-action-sheet>
+
+</view>

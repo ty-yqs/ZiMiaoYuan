@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": ["ES2020"],
+    "types": ["miniprogram-api-typings"],
+    "baseUrl": "./miniprogram",
+    "paths": {
+      "@utils/*": ["utils/*"],
+      "@config/*": ["config/*"],
+      "@components/*": ["components/*"]
+    },
+    "allowJs": true,
+    "checkJs": false,
+    "noImplicitAny": false,
+    "outDir": "./dist",
+    "rootDir": "./miniprogram",
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "miniprogram/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "miniprogram/miniprogram_npm",
+    "cloudfunctions"
+  ]
+}

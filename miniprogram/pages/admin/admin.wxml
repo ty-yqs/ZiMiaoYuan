@@ -1,0 +1,81 @@
+<!--
+  管理员后台
+-->
+<view class="page-container">
+
+  <!-- ==================== 加载中 ==================== -->
+  <view wx:if="{{loading}}" class="loading-tip">
+    <text>加载中...</text>
+  </view>
+
+  <!-- ==================== Tab 切换 ==================== -->
+  <block wx:else>
+    <van-tabs active="{{activeTab}}" bind:click="onTabChange" color="#7EC8A8">
+      <van-tab title="待审核 ({{pendingCats.length}})">
+        <!-- 待审核列表 -->
+        <view wx:if="{{pendingCats.length === 0}}" class="empty-state">
+          <text class="empty-icon">✅</text>
+          <text class="empty-text">没有待审核的猫咪</text>
+        </view>
+
+        <view wx:for="{{pendingCats}}" wx:key="_id" class="card admin-card">
+          <view class="flex-row">
+            <image class="admin-cat-img" src="{{item.avatar}}" mode="aspectFill" />
+            <view class="flex-1 admin-cat-info">
+              <text class="admin-cat-name">{{item.cat_name || '未命名'}}</text>
+              <text class="admin-cat-detail">毛色：{{item.color}}</text>
+              <text class="admin-cat-detail">地点：{{item.location.name}}</text>
+              <van-tag type="warning" size="mini">待审核</van-tag>
+            </view>
+          </view>
+
+          <view class="admin-actions flex-row">
+            <van-button
+              type="primary"
+              size="small"
+              color="#7EC8A8"
+              data-cat-id="{{item._id}}"
+              bind:click="onApprove"
+            >通过</van-button>
+            <van-button
+              type="danger"
+              size="small"
+              data-cat-id="{{item._id}}"
+              bind:click="onReject"
+            >拒绝</van-button>
+          </view>
+        </view>
+      </van-tab>
+
+      <van-tab title="全部猫咪 ({{allCats.length}})">
+        <!-- 全部猫咪列表 -->
+        <view wx:for="{{allCats}}" wx:key="_id" class="card admin-card">
+          <view class="flex-row">
+            <image class="admin-cat-img" src="{{item.avatar}}" mode="aspectFill" />
+            <view class="flex-1 admin-cat-info">
+              <text class="admin-cat-name">{{item.cat_name || '未命名'}}</text>
+              <text class="admin-cat-detail">毛色：{{item.color}}</text>
+              <view class="flex-row">
+                <van-tag wx:if="{{item.status === 'pending'}}" type="warning" size="mini">待审核</van-tag>
+                <van-tag wx:elif="{{item.status === 'approved'}}" type="success" size="mini">已审核</van-tag>
+                <van-tag wx:else type="danger" size="mini">已拒绝</van-tag>
+              </view>
+            </view>
+          </view>
+
+          <view class="admin-actions flex-row">
+            <van-button
+              type="danger"
+              size="small"
+              plain
+              hairline
+              data-cat-id="{{item._id}}"
+              bind:click="onDelete"
+            >删除</van-button>
+          </view>
+        </view>
+      </van-tab>
+    </van-tabs>
+  </block>
+
+</view>

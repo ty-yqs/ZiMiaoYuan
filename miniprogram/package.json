@@ -1,0 +1,16 @@
+{
+  "name": "suatcat-miniprogram",
+  "version": "1.0.0",
+  "description": "深理猫谱 - 校园猫咪数字档案平台",
+  "main": "app.ts",
+  "scripts": {
+    "tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vant/weapp": "^1.10.18"
+  },
+  "devDependencies": {
+    "miniprogram-api-typings": "^3.12.2",
+    "typescript": "^5.2.2"
+  }
+}

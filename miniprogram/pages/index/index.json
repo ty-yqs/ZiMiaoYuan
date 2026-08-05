@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "深理猫谱",
+  "usingComponents": {
+    "cat-card": "/components/cat-card/cat-card",
+    "van-search": "@vant/weapp/search/index",
+    "van-skeleton": "@vant/weapp/skeleton/index"
+  }
+}

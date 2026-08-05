@@ -1,0 +1,91 @@
+<!--
+  个人中心
+-->
+<view class="page-container">
+
+  <!-- ==================== 用户头部 ==================== -->
+  <view class="profile-header card">
+    <view class="user-info flex-row">
+      <!-- 头像 -->
+      <view class="avatar-wrapper">
+        <image
+          class="user-avatar"
+          src="{{userInfo.avatar || '/images/avatar.png'}}"
+          mode="aspectFill"
+        />
+      </view>
+
+      <!-- 昵称和角色 -->
+      <view class="user-meta flex-1">
+        <view class="flex-row">
+          <text class="user-name text-ellipsis">{{userInfo.nickname || '猫友'}}</text>
+          <van-tag
+            wx:if="{{isAdmin}}"
+            type="warning"
+            size="mini"
+            color="#F2A65A"
+          >管理员</van-tag>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== 贡献统计 ==================== -->
+  <view class="stats-row flex-row">
+    <view class="stat-item flex-column flex-center">
+      <text class="stat-number">{{stats.catCount}}</text>
+      <text class="stat-label">发现猫咪</text>
+    </view>
+    <view class="stat-divider" />
+    <view class="stat-item flex-column flex-center">
+      <text class="stat-number">{{stats.recordCount}}</text>
+      <text class="stat-label">发现记录</text>
+    </view>
+  </view>
+
+  <!-- ==================== 功能菜单 ==================== -->
+  <view class="menu-section">
+    <van-cell-group>
+      <van-cell
+        title="📸 发现猫咪"
+        label="上传你发现的校园猫咪"
+        is-link
+        url="/pages/upload/upload"
+      />
+      <van-cell
+        title="📋 我的发现"
+        label="查看我的发现记录"
+        is-link
+        url=""
+      />
+    </van-cell-group>
+
+    <!-- 管理员入口 -->
+    <van-cell-group wx:if="{{isAdmin}}" title="⚙️ 管理功能">
+      <van-cell
+        title="🔧 管理后台"
+        label="审核猫咪、管理数据"
+        is-link
+        bind:click="onGoAdmin"
+      />
+    </van-cell-group>
+
+    <van-cell-group title="ℹ️ 其他">
+      <van-cell
+        title="💡 关于深理猫谱"
+        is-link
+        bind:click="onAbout"
+      />
+      <van-cell
+        title="{{showVersion}}"
+        value="校园猫谱"
+      />
+    </van-cell-group>
+  </view>
+
+  <!-- ==================== 底部品牌 ==================== -->
+  <view class="brand-footer">
+    <text class="brand-text">🐱 深理猫谱 · 发现校园里的每一只猫</text>
+  </view>
+
+</view>

@@ -1,0 +1,186 @@
+/**
+ * 深理猫谱 - 主题样式
+ *
+ * 风格：温暖、治愈、校园、猫咪
+ * 配色：薄荷绿 + 米黄 + 暖橙
+ */
+
+/* ========== CSS 变量 ========== */
+page {
+  /* 主色调 — 温暖薄荷绿 */
+  --color-primary: #7EC8A8;
+  --color-primary-light: #A8DCC8;
+  --color-primary-dark: #5AA882;
+
+  /* 背景色 — 米黄色系 */
+  --color-bg: #FFF8EC;
+  --color-bg-card: #FFFFFF;
+  --color-bg-warm: #FFF3E0;
+
+  /* 强调色 — 暖橙 */
+  --color-accent: #F2A65A;
+  --color-accent-light: #F7C68A;
+
+  /* 文字颜色 */
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-hint: #999999;
+
+  /* 边框与阴影 */
+  --color-border: #F0EDE4;
+  --shadow-card: 0 2rpx 16rpx rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 4rpx 24rpx rgba(0, 0, 0, 0.10);
+
+  /* 圆角 */
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-round: 50%;
+
+  /* 间距 */
+  --spacing-xs: 8rpx;
+  --spacing-sm: 16rpx;
+  --spacing-md: 24rpx;
+  --spacing-lg: 32rpx;
+  --spacing-xl: 48rpx;
+
+  /* 字体大小 */
+  --font-xs: 22rpx;
+  --font-sm: 26rpx;
+  --font-md: 28rpx;
+  --font-lg: 32rpx;
+  --font-xl: 36rpx;
+  --font-xxl: 44rpx;
+
+  /* 安全区域 */
+  --safe-area-bottom: env(safe-area-inset-bottom, 0rpx);
+
+  /* 页面基础样式 */
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-size: var(--font-md);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  line-height: 1.6;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* ========== 通用工具类 ========== */
+
+/* 卡片容器 */
+.card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-md);
+  margin: var(--spacing-sm) var(--spacing-md);
+}
+
+/* 页面容器 */
+.page-container {
+  min-height: 100vh;
+  padding-bottom: calc(var(--spacing-lg) + var(--safe-area-bottom));
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* 分割线 */
+.divider {
+  height: 1rpx;
+  background: var(--color-border);
+  margin: var(--spacing-sm) 0;
+}
+
+/* 文字省略 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 行 clamp */
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 标签基础样式 */
+.tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs);
+  line-height: 1.5;
+}
+
+.tag-primary {
+  background: rgba(126, 200, 168, 0.15);
+  color: var(--color-primary-dark);
+}
+
+.tag-accent {
+  background: rgba(242, 166, 90, 0.15);
+  color: var(--color-accent);
+}
+
+.tag-outline {
+  border: 1rpx solid var(--color-border);
+  color: var(--color-text-secondary);
+  background: transparent;
+}
+
+/* Flex 布局 */
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-between {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 安全区适配 */
+.safe-bottom {
+  padding-bottom: var(--safe-area-bottom);
+}
+
+/* ========== 空状态 ========== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-state .empty-icon {
+  font-size: 100rpx;
+  margin-bottom: var(--spacing-md);
+}
+
+.empty-state .empty-text {
+  color: var(--color-text-hint);
+  font-size: var(--font-sm);
+}

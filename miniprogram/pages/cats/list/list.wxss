@@ -1,0 +1,76 @@
+/**
+ * 猫咪档案列表页样式
+ */
+
+/* ========== 搜索栏 ========== */
+.search-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-bg);
+}
+
+/* ========== 筛选栏 ========== */
+.filter-bar {
+  position: sticky;
+  top: 54px;
+  z-index: 10;
+  background: var(--color-bg-card);
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+/* ========== 加载更多 ========== */
+.load-more {
+  text-align: center;
+  padding: var(--spacing-md);
+  color: var(--color-text-hint);
+  font-size: var(--font-xs);
+}
+
+/* ========== 悬浮按钮 (FAB) ========== */
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(120rpx + var(--safe-area-bottom));
+  width: 100rpx;
+  height: 100rpx;
+  background: var(--color-primary);
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 20rpx rgba(126, 200, 168, 0.4);
+  z-index: 100;
+}
+
+.fab-icon {
+  font-size: 52rpx;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.fab:active {
+  transform: scale(0.95);
+  opacity: 0.9;
+}
+
+/* ========== 空状态按钮 ========== */
+.add-btn {
+  margin-top: var(--spacing-md);
+  padding: 16rpx 40rpx;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-sm);
+}
+
+.retry-btn {
+  margin-top: var(--spacing-sm);
+  padding: 12rpx 32rpx;
+  background: var(--color-bg);
+  color: var(--color-primary);
+  border: 1rpx solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-xs);
+}

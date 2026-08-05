@@ -1,0 +1,65 @@
+/**
+ * 发现记录 / 便利贴 完整列表页样式
+ */
+
+/* ========== 发现记录 ========== */
+.record-card {
+  display: flex;
+  flex-direction: row;
+}
+
+.record-photo {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: var(--color-bg-warm);
+}
+
+.record-info {
+  flex: 1;
+  margin-left: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.record-desc {
+  font-size: var(--font-sm);
+  color: var(--color-text-primary);
+  margin-bottom: 4rpx;
+}
+
+.record-time {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+/* ========== 便利贴 ========== */
+.note-card {
+  /* card already provides background, radius, shadow, padding, margin */
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.note-nickname {
+  font-size: var(--font-xs);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.note-time {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+.note-content {
+  font-size: var(--font-md);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}

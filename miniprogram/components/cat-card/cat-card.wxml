@@ -1,0 +1,48 @@
+<!--
+  cat-card — 猫咪卡片
+  @param cat           - 猫咪数据
+  @param showRecentTime - 是否显示最近发现时间
+  @param mode          - 卡片模式: default | compact
+-->
+<view class="cat-card card {{mode}}" bind:tap="onTapCard">
+
+  <!-- ========== 头像区 ========== -->
+  <view class="card-avatar">
+    <image
+      class="avatar-img"
+      src="{{cat.avatar || '/images/default-avatar.png'}}"
+      mode="aspectFill"
+      lazy-load
+    />
+    <!-- 性别角标 -->
+    <view class="gender-badge male" wx:if="{{cat.gender === 'male'}}">♂</view>
+    <view class="gender-badge female" wx:if="{{cat.gender === 'female'}}">♀</view>
+  </view>
+
+  <!-- ========== 信息区 ========== -->
+  <view class="card-body">
+
+    <!-- 第一行：名字 + 年龄 + 毛色标签 -->
+    <view class="card-row">
+      <text class="cat-name text-ellipsis">{{cat.cat_name || '未命名猫咪'}}</text>
+      <text class="age-label" wx:if="{{ageLabel}}">{{ageLabel}}</text>
+      <text class="color-tag">{{cat.color || '未知毛色'}}</text>
+    </view>
+
+    <!-- 第二行：地点 -->
+    <view class="card-row" wx:if="{{showLocation && cat.location && cat.location.name}}">
+      <text class="row-icon">📍</text>
+      <text class="row-text text-ellipsis">{{cat.location.name}}</text>
+    </view>
+
+    <!-- 第三行：健康 + 时间 -->
+    <view class="card-row card-footer">
+      <view class="health-dots">
+        <text class="dot on" wx:if="{{cat.health && cat.health.sterilized}}">绝</text>
+        <text class="dot on" wx:if="{{cat.health && cat.health.vaccinated}}">疫</text>
+      </view>
+    </view>
+
+  </view>
+
+</view>

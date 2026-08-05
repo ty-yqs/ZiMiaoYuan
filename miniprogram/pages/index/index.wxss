@@ -1,0 +1,97 @@
+/**
+ * 首页样式
+ */
+
+/* ========== Banner 区域 ========== */
+.banner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  margin: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  border-radius: var(--radius-lg);
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.banner-content {
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.banner-title {
+  font-size: var(--font-xxl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.banner-subtitle {
+  font-size: var(--font-sm);
+  opacity: 0.9;
+}
+
+.banner-decor {
+  position: absolute;
+  right: 20rpx;
+  top: 20rpx;
+  width: 150rpx;
+  height: 150rpx;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+/* ========== 区块通用 ========== */
+.section {
+  margin-top: var(--spacing-sm);
+}
+
+.section-header {
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+}
+
+.section-title {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.section-more {
+  font-size: var(--font-sm);
+  color: var(--color-primary);
+}
+
+/* ========== 快捷入口 ========== */
+.quick-entries {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-md);
+}
+
+.entry-item {
+  padding: var(--spacing-md) var(--spacing-xs);
+  margin: 0;
+}
+
+.entry-item:active {
+  background: var(--color-bg);
+}
+
+.entry-icon {
+  font-size: 48rpx;
+  margin-bottom: var(--spacing-xs);
+}
+
+.entry-label {
+  font-size: var(--font-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ========== 安全区 ========== */
+.safe-bottom-spacer {
+  height: calc(var(--safe-area-bottom) + 40rpx);
+}

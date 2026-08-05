@@ -1,0 +1,43 @@
+/**
+ * 管理员后台样式
+ */
+
+/* ========== 管理员卡片 ========== */
+.admin-card {
+  margin: var(--spacing-sm) var(--spacing-md);
+}
+
+.admin-cat-img {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-warm);
+  flex-shrink: 0;
+}
+
+.admin-cat-info {
+  margin-left: var(--spacing-sm);
+  min-width: 0;
+}
+
+.admin-cat-name {
+  font-size: var(--font-md);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.admin-cat-detail {
+  font-size: var(--font-xs);
+  color: var(--color-text-secondary);
+  display: block;
+  margin-bottom: 2rpx;
+}
+
+.admin-actions {
+  margin-top: var(--spacing-sm);
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  padding-top: var(--spacing-sm);
+  border-top: 1rpx solid var(--color-border);
+}

@@ -1,0 +1,65 @@
+/**
+ * 深理猫谱 - 全局样式
+ */
+
+/* 导入主题变量 */
+@import './styles/theme.wxss';
+
+/* ========== 全局重置 ========== */
+page {
+  --nav-bar-height: 44px;
+  --tab-bar-height: 50px;
+}
+
+/* 清除 button 默认样式 */
+button {
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+/* ========== 导航栏自定义 ========== */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  background: #fff;
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* ========== 页面标题 ========== */
+.page-title {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+}
+
+.page-subtitle {
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+  padding: 0 var(--spacing-md);
+}
+
+/* ========== 反馈状态 ========== */
+.error-tip {
+  text-align: center;
+  padding: 40rpx;
+  color: #E74C3C;
+  font-size: var(--font-sm);
+}
+
+.loading-tip {
+  text-align: center;
+  padding: 40rpx;
+  color: var(--color-text-hint);
+}

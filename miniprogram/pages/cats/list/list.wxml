@@ -1,0 +1,77 @@
+<!--
+  猫咪档案列表页
+  支持搜索、筛选、触底加载
+-->
+<view class="page-container">
+
+  <!-- ==================== 搜索栏 ==================== -->
+  <view class="search-bar">
+    <van-search
+      value="{{searchKeyword}}"
+      placeholder="搜索猫咪名字、毛色..."
+      bind:search="onSearch"
+      bind:clear="onSearch"
+      shape="round"
+      background="#FFF8EC"
+    />
+  </view>
+
+  <!-- ==================== 筛选栏 ==================== -->
+  <view class="filter-bar">
+    <van-dropdown-menu active-color="#7EC8A8">
+      <van-dropdown-item
+        options="{{colorOptions}}"
+        value="{{filterColor}}"
+        bind:change="onFilterColor"
+        title="毛色"
+      />
+      <van-dropdown-item
+        options="{{genderOptions}}"
+        value="{{filterGender}}"
+        bind:change="onFilterGender"
+        title="性别"
+      />
+      <van-dropdown-item
+        options="{{ageOptions}}"
+        value="{{filterAge}}"
+        bind:change="onFilterAge"
+        title="年龄"
+      />
+    </van-dropdown-menu>
+  </view>
+
+  <!-- ==================== 猫咪列表 ==================== -->
+  <block wx:if="{{cats.length > 0}}">
+    <cat-card
+      wx:for="{{cats}}"
+      wx:key="_id"
+      cat="{{item}}"
+      showLocation="{{false}}"
+    />
+
+    <!-- 加载更多 -->
+    <view class="load-more">
+      <text wx:if="{{loading}}">正在加载...</text>
+      <text wx:elif="{{!hasMore}}">—— 已经到底了 ——</text>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">😿</text>
+    <text class="empty-text">还没有猫咪档案</text>
+    <button class="add-btn" bind:tap="onTapUpload">去发现第一只猫</button>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-tip" wx:if="{{error && cats.length === 0}}">
+    <text>{{error}}</text>
+    <button class="retry-btn" bind:tap="loadCats">重试</button>
+  </view>
+
+  <!-- 发布按钮 -->
+  <view class="fab" bind:tap="onTapUpload">
+    <text class="fab-icon">+</text>
+  </view>
+
+</view>

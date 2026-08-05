@@ -1,0 +1,50 @@
+<!--
+  发现记录 / 便利贴 完整列表页
+-->
+<view class="page-container">
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-tip">
+    <text>正在加载...</text>
+  </view>
+
+  <!-- 错误 -->
+  <view wx:elif="{{error}}" class="empty-state">
+    <text class="empty-icon">😿</text>
+    <text class="empty-text">{{error}}</text>
+  </view>
+
+  <!-- 列表 -->
+  <block wx:elif="{{items.length > 0}}">
+
+    <!-- 发现记录模式 -->
+    <block wx:if="{{type === 'photo'}}">
+      <view class="card record-card" wx:for="{{items}}" wx:key="_id">
+        <image class="record-photo" src="{{item.photo}}" mode="aspectFill" />
+        <view class="record-info">
+          <text class="record-desc">{{item.description || '发现记录'}}</text>
+          <text class="record-time">{{formatDate(item.createTime)}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 便利贴模式 -->
+    <block wx:if="{{type === 'note'}}">
+      <view class="card note-card" wx:for="{{items}}" wx:key="_id">
+        <view class="note-header">
+          <text class="note-nickname">{{item.nickname || '匿名猫友'}}</text>
+          <text class="note-time">{{formatDate(item.createTime)}}</text>
+        </view>
+        <text class="note-content">{{item.description}}</text>
+      </view>
+    </block>
+
+  </block>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">{{type === 'note' ? '📝' : '📸'}}</text>
+    <text class="empty-text">{{type === 'note' ? '还没有便利贴' : '还没有发现记录'}}</text>
+  </view>
+
+</view>

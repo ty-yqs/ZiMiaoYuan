@@ -1,0 +1,26 @@
+# npm dependencies
+*/node_modules/
+
+# WeChat mini program npm build output
+miniprogram_npm/
+
+# TypeScript compiled output in miniprogram (source is .ts)
+miniprogram/**/*.js
+miniprogram/**/*.js.map
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# WeChat dev tools
+project.private.config.json
+
+.claude/
+.cloudbase/

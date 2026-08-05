@@ -1,0 +1,350 @@
+/**
+ * 猫咪详情页样式
+ */
+
+/* ========== 图片轮播 ========== */
+.photo-scroll {
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.photo-item {
+  display: inline-block;
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: var(--radius-md);
+  margin-right: var(--spacing-sm);
+  background: var(--color-bg-warm);
+}
+
+/* ========== 基本信息卡片 ========== */
+.info-card {
+  margin-top: var(--spacing-sm);
+}
+
+.info-header {
+  margin-bottom: var(--spacing-sm);
+}
+
+.cat-name {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-right: var(--spacing-xs);
+}
+
+.gender-icon {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: #4A90D9;
+}
+
+.gender-icon.female {
+  color: #E8749F;
+}
+
+.info-row {
+  margin-top: 8rpx;
+}
+
+.info-icon {
+  font-size: var(--font-sm);
+  margin-right: 4rpx;
+}
+
+.info-text {
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+  flex: 1;
+}
+
+.nav-link {
+  font-size: var(--font-sm);
+  color: var(--color-primary);
+}
+
+/* ========== 健康状态 ========== */
+.health-card {
+  margin-top: var(--spacing-sm);
+}
+
+.section-title-sm {
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.section-title-row .section-title-sm {
+  margin-bottom: 0;
+}
+
+.section-more {
+  font-size: var(--font-xs);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.health-grid {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-md);
+}
+
+.health-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  flex: 1;
+}
+
+.health-icon {
+  font-size: var(--font-lg);
+  margin-bottom: 4rpx;
+}
+
+.health-label {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+.health-item.editable {
+  border: 2rpx dashed var(--color-primary-light);
+}
+
+.health-item.editable:active {
+  background: rgba(126, 200, 168, 0.1);
+  transform: scale(0.96);
+}
+
+/* ========== 简介 ========== */
+.desc-card {
+  margin-top: var(--spacing-sm);
+}
+
+.desc-text {
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}
+
+/* ========== 发现记录 ========== */
+.records-card {
+  margin-top: var(--spacing-sm);
+}
+
+.record-item {
+  display: flex;
+  flex-direction: row;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-photo {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: var(--color-bg-warm);
+}
+
+.record-note-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: var(--color-bg-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+}
+
+/* ========== 便利贴板块 ========== */
+.notes-card {
+  margin-top: var(--spacing-sm);
+}
+
+.note-item {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.note-item:last-child {
+  border-bottom: none;
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.note-nickname {
+  font-size: var(--font-xs);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.note-time {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+.note-content {
+  font-size: var(--font-sm);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}
+
+.record-info {
+  flex: 1;
+  margin-left: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.record-desc {
+  font-size: var(--font-sm);
+  color: var(--color-text-primary);
+  margin-bottom: 4rpx;
+}
+
+.record-time {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+/* ========== 底部按钮 ========== */
+.bottom-btn-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-card);
+  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.05);
+}
+
+.bottom-btn-row {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.upload-record-btn {
+  flex: 1;
+  padding: 20rpx 0;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-md);
+  font-weight: 600;
+  text-align: center;
+}
+
+.sticky-note-btn {
+  flex: 1;
+  padding: 20rpx 0;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-md);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ========== 便利贴弹窗 ========== */
+.sticky-note-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sticky-note-panel {
+  width: 100%;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--spacing-md);
+  padding-bottom: calc(var(--spacing-md) + var(--safe-area-bottom));
+}
+
+.sticky-note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.sticky-note-title {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.sticky-note-close {
+  font-size: var(--font-lg);
+  color: var(--color-text-hint);
+  padding: 8rpx;
+}
+
+.sticky-note-input {
+  width: 100%;
+  height: 160rpx;
+  padding: var(--spacing-sm);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  font-size: var(--font-md);
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+}
+
+.sticky-note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-sm);
+}
+
+.sticky-note-count {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+.sticky-note-submit {
+  padding: 12rpx 40rpx;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: var(--radius-md);
+  font-size: var(--font-sm);
+  font-weight: 600;
+}
+
+.sticky-note-submit[disabled] {
+  background: #ddd;
+  color: #999;
+}

@@ -1,0 +1,9 @@
+{
+  "name": "uploadRecord",
+  "version": "1.0.0",
+  "description": "上传发现记录（针对已有猫咪）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

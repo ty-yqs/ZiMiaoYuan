@@ -1,0 +1,9 @@
+{
+  "name": "addCat",
+  "version": "1.0.0",
+  "description": "新增猫咪档案",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

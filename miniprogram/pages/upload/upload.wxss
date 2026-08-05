@@ -1,0 +1,132 @@
+/**
+ * 上传发现猫咪页样式
+ */
+
+/* ========== 区块标题 ========== */
+.section-title {
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ========== 图片上传 ========== */
+.photo-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.photo-item {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-bg-warm);
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-delete {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: rgba(0,0,0,0.5);
+  border-radius: var(--radius-round);
+  color: #fff;
+  font-size: var(--font-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-add {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: var(--radius-md);
+  border: 2rpx dashed var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+}
+
+.add-icon {
+  font-size: 56rpx;
+  color: var(--color-text-hint);
+  line-height: 1;
+}
+
+.add-text {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 4rpx;
+}
+
+/* ========== 位置选择 ========== */
+.location-picker {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+}
+
+.location-icon {
+  font-size: var(--font-md);
+  margin-right: var(--spacing-xs);
+}
+
+.location-text {
+  flex: 1;
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+}
+
+.location-arrow {
+  font-size: var(--font-lg);
+  color: var(--color-text-hint);
+}
+
+/* ========== 提交区域 ========== */
+.submit-area {
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+/* ========== 选择器弹窗 ========== */
+.picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+}
+
+.picker-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.picker-item {
+  padding: var(--spacing-md);
+  text-align: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-size: var(--font-sm);
+}
+
+.picker-item.active {
+  background: rgba(126, 200, 168, 0.15);
+  color: var(--color-primary);
+}
+
+.picker-item:active {
+  opacity: 0.7;
+}

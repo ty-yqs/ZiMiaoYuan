@@ -1,0 +1,149 @@
+<!--
+  猫咪详情页
+-->
+<view class="page-container">
+
+  <!-- ==================== 加载中 ==================== -->
+  <view wx:if="{{loading}}" class="loading-tip">
+    <text>正在加载猫咪信息...</text>
+  </view>
+
+  <!-- ==================== 错误 ==================== -->
+  <view wx:elif="{{error}}" class="empty-state">
+    <text class="empty-icon">😿</text>
+    <text class="empty-text">{{error}}</text>
+  </view>
+
+  <!-- ==================== 详情内容 ==================== -->
+  <block wx:elif="{{cat}}">
+
+    <!-- 图片轮播 -->
+    <view class="photo-swiper" wx:if="{{cat.photos && cat.photos.length > 0}}">
+      <scroll-view scroll-x class="photo-scroll">
+        <image
+          wx:for="{{cat.photos}}"
+          wx:key="*this"
+          class="photo-item"
+          src="{{item}}"
+          mode="aspectFill"
+          data-url="{{item}}"
+          data-urls="{{cat.photos}}"
+          bind:tap="onPreviewImage"
+        />
+      </scroll-view>
+    </view>
+
+    <!-- 基本信息卡片 -->
+    <view class="card info-card">
+      <view class="info-header flex-between">
+        <view class="flex-row">
+          <text class="cat-name">{{cat.cat_name || '未命名猫咪'}}</text>
+          <text class="gender-icon" wx:if="{{cat.gender === 'male'}}">♂</text>
+          <text class="gender-icon female" wx:if="{{cat.gender === 'female'}}">♀</text>
+        </view>
+        <van-tag type="primary" color="#7EC8A8">{{cat.color}}</van-tag>
+      </view>
+
+      <view class="info-row flex-row">
+        <text class="info-icon">📅</text>
+        <text class="info-text">{{cat.age || '未知年龄'}}龄</text>
+      </view>
+    </view>
+
+    <!-- 健康状态卡片 -->
+    <view class="card health-card">
+      <view class="section-title-sm">🏥 健康状态</view>
+      <view class="health-grid">
+        <view
+          class="health-item {{cat.health.sterilized ? 'done' : ''}} {{isAdmin ? 'editable' : ''}}"
+          data-field="sterilized"
+          bind:tap="onToggleHealth"
+        >
+          <text class="health-icon">{{cat.health.sterilized ? '✅' : '❌'}}</text>
+          <text class="health-label">{{cat.health.sterilized ? '已绝育' : '未绝育'}}</text>
+        </view>
+        <view
+          class="health-item {{cat.health.vaccinated ? 'done' : ''}} {{isAdmin ? 'editable' : ''}}"
+          data-field="vaccinated"
+          bind:tap="onToggleHealth"
+        >
+          <text class="health-icon">{{cat.health.vaccinated ? '✅' : '❌'}}</text>
+          <text class="health-label">{{cat.health.vaccinated ? '已打疫苗' : '未打疫苗'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 简介 -->
+    <view class="card desc-card" wx:if="{{cat.description}}">
+      <view class="section-title-sm">📝 简介</view>
+      <text class="desc-text">{{cat.description}}</text>
+    </view>
+
+    <!-- ==================== 便利贴 ==================== -->
+    <view class="card notes-card" wx:if="{{notes.length > 0}}">
+      <view class="section-title-row">
+        <text class="section-title-sm">📝 便利贴 ({{totalNotes}})</text>
+        <text class="section-more" wx:if="{{hasMoreNotes}}" data-type="note" bind:tap="onTapMoreRecords">查看更多 ›</text>
+      </view>
+
+      <view class="note-item" wx:for="{{notes}}" wx:key="_id">
+        <view class="note-header">
+          <text class="note-nickname">{{item.nickname || '匿名猫友'}}</text>
+          <text class="note-time">{{formatDate(item.createTime)}}</text>
+        </view>
+        <text class="note-content">{{item.description}}</text>
+      </view>
+    </view>
+
+    <!-- ==================== 发现记录 ==================== -->
+    <view class="card records-card" wx:if="{{records.length > 0}}">
+      <view class="section-title-row">
+        <text class="section-title-sm">📸 发现记录 ({{totalRecords}})</text>
+        <text class="section-more" wx:if="{{hasMoreRecords}}" data-type="photo" bind:tap="onTapMoreRecords">查看更多 ›</text>
+      </view>
+
+      <view class="record-item" wx:for="{{records}}" wx:key="_id">
+        <image class="record-photo" src="{{item.photo}}" mode="aspectFill" />
+        <view class="record-info">
+          <text class="record-desc">{{item.description || '发现记录'}}</text>
+          <text class="record-time">{{formatDate(item.createTime)}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部留白（为固定按钮让位） -->
+    <view style="height: 100rpx;" />
+
+    <!-- 底部操作按钮 -->
+    <view class="bottom-btn-fixed safe-bottom">
+      <view class="bottom-btn-row">
+        <button class="upload-record-btn" bind:tap="onUploadRecord">📸 上传猫照</button>
+        <button class="sticky-note-btn" bind:tap="onShowStickyNote">📝 写便利贴</button>
+      </view>
+    </view>
+
+  </block>
+
+</view>
+
+<!-- ==================== 写便利贴弹窗 ==================== -->
+<view class="sticky-note-overlay" wx:if="{{showStickyNote}}" bind:tap="onCloseStickyNote">
+  <view class="sticky-note-panel" catch:tap="noop">
+    <view class="sticky-note-header">
+      <text class="sticky-note-title">📝 写便利贴</text>
+      <text class="sticky-note-close" bind:tap="onCloseStickyNote">✕</text>
+    </view>
+    <textarea
+      class="sticky-note-input"
+      value="{{stickyNoteText}}"
+      placeholder="给这只猫咪留下一条便利贴..."
+      maxlength="200"
+      auto-focus
+      bind:input="onStickyNoteInput"
+    />
+    <view class="sticky-note-footer">
+      <text class="sticky-note-count">{{stickyNoteText.length || 0}}/200</text>
+      <button class="sticky-note-submit" bind:tap="onSubmitStickyNote" disabled="{{!stickyNoteValid}}">贴上</button>
+    </view>
+  </view>
+</view>
