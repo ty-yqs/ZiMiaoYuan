@@ -9,7 +9,8 @@
     "pages/admin/admin",
     "pages/stats/stats",
     "pages/login/login",
-    "pages/feedback/feedback"
+    "pages/feedback/feedback",
+    "pages/support/support"
   ],
   "window": {
     "backgroundColor": "#FFF8EC",

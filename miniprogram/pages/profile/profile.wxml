@@ -77,6 +77,12 @@
         bind:click="onFeedback"
       />
       <van-cell
+        title="🥫 投喂罐头"
+        label="支持小程序运营维护"
+        is-link
+        bind:click="onSupport"
+      />
+      <van-cell
         title="🗑️ 清除图片缓存"
         label="当前缓存 {{cacheCount}} 张图片（{{cacheSize}}），清除后图片将重新从云端加载"
         is-link

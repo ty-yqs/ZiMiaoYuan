@@ -192,6 +192,11 @@ Page({
     wx.navigateTo({ url: ROUTES.FEEDBACK });
   },
 
+  /** 跳转投喂罐头页 */
+  onSupport() {
+    wx.navigateTo({ url: ROUTES.SUPPORT });
+  },
+
   /** 跳转管理员页面 */
   onGoAdmin() {
     wx.navigateTo({ url: ROUTES.ADMIN });
