@@ -34,7 +34,10 @@ Page({
 
     if (res.code === 0) {
       const { cat, records } = res.data;
-      const allRecords = records || [];
+      const allRecords = (records || []).map((r: IRecord) => ({
+        ...r,
+        _time: formatDate(r.createTime, 'YYYY-MM-DD HH:mm'),
+      }));
       const items = this.data.type === 'note'
         ? allRecords.filter((r: IRecord) => r.type === 'note')
         : allRecords.filter((r: IRecord) => !r.type || r.type !== 'note');

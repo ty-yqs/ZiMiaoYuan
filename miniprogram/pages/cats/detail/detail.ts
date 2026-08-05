@@ -82,7 +82,13 @@ Page({
       };
       cat.ageLabel = AGE_LABEL_MAP[cat.age] || '未知年龄';
 
-      const allRecords = records || [];
+      // 预格式化时间
+      const fmt = (d: any) => formatDate(d, 'YYYY-MM-DD HH:mm');
+
+      const allRecords = (records || []).map((r: IRecord) => ({
+        ...r,
+        _time: fmt(r.createTime),
+      }));
       const photoRecords = allRecords.filter((r: IRecord) => !r.type || r.type !== 'note');
       const noteRecords = allRecords.filter((r: IRecord) => r.type === 'note');
       this.setData({

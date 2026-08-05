@@ -23,7 +23,7 @@
         <image class="record-photo" src="{{item.photo}}" mode="aspectFill" />
         <view class="record-info">
           <text class="record-desc">{{item.description || '发现记录'}}</text>
-          <text class="record-time">{{formatDate(item.createTime)}}</text>
+          <text class="record-time">发布于 {{item._time}}</text>
         </view>
       </view>
     </block>
@@ -33,7 +33,7 @@
       <view class="card note-card" wx:for="{{items}}" wx:key="_id">
         <view class="note-header">
           <text class="note-nickname">{{item.nickname || '匿名猫友'}}</text>
-          <text class="note-time">{{formatDate(item.createTime)}}</text>
+          <text class="note-time">发布于 {{item._time}}</text>
         </view>
         <text class="note-content">{{item.description}}</text>
       </view>
