@@ -70,4 +70,12 @@
   <!-- 底部安全区 -->
   <view class="safe-bottom-spacer" />
 
+  <!-- ==================== 科普弹窗 ==================== -->
+  <view class="poster-overlay" wx:if="{{showPoster}}" catch:tap="onClosePoster">
+    <view class="poster-modal" catch:tap="noop">
+      <image class="poster-modal-img" src="/images/poster.jpg" mode="widthFix" />
+      <view class="poster-close" bind:tap="onClosePoster">✕</view>
+    </view>
+  </view>
+
 </view>

@@ -15,6 +15,7 @@ Page({
   data: {
     // 是否为已有猫咪添加记录
     targetCatId: '',
+    maxPhotos: 3,
 
     // 表单数据
     photos: [] as string[],           // 临时文件路径
@@ -43,7 +44,7 @@ Page({
 
   onLoad(options: Record<string, string>) {
     if (options.catId) {
-      this.setData({ targetCatId: options.catId });
+      this.setData({ targetCatId: options.catId, maxPhotos: 1 });
       wx.setNavigationBarTitle({ title: '记录发现' });
     }
   },
@@ -59,7 +60,13 @@ Page({
   /** 选择图片 */
   async onChooseImage() {
     try {
-      const res = await chooseImage(3 - this.data.photos.length);
+      const maxCount = this.data.targetCatId ? 1 : 3;
+      const remaining = maxCount - this.data.photos.length;
+      if (remaining <= 0) {
+        showToast(`最多上传${maxCount}张图片`, 'error');
+        return;
+      }
+      const res = await chooseImage(remaining);
       this.setData({
         photos: [...this.data.photos, ...res.tempFilePaths],
       });

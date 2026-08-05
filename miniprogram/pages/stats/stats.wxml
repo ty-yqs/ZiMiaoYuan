@@ -25,14 +25,14 @@
         <text class="stat-card-label">在册猫咪</text>
       </view>
       <view class="stat-card">
+        <text class="stat-card-icon">🖊️</text>
+        <text class="stat-card-number">{{namingRate}}%</text>
+        <text class="stat-card-label">命名率</text>
+      </view>
+      <view class="stat-card">
         <text class="stat-card-icon">👶</text>
         <text class="stat-card-number">{{sterilizationRate}}%</text>
         <text class="stat-card-label">绝育率</text>
-      </view>
-      <view class="stat-card">
-        <text class="stat-card-icon">💉</text>
-        <text class="stat-card-number">{{vaccinationRate}}%</text>
-        <text class="stat-card-label">疫苗率</text>
       </view>
       <view class="stat-card">
         <text class="stat-card-icon">👀</text>

@@ -12,17 +12,19 @@ import { ROUTES } from '../../utils/constants';
 Page({
   data: {
     // Banner
-    bannerTitle: '校园猫谱',
-    bannerSubtitle: '发现校园里的每一只猫',
+    bannerTitle: '紫喵园 · 校园猫谱',
+    bannerSubtitle: '记录校园里的每一只小猫',
 
     // 推荐猫咪
     featuredCats: [] as ICat[],
     loading: true,
     error: '',
+    showPoster: true,
 
     // 快捷入口
     quickEntries: [
       { icon: '📸', label: '发现猫咪', url: ROUTES.UPLOAD },
+      { icon: '📊', label: '数据统计', url: ROUTES.STATS },
     ],
   },
 
@@ -30,14 +32,7 @@ Page({
     this.loadFeaturedCats();
   },
 
-  onShow() {
-    // 每次回到首页刷新数据
-    if (!this.data.loading) {
-      this.loadFeaturedCats();
-    }
-  },
-
-  /** 加载推荐猫咪（随机推荐2只） */
+  /** 加载推荐猫咪（随机推荐2只，仅首次进入时加载） */
   async loadFeaturedCats() {
     this.setData({ loading: true, error: '' });
 
@@ -71,7 +66,7 @@ Page({
   /** 跳转快捷入口 */
   onTapEntry(e: WechatMiniprogram.TouchEvent) {
     const { url } = e.currentTarget.dataset;
-    if (url === ROUTES.CAT_LIST || url === ROUTES.PROFILE || url === ROUTES.INDEX) {
+    if (url === ROUTES.CAT_LIST || url === ROUTES.PROFILE || url === ROUTES.INDEX || url === ROUTES.STATS) {
       wx.switchTab({ url });
     } else {
       wx.navigateTo({ url });
@@ -83,4 +78,12 @@ Page({
     await this.loadFeaturedCats();
     wx.stopPullDownRefresh();
   },
+
+  /** 关闭科普弹窗 */
+  onClosePoster() {
+    this.setData({ showPoster: false });
+  },
+
+  /** 阻止冒泡 */
+  noop() {},
 });

@@ -91,7 +91,7 @@
 
   <!-- ==================== 底部品牌 ==================== -->
   <view class="brand-footer">
-    <text class="brand-text">🐱 紫喵园 · 发现校园里的每一只猫</text>
+    <text class="brand-text">🐱 紫喵园 · 记录校园里的每一只小猫</text>
   </view>
 
 </view>

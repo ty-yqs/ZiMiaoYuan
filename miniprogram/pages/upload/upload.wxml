@@ -17,11 +17,11 @@
       </view>
       <view
         class="photo-add"
-        wx:if="{{photos.length < 3}}"
+        wx:if="{{photos.length < maxPhotos}}"
         bind:tap="onChooseImage"
       >
         <text class="add-icon">+</text>
-        <text class="add-text">{{photos.length}}/3</text>
+        <text class="add-text">{{photos.length}}/{{maxPhotos}}</text>
       </view>
     </view>
   </view>
@@ -51,7 +51,7 @@
 
     <!-- 性别 -->
     <van-field
-      value="{{gender === 'male' ? '公猫 ♂' : gender === 'female' ? '母猫 ♀' : ''}}"
+      value="{{gender === 'male' ? '公猫' : gender === 'female' ? '母猫' : ''}}"
       placeholder="选择性别"
       readonly
       right-icon="arrow"

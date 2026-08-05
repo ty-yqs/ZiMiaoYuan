@@ -32,7 +32,7 @@ exports.main = async (event, context) => {
       getCollection(COLLECTIONS.CATS).where({ ...approvedWhere, 'health.sterilized': true }).count(),
       getCollection(COLLECTIONS.CATS).where({ ...approvedWhere, 'health.vaccinated': true }).count(),
       getCollection(COLLECTIONS.RECORDS).count(),
-      getCollection(COLLECTIONS.CATS).where(approvedWhere).field({ color: true, gender: true, age: true }).get(),
+      getCollection(COLLECTIONS.CATS).where(approvedWhere).field({ color: true, gender: true, age: true, cat_name: true }).get(),
     ]);
 
     // ==================== 计算分布 ====================
@@ -49,6 +49,9 @@ exports.main = async (event, context) => {
     // 年龄分布
     const ageMap = {};
     cats.forEach(c => { const k = c.age || 'unknown'; ageMap[k] = (ageMap[k] || 0) + 1; });
+
+    // 命名率：有名字的猫咪（排除空名和默认名）
+    const namedCount = cats.filter(c => c.cat_name && c.cat_name.trim() && c.cat_name !== '未命名猫咪').length;
 
     // ==================== 当日访问量（仅读取，集合可能还不存在） ====================
     let todayVisits = 0;
@@ -80,12 +83,14 @@ exports.main = async (event, context) => {
       catCount,
       sterilizedCount: sterilizedRes.total,
       vaccinatedCount: vaccinatedRes.total,
+      namedCount,
       sterilizationRate: catCount > 0 ? Math.round((sterilizedRes.total / catCount) * 100) : 0,
       vaccinationRate: catCount > 0 ? Math.round((vaccinatedRes.total / catCount) * 100) : 0,
+      namingRate: catCount > 0 ? Math.round((namedCount / catCount) * 100) : 0,
       catsByColor: sortByCount(colorMap),
       catsByGender: [
-        { name: '公猫 ♂', count: genderMap.male || 0 },
-        { name: '母猫 ♀', count: genderMap.female || 0 },
+        { name: '公猫', count: genderMap.male || 0 },
+        { name: '母猫', count: genderMap.female || 0 },
         { name: '未知', count: genderMap.unknown || 0 },
       ].filter(g => g.count > 0 || true), // 保留所有性别项
       catsByAge: sortByCount(ageMap),

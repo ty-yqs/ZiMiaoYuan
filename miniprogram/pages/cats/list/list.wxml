@@ -9,7 +9,7 @@
     <view class="search-bar">
       <van-search
         value="{{searchKeyword}}"
-        placeholder="搜索猫咪名字、毛色..."
+        placeholder="搜索猫咪名字"
         bind:search="onSearch"
         bind:clear="onSearch"
         shape="round"

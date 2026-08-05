@@ -16,6 +16,7 @@ Page({
     vaccinatedCount: 0,
     sterilizationRate: 0,
     vaccinationRate: 0,
+    namingRate: 0,
     recordCount: 0,
     todayVisits: 0,
 
@@ -77,6 +78,7 @@ Page({
         vaccinatedCount: d.vaccinatedCount,
         sterilizationRate: d.sterilizationRate,
         vaccinationRate: d.vaccinationRate,
+        namingRate: d.namingRate,
         recordCount: d.recordCount,
         todayVisits: d.todayVisits,
         catsByColor,
@@ -93,11 +95,5 @@ Page({
         loading: false,
       });
     }
-  },
-
-  /** 下拉刷新 */
-  async onPullDownRefresh() {
-    await this.loadStats();
-    wx.stopPullDownRefresh();
   },
 });
