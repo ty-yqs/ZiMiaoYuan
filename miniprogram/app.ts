@@ -6,6 +6,7 @@
  */
 
 const config = require('./config/index');
+const { apiTrackVisit } = require('./utils/api');
 
 App<IAppOption>({
   globalData: {
@@ -28,6 +29,11 @@ App<IAppOption>({
 
     // 预登录
     this.checkLoginStatus();
+
+    // 记录当日访问量
+    apiTrackVisit()
+      .then(res => console.log('[App] trackVisit 返回:', JSON.stringify(res)))
+      .catch(err => console.error('[App] trackVisit 失败:', err));
   },
 
   /**

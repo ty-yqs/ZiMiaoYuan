@@ -1,0 +1,99 @@
+<!--
+  数据统计页
+-->
+<view class="page-container">
+
+  <!-- ==================== 加载中 ==================== -->
+  <view wx:if="{{loading}}" class="loading-tip">
+    <text>正在加载统计数据...</text>
+  </view>
+
+  <!-- ==================== 错误 ==================== -->
+  <view wx:elif="{{error}}" class="empty-state">
+    <text class="empty-icon">📊</text>
+    <text class="empty-text">{{error}}</text>
+  </view>
+
+  <!-- ==================== 统计内容 ==================== -->
+  <block wx:else>
+
+    <!-- 概览卡片 -->
+    <view class="overview-grid">
+      <view class="stat-card">
+        <text class="stat-card-icon">🐱</text>
+        <text class="stat-card-number">{{catCount}}</text>
+        <text class="stat-card-label">在册猫咪</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-card-icon">👶</text>
+        <text class="stat-card-number">{{sterilizationRate}}%</text>
+        <text class="stat-card-label">绝育率</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-card-icon">💉</text>
+        <text class="stat-card-number">{{vaccinationRate}}%</text>
+        <text class="stat-card-label">疫苗率</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-card-icon">👀</text>
+        <text class="stat-card-number">{{todayVisits}}</text>
+        <text class="stat-card-label">今日访问</text>
+      </view>
+    </view>
+
+    <!-- 总记录数 -->
+    <view class="card record-summary">
+      <view class="flex-row flex-between">
+        <text class="section-title">📸 累计记录</text>
+        <text class="record-total">{{recordCount}} 条</text>
+      </view>
+    </view>
+
+    <!-- 性别分布 -->
+    <view class="card distro-card">
+      <text class="section-title">⚧ 性别分布</text>
+      <view class="distro-list">
+        <view class="distro-item" wx:for="{{catsByGender}}" wx:key="name">
+          <text class="distro-name">{{item.label}}</text>
+          <view class="distro-bar-bg">
+            <view class="distro-bar-fill gender-bar" style="width: {{maxGenderCount > 0 ? item.count / maxGenderCount * 100 : 0}}%;" />
+          </view>
+          <text class="distro-count">{{item.count}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 毛色分布 -->
+    <view class="card distro-card">
+      <text class="section-title">🎨 毛色分布</text>
+      <view class="distro-list">
+        <view class="distro-item" wx:for="{{catsByColor}}" wx:key="name">
+          <text class="distro-name">{{item.label}}</text>
+          <view class="distro-bar-bg">
+            <view class="distro-bar-fill color-bar" style="width: {{maxColorCount > 0 ? item.count / maxColorCount * 100 : 0}}%;" />
+          </view>
+          <text class="distro-count">{{item.count}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 年龄段分布 -->
+    <view class="card distro-card">
+      <text class="section-title">🎂 年龄段分布</text>
+      <view class="distro-list">
+        <view class="distro-item" wx:for="{{catsByAge}}" wx:key="name">
+          <text class="distro-name">{{item.label}}</text>
+          <view class="distro-bar-bg">
+            <view class="distro-bar-fill age-bar" style="width: {{maxAgeCount > 0 ? item.count / maxAgeCount * 100 : 0}}%;" />
+          </view>
+          <text class="distro-count">{{item.count}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部安全区 -->
+    <view style="height: 40rpx;" />
+
+  </block>
+
+</view>

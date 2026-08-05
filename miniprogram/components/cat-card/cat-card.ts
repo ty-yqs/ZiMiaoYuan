@@ -6,6 +6,7 @@
  */
 
 import { getRelativeTime } from '../../utils/util';
+import { getCachedImageUrl } from '../../utils/imageCache';
 
 Component({
   properties: {
@@ -34,6 +35,7 @@ Component({
   data: {
     relativeTime: '',
     ageLabel: '',
+    cachedAvatar: '', // 缓存后的头像本地路径
   },
 
   observers: {
@@ -54,9 +56,31 @@ Component({
         ageLabel: AGE_MAP[val] || '',
       });
     },
+    'cat.avatar'(val: string) {
+      if (val) {
+        this.loadCachedAvatar(val);
+      }
+    },
+  },
+
+  lifetimes: {
+    attached() {
+      const avatar = this.properties.cat?.avatar;
+      if (avatar) {
+        this.loadCachedAvatar(avatar);
+      }
+    },
   },
 
   methods: {
+    /** 加载缓存的头像 */
+    async loadCachedAvatar(cloudFileID: string) {
+      const cached = await getCachedImageUrl(cloudFileID);
+      if (cached) {
+        this.setData({ cachedAvatar: cached });
+      }
+    },
+
     /** 点击卡片跳转到猫咪详情 */
     onTapCard() {
       const { cat } = this.properties;
@@ -69,8 +93,14 @@ Component({
 
     /** 预览猫咪头像 */
     onPreviewAvatar() {
+      const { cachedAvatar } = this.data;
       const { cat } = this.properties;
-      if (cat && cat.avatar) {
+      if (cachedAvatar) {
+        wx.previewImage({
+          urls: [cachedAvatar],
+          current: cachedAvatar,
+        });
+      } else if (cat && cat.avatar) {
         wx.previewImage({
           urls: [cat.avatar],
           current: cat.avatar,

@@ -3,8 +3,10 @@
  *
  * 显示用户信息、贡献统计、管理员入口
  */
-import { apiGetCats } from '../../utils/api';
 import { ROUTES } from '../../utils/constants';
+import { apiGetUserStats } from '../../utils/api';
+import { getCachedImageUrl, getCacheSize, clearImageCache } from '../../utils/imageCache';
+import { showToast, showConfirm } from '../../utils/util';
 
 const app = getApp<IAppOption>();
 
@@ -14,14 +16,21 @@ Page({
     isAdmin: false,
     isLoggedIn: false,
 
+    // 用户头像缓存后的本地路径
+    cachedAvatar: '',
+
     // 贡献统计
     stats: {
       catCount: 0,
       recordCount: 0,
     },
 
+    // 缓存信息
+    cacheSize: '计算中...',
+    cacheCount: 0,
+
     loading: true,
-    showVersion: '1.0.0 MVP',
+    showVersion: '1.0.0',
   },
 
   onLoad() {
@@ -38,6 +47,8 @@ Page({
         isLoggedIn: true,
       });
       this.loadUserStats();
+      this.loadCacheSize();
+      this.loadCachedAvatar(userInfo.avatar);
     }
   },
 
@@ -54,6 +65,8 @@ Page({
         isLoggedIn: true,
       });
       await this.loadUserStats();
+      this.loadCacheSize();
+      this.loadCachedAvatar(userInfo.avatar);
     } else {
       // 尝试重新登录
       const user = await app.checkLoginStatus();
@@ -64,6 +77,8 @@ Page({
           isLoggedIn: true,
         });
         await this.loadUserStats();
+        this.loadCacheSize();
+        this.loadCachedAvatar(user.avatar);
       } else {
         this.setData({ isLoggedIn: false });
       }
@@ -72,20 +87,42 @@ Page({
     this.setData({ loading: false });
   },
 
+  /** 加载缓存的头像 */
+  async loadCachedAvatar(avatar: string | undefined) {
+    if (!avatar) return;
+    const cached = await getCachedImageUrl(avatar);
+    if (cached) {
+      this.setData({ cachedAvatar: cached });
+    }
+  },
+
   /** 加载用户贡献统计 */
   async loadUserStats() {
     try {
-      // 调用云函数获取当前用户的猫咪和记录数量
-      // 这里简化处理，实际通过云函数统计
-      // TODO: 在云函数 login 中返回统计信息
-      this.setData({
-        stats: {
-          catCount: 0,
-          recordCount: 0,
-        },
-      });
+      const res = await apiGetUserStats();
+      if (res.code === 0 && res.data) {
+        this.setData({
+          stats: {
+            catCount: res.data.catCount || 0,
+            recordCount: res.data.recordCount || 0,
+          },
+        });
+      }
     } catch (err) {
       console.error('[Profile] 加载统计失败:', err);
+    }
+  },
+
+  /** 加载缓存大小 */
+  async loadCacheSize() {
+    try {
+      const { count, sizeFormatted } = await getCacheSize();
+      this.setData({
+        cacheSize: sizeFormatted,
+        cacheCount: count,
+      });
+    } catch (err) {
+      console.error('[Profile] 获取缓存大小失败:', err);
     }
   },
 
@@ -106,6 +143,42 @@ Page({
     }
   },
 
+  /** 清除图片缓存 */
+  async onClearCache() {
+    if (this.data.cacheCount === 0) {
+      showToast('暂无缓存数据');
+      return;
+    }
+
+    const confirmed = await showConfirm(
+      `当前缓存了 ${this.data.cacheCount} 张图片（${this.data.cacheSize}），确认清除吗？\n\n清除后图片将重新从云端加载。`,
+      '清除缓存'
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const { clearedCount } = await clearImageCache();
+      showToast(`已清除 ${clearedCount} 张缓存图片`, 'success');
+      this.setData({
+        cacheSize: '0 B',
+        cacheCount: 0,
+        cachedAvatar: '',
+      });
+      // 延迟刷新头像缓存
+      setTimeout(() => {
+        const { userInfo } = this.data;
+        if (userInfo?.avatar) {
+          this.loadCachedAvatar(userInfo.avatar);
+        }
+        this.loadCacheSize();
+      }, 500);
+    } catch (err) {
+      console.error('[Profile] 清除缓存失败:', err);
+      showToast('清除失败，请重试', 'error');
+    }
+  },
+
   /** 跳转管理员页面 */
   onGoAdmin() {
     wx.navigateTo({ url: ROUTES.ADMIN });
@@ -115,7 +188,7 @@ Page({
   onAbout() {
     wx.showModal({
       title: '关于深理猫谱',
-      content: '深理猫谱 — 校园猫咪数字档案平台\n\n记录校园里每一只可爱的猫咪 🐱\n\nVersion 1.0.0 MVP',
+      content: '深理猫谱 — 校园猫咪数字档案平台\n\n记录校园里每一只可爱的猫咪 🐱\n\nVersion 1.0.0',
       showCancel: false,
     });
   },

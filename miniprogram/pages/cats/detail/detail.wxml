@@ -21,13 +21,13 @@
     <view class="photo-swiper" wx:if="{{cat.photos && cat.photos.length > 0}}">
       <scroll-view scroll-x class="photo-scroll">
         <image
-          wx:for="{{cat.photos}}"
+          wx:for="{{cachedPhotos}}"
           wx:key="*this"
           class="photo-item"
           src="{{item}}"
           mode="aspectFill"
           data-url="{{item}}"
-          data-urls="{{cat.photos}}"
+          data-urls="{{cachedPhotos}}"
           bind:tap="onPreviewImage"
         />
       </scroll-view>
@@ -102,7 +102,7 @@
         <text class="section-more" wx:if="{{hasMoreRecords}}" data-type="photo" bind:tap="onTapMoreRecords">查看更多 ›</text>
       </view>
 
-      <view class="record-item" wx:for="{{records}}" wx:key="_id">
+      <view class="record-item" wx:for="{{cachedRecords}}" wx:key="_id">
         <image class="record-photo" src="{{item.photo}}" mode="aspectFill" />
         <view class="record-info">
           <text class="record-desc">{{item.description || '发现记录'}}</text>

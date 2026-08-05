@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "数据统计",
+  "usingComponents": {
+    "van-loading": "@vant/weapp/loading/index",
+    "van-empty": "@vant/weapp/empty/index"
+  }
+}

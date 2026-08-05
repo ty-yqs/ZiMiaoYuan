@@ -10,7 +10,7 @@
       <view class="avatar-wrapper">
         <image
           class="user-avatar"
-          src="{{userInfo.avatar || '/images/avatar.png'}}"
+          src="{{cachedAvatar || userInfo.avatar || '/images/avatar.png'}}"
           mode="aspectFill"
         />
       </view>
@@ -52,12 +52,6 @@
         is-link
         url="/pages/upload/upload"
       />
-      <van-cell
-        title="📋 我的发现"
-        label="查看我的发现记录"
-        is-link
-        url=""
-      />
     </van-cell-group>
 
     <!-- 管理员入口 -->
@@ -75,6 +69,12 @@
         title="💡 关于深理猫谱"
         is-link
         bind:click="onAbout"
+      />
+      <van-cell
+        title="🗑️ 清除图片缓存"
+        label="当前缓存 {{cacheCount}} 张图片（{{cacheSize}}），清除后图片将重新从云端加载"
+        is-link
+        bind:click="onClearCache"
       />
       <van-cell
         title="{{showVersion}}"

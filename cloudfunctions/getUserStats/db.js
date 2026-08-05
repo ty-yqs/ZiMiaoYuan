@@ -12,7 +12,6 @@ const COLLECTIONS = {
   USERS: 'users',
   CATS: 'cats',
   RECORDS: 'records',
-  DAILY_VISITS: 'dailyVisits',
 };
 
 // 用户角色

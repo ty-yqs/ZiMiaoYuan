@@ -122,4 +122,6 @@ Page({
   onTapUpload() {
     wx.navigateTo({ url: '/pages/upload/upload' });
   },
+
+
 });

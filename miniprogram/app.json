@@ -6,7 +6,8 @@
     "pages/cats/records/records",
     "pages/upload/upload",
     "pages/profile/profile",
-    "pages/admin/admin"
+    "pages/admin/admin",
+    "pages/stats/stats"
   ],
   "window": {
     "backgroundColor": "#FFF8EC",
@@ -28,6 +29,10 @@
       {
         "pagePath": "pages/cats/list/list",
         "text": "🐱 档案"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "📊 统计"
       },
       {
         "pagePath": "pages/profile/profile",

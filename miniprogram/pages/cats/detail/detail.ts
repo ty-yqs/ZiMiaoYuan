@@ -6,6 +6,7 @@
 import { apiGetCatDetail, apiAdminUpdateCat, apiUploadRecord } from '../../../utils/api';
 import { formatDate, showToast, showLoading, hideLoading } from '../../../utils/util';
 import { ROUTES } from '../../../utils/constants';
+import { getCachedImageUrls } from '../../../utils/imageCache';
 
 const app = getApp<IAppOption>();
 
@@ -20,6 +21,11 @@ Page({
     totalNotes: 0,
     hasMoreRecords: false,
     hasMoreNotes: false,
+
+    // 缓存后的图片
+    cachedPhotos: [] as string[],
+    cachedRecords: [] as IRecord[],
+    cachedNotes: [] as IRecord[],
 
     // UI 状态
     loading: true,
@@ -77,8 +83,14 @@ Page({
         totalNotes: noteRecords.length,
         hasMoreRecords: photoRecords.length > 3,
         hasMoreNotes: noteRecords.length > 3,
+        // 先用原始数据初始化，等缓存加载后再替换
+        cachedPhotos: cat.photos || [],
+        cachedRecords: photoRecords.slice(0, 3),
         loading: false,
       });
+
+      // 异步转换图片 URL 到本地缓存
+      this.cacheImages(cat, photoRecords);
 
       // 更新导航栏标题
       wx.setNavigationBarTitle({
@@ -90,6 +102,50 @@ Page({
         loading: false,
       });
     }
+  },
+
+  /** 缓存图片到本地 */
+  async cacheImages(cat: ICat, photoRecords: IRecord[]) {
+    // 收集所有需要缓存的 cloud:// 图片 ID
+    const cloudIDs: string[] = [];
+
+    // 猫咪照片
+    if (cat.photos && cat.photos.length > 0) {
+      cloudIDs.push(...cat.photos);
+    }
+
+    // 发现记录中的照片
+    for (const record of photoRecords) {
+      if (record.photo) {
+        cloudIDs.push(record.photo);
+      }
+    }
+
+    if (cloudIDs.length === 0) return;
+
+    // 批量缓存
+    const cachedUrls = await getCachedImageUrls(cloudIDs);
+
+    // 将缓存结果映射回去（仅替换成功缓存的项目）
+    let urlIndex = 0;
+
+    // 猫咪照片
+    const photoCount = cat.photos ? cat.photos.length : 0;
+    const cachedPhotos = cat.photos
+      ? cat.photos.map((originalUrl, i) => cachedUrls[i] || originalUrl)
+      : [];
+    urlIndex = photoCount;
+
+    // 记录中的照片
+    const cachedRecords = photoRecords.map((record, i) => ({
+      ...record,
+      photo: cachedUrls[urlIndex + i] || record.photo,
+    }));
+
+    this.setData({
+      cachedPhotos,
+      cachedRecords: cachedRecords.slice(0, 3),
+    });
   },
 
   /** 预览图片 */

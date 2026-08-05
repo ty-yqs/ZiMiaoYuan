@@ -10,7 +10,7 @@
   <view class="card-avatar">
     <image
       class="avatar-img"
-      src="{{cat.avatar || '/images/default-avatar.png'}}"
+      src="{{cachedAvatar || cat.avatar || '/images/default-avatar.png'}}"
       mode="aspectFill"
       lazy-load
     />

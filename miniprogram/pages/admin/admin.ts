@@ -8,6 +8,7 @@
  */
 import { apiGetCats, apiAdminUpdateCat } from '../../utils/api';
 import { showToast, showConfirm } from '../../utils/util';
+import { getCachedImageUrls } from '../../utils/imageCache';
 
 const app = getApp<IAppOption>();
 
@@ -53,15 +54,44 @@ Page({
     const pendingRes = await apiGetCats({ status: 'pending', pageSize: 50 });
     if (pendingRes.code === 0) {
       this.setData({ pendingCats: pendingRes.data.cats || [] });
+      this.cacheAvatars(pendingRes.data.cats || [], 'pendingCats');
     }
 
     // 加载全部猫咪
     const allRes = await apiGetCats({ status: 'all', pageSize: 50 });
     if (allRes.code === 0) {
       this.setData({ allCats: allRes.data.cats || [] });
+      this.cacheAvatars(allRes.data.cats || [], 'allCats');
     }
 
     this.setData({ loading: false });
+  },
+
+  /** 缓存猫咪头像到本地 */
+  async cacheAvatars(cats: ICat[], listKey: string) {
+    const cloudIDs = cats
+      .map((c) => c.avatar)
+      .filter((avatar) => avatar && avatar.startsWith('cloud://'));
+
+    if (cloudIDs.length === 0) return;
+
+    const cachedUrls = await getCachedImageUrls(cloudIDs);
+
+    // 构建 cloudID → cachedURL 映射
+    const urlMap: Record<string, string> = {};
+    for (let i = 0; i < cloudIDs.length; i++) {
+      if (cachedUrls[i]) {
+        urlMap[cloudIDs[i]] = cachedUrls[i];
+      }
+    }
+
+    // 更新列表中的 avatar 字段
+    const updatedCats = cats.map((cat) => ({
+      ...cat,
+      avatar: urlMap[cat.avatar] || cat.avatar,
+    }));
+
+    this.setData({ [listKey]: updatedCats });
   },
 
   // ==================== 审核操作 ====================

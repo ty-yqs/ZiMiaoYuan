@@ -2,7 +2,8 @@
  * 发现记录 / 便利贴 完整列表页
  */
 import { apiGetCatDetail } from '../../../utils/api';
-import { formatDate, showToast } from '../../../utils/util';
+import { formatDate } from '../../../utils/util';
+import { getCachedImageUrls } from '../../../utils/imageCache';
 
 Page({
   data: {
@@ -43,12 +44,42 @@ Page({
         catName: cat?.cat_name || '猫咪',
         loading: false,
       });
+
+      // 异步缓存图片到本地
+      this.cacheRecordPhotos(items);
     } else {
       this.setData({
         error: res.message || '加载失败',
         loading: false,
       });
     }
+  },
+
+  /** 缓存记录中的照片到本地 */
+  async cacheRecordPhotos(records: IRecord[]) {
+    const cloudIDs = records
+      .map((r) => r.photo)
+      .filter((photo) => photo && photo.startsWith('cloud://'));
+
+    if (cloudIDs.length === 0) return;
+
+    const cachedUrls = await getCachedImageUrls(cloudIDs);
+
+    // 构建 cloudID → cachedURL 映射
+    const urlMap: Record<string, string> = {};
+    for (let i = 0; i < cloudIDs.length; i++) {
+      if (cachedUrls[i]) {
+        urlMap[cloudIDs[i]] = cachedUrls[i];
+      }
+    }
+
+    // 更新 items 中的 photo 字段
+    const updatedItems = records.map((item) => ({
+      ...item,
+      photo: urlMap[item.photo] || item.photo,
+    }));
+
+    this.setData({ items: updatedItems });
   },
 
   formatDate(date: Date | string): string {
