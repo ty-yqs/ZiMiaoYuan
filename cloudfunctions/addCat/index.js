@@ -70,10 +70,25 @@ exports.main = async (event, context) => {
 
     console.log('[addCat] 猫咪档案已创建:', catId, '名称:', cat_name);
 
+    // 查询用户昵称
+    let nickname = '匿名猫友';
+    try {
+      const userRes = await getCollection(COLLECTIONS.USERS)
+        .where({ _openid: OPENID })
+        .limit(1)
+        .get();
+      if (userRes.data && userRes.data.length > 0 && userRes.data[0].nickname) {
+        nickname = userRes.data[0].nickname;
+      }
+    } catch (e) {
+      // 查不到用户就用默认昵称
+    }
+
     // Step 2: 创建首条发现记录
     const recordData = {
       catId,
       userId: OPENID,
+      nickname,
       photo: photos[0],
       location: catData.location,
       description: description || '首次发现',

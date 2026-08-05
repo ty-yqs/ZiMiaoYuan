@@ -1,5 +1,7 @@
 # 🐱 紫喵园 (SUATCat)
 
+![Shen Xiao Li](miniprogram/images/banner-cat.png)
+
 校园猫咪数字档案与互动平台 —— 发现、记录、分享校园里每一只猫咪的故事。
 
 ## ✨ 功能

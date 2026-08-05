@@ -24,6 +24,13 @@
   justify-content: center;
 }
 
+.record-nickname {
+  font-size: var(--font-xs);
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-bottom: 4rpx;
+}
+
 .record-desc {
   font-size: var(--font-sm);
   color: var(--color-text-primary);

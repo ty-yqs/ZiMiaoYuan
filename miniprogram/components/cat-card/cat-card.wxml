@@ -15,8 +15,12 @@
       lazy-load
     />
     <!-- 性别角标 -->
-    <view class="gender-badge male" wx:if="{{cat.gender === 'male'}}">♂</view>
-    <view class="gender-badge female" wx:if="{{cat.gender === 'female'}}">♀</view>
+    <view class="gender-badge male" wx:if="{{cat.gender === 'male'}}">
+      <image class="gender-badge-img" src="/images/gender-male.svg" />
+    </view>
+    <view class="gender-badge female" wx:if="{{cat.gender === 'female'}}">
+      <image class="gender-badge-img" src="/images/gender-female.svg" />
+    </view>
   </view>
 
   <!-- ========== 信息区 ========== -->

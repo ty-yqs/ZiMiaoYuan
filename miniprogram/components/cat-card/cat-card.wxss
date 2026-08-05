@@ -44,13 +44,14 @@
   width: 36rpx;
   height: 36rpx;
   border-radius: var(--radius-round);
-  font-size: 22rpx;
-  font-weight: 700;
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+}
+
+.gender-badge-img {
+  width: 24rpx;
+  height: 24rpx;
 }
 
 .gender-badge.male {
@@ -175,5 +176,9 @@
 .cat-card.compact .gender-badge {
   width: 28rpx;
   height: 28rpx;
-  font-size: 18rpx;
+}
+
+.cat-card.compact .gender-badge-img {
+  width: 18rpx;
+  height: 18rpx;
 }

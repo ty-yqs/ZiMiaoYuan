@@ -36,13 +36,10 @@
 }
 
 .gender-icon {
-  font-size: var(--font-lg);
-  font-weight: 700;
-  color: #4A90D9;
-}
-
-.gender-icon.female {
-  color: #E8749F;
+  width: 36rpx;
+  height: 36rpx;
+  flex-shrink: 0;
+  margin-left: 4rpx;
 }
 
 .info-row {
@@ -220,6 +217,13 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.record-nickname {
+  font-size: var(--font-xs);
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-bottom: 4rpx;
 }
 
 .record-desc {

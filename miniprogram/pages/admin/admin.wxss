@@ -5,6 +5,7 @@
 /* ========== 管理员卡片 ========== */
 .admin-card {
   margin: var(--spacing-sm) var(--spacing-md);
+  overflow: hidden;
 }
 
 .admin-cat-img {
@@ -38,6 +39,7 @@
   margin-top: var(--spacing-sm);
   gap: var(--spacing-sm);
   justify-content: flex-end;
+  flex-wrap: wrap;
   padding-top: var(--spacing-sm);
   border-top: 1rpx solid var(--color-border);
 }
