@@ -134,10 +134,12 @@ Page({
     const { avatarUrl } = e.detail;
     // 上传到云存储
     try {
+      // 先压缩头像（减少存储和流量）
+      const compressRes = await wx.compressImage({ src: avatarUrl, quality: 80 });
       const cloudPath = `users/avatars/${Date.now()}.jpg`;
       const res = await wx.cloud.uploadFile({
         cloudPath,
-        filePath: avatarUrl,
+        filePath: compressRes.tempFilePath,
       });
       // TODO: 调用云函数更新用户头像
       console.log('[Profile] 头像上传成功:', res.fileID);

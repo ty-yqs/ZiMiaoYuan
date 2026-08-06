@@ -88,6 +88,15 @@ Page({
     this.setData({ photos });
   },
 
+  /** 压缩图片列表，返回压缩后的临时文件路径 */
+  compressImages(filePaths: string[]): Promise<string[]> {
+    return Promise.all(
+      filePaths.map(path =>
+        wx.compressImage({ src: path, quality: 80 }).then(res => res.tempFilePath)
+      )
+    );
+  },
+
   /** 选择位置 */
   onChooseLocation() {
     wx.chooseLocation({
@@ -136,18 +145,22 @@ Page({
 
     if (this.data.submitting) return;
     this.setData({ submitting: true });
-    showLoading('上传中...');
+    showLoading('压缩中...');
 
     try {
-      // Step 1: 上传图片到云存储
+      // Step 1: 压缩图片（减少上行流量和存储占用）
+      const compressedPaths = await this.compressImages(this.data.photos);
+
+      // Step 2: 上传图片到云存储
+      showLoading('上传中...');
       const cloudFileIds: string[] = [];
-      for (const filePath of this.data.photos) {
+      for (const filePath of compressedPaths) {
         const cloudPath = `${config.STORAGE_PREFIX.CAT_PHOTO}${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
         const uploadRes = await wx.cloud.uploadFile({ cloudPath, filePath });
         cloudFileIds.push(uploadRes.fileID);
       }
 
-      // Step 2: 如果是为已有猫咪添加记录
+      // Step 3: 如果是为已有猫咪添加记录
       if (this.data.targetCatId) {
         const res = await apiUploadRecord({
           catId: this.data.targetCatId,
@@ -168,7 +181,7 @@ Page({
           showToast(res.message || '提交失败', 'error');
         }
       } else {
-        // Step 3: 新建猫咪 + 记录
+        // Step 4: 新建猫咪 + 记录
         const res = await apiAddCat({
           cat_name: this.data.cat_name,
           photos: cloudFileIds,
