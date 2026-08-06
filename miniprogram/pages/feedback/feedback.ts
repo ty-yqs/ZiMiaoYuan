@@ -11,6 +11,10 @@ Page({
     submitting: false,
   },
 
+  onLoad() {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
+  },
+
   onShow() {
     requireProfile();
   },

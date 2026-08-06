@@ -19,6 +19,7 @@ Page({
   },
 
   onLoad() {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     // 预填已有信息
     const user = app.globalData.userInfo;
     if (user) {

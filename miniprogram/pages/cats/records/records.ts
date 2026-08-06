@@ -16,6 +16,7 @@ Page({
   },
 
   onLoad(options: Record<string, string>) {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     const { catId, type } = options;
     if (catId) {
       this.setData({ catId, type: type || 'photo' });

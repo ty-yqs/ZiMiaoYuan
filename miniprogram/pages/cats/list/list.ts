@@ -38,6 +38,7 @@ Page({
   },
 
   onLoad() {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     this.loadCats(true);
   },
 

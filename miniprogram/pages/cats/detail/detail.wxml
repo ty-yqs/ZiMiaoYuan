@@ -52,7 +52,7 @@
 
     <!-- 简介 -->
     <view class="card desc-card" wx:if="{{cat.description}}">
-      <view class="section-title-sm">📝 简介</view>
+      <view class="section-title-sm">简介</view>
       <text class="desc-text">{{cat.description}}</text>
     </view>
 

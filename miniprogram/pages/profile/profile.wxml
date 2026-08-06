@@ -39,7 +39,7 @@
     <view class="stat-divider" />
     <view class="stat-item flex-column flex-center">
       <text class="stat-number">{{stats.recordCount}}</text>
-      <text class="stat-label">发现记录</text>
+      <text class="stat-label">提交记录</text>
     </view>
   </view>
 

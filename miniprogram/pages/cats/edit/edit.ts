@@ -46,6 +46,7 @@ Page({
   noop() {},
 
   onLoad(options: Record<string, string>) {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     const { catId } = options;
     if (!catId) {
       this.setData({ error: '猫咪不存在', loading: false });

@@ -15,6 +15,7 @@ Page({
   },
 
   onLoad() {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     this.loadQRCode();
     this.loadSupporters();
   },

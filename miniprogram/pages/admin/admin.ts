@@ -40,6 +40,7 @@ Page({
   },
 
   onLoad() {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     if (!app.globalData.isAdmin) {
       wx.showModal({
         title: '权限不足',

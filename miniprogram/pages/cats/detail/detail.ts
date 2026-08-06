@@ -53,6 +53,7 @@ Page({
   },
 
   onLoad(options: Record<string, string>) {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     this.setData({ isAdmin: app.globalData.isAdmin });
 
     const { catId } = options;

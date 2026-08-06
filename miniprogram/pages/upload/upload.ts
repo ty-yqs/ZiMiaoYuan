@@ -48,6 +48,7 @@ Page({
   },
 
   onLoad(options: Record<string, string>) {
+    wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     if (options.catId) {
       this.setData({ targetCatId: options.catId, maxPhotos: 1 });
       wx.setNavigationBarTitle({ title: '记录发现' });
