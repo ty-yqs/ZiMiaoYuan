@@ -46,11 +46,15 @@
       </block>
     </view>
 
-    <!-- 第四行：健康 -->
+    <!-- 第四行：健康 + 评分 -->
     <view class="card-row card-footer">
       <view class="health-dots">
         <text class="dot {{cat.health && cat.health.sterilized ? 'on' : ''}}">绝</text>
         <text class="dot {{cat.health && cat.health.vaccinated ? 'on' : ''}}">疫</text>
+      </view>
+      <view class="rating-display" wx:if="{{ratingDisplay}}">
+        <text class="rating-star">亲人指数：</text>
+        <text class="rating-value">{{ratingDisplay}}</text>
       </view>
     </view>
 

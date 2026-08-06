@@ -176,6 +176,28 @@
   color: var(--color-text-hint);
 }
 
+/* 评分展示 */
+.rating-display {
+  display: flex;
+  align-items: center;
+  gap: 2rpx;
+}
+
+.rating-star {
+  font-size: 22rpx;
+}
+
+.rating-value {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.rating-num {
+  font-size: 20rpx;
+  color: var(--color-text-hint);
+}
+
 /* ========== Compact 模式 ========== */
 .cat-card.compact {
   padding: 16rpx 20rpx;

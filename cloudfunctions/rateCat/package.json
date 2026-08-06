@@ -1,0 +1,9 @@
+{
+  "name": "rateCat",
+  "version": "1.0.0",
+  "description": "猫咪亲人指数评分",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

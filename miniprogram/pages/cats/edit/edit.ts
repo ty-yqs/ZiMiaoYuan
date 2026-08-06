@@ -96,6 +96,10 @@ Page({
     return option ? option.label : '';
   },
 
+  onShareAppMessage() {
+    return { title: '编辑猫咪信息', path: `/pages/cats/edit/edit?catId=${this.data.catId}` };
+  },
+
   /** 提交编辑 */
   async onSubmit() {
     if (!requireProfile()) return;

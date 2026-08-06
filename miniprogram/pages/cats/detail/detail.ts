@@ -3,7 +3,7 @@
  *
  * 展示猫咪完整信息：图片、档案、健康状态、发现记录
  */
-import { apiGetCatDetail, apiAdminUpdateCat, apiUploadRecord } from '../../../utils/api';
+import { apiGetCatDetail, apiAdminUpdateCat, apiUploadRecord, apiRateCat } from '../../../utils/api';
 import { formatDate, showToast, showLoading, hideLoading, requireProfile } from '../../../utils/util';
 import { ROUTES } from '../../../utils/constants';
 import { getCachedImageUrls } from '../../../utils/imageCache';
@@ -43,6 +43,13 @@ Page({
     stickyNoteText: '',
     stickyNoteValid: false,
     submitNoteLoading: false,
+
+    // 亲人指数评分
+    myRating: 0,
+    ratingAvg: null as number | null,
+    ratingCount: 0,
+    ratingAvgDisplay: '--',
+    rateLoading: false,
   },
 
   onLoad(options: Record<string, string>) {
@@ -72,7 +79,7 @@ Page({
     const res = await apiGetCatDetail(this.data.catId);
 
     if (res.code === 0) {
-      const { cat, records } = res.data;
+      const { cat, records, myRating } = res.data;
 
       // 年龄段中文映射
       const AGE_LABEL_MAP: Record<string, string> = {
@@ -103,6 +110,11 @@ Page({
         // 先用原始数据初始化，等缓存加载后再替换
         cachedPhotos: cat.photos || [],
         cachedRecords: photoRecords.slice(0, 3),
+        // 评分数据
+        myRating: myRating || 0,
+        ratingAvg: cat.ratingAvg != null ? Number(cat.ratingAvg) : null,
+        ratingAvgDisplay: cat.ratingAvg != null ? Number(cat.ratingAvg).toFixed(1) : '--',
+        ratingCount: cat.ratingCount || 0,
         loading: false,
       });
 
@@ -299,5 +311,43 @@ Page({
       path: `/pages/cats/detail/detail?catId=${this.data.catId}`,
       imageUrl: cat?.avatar || '',
     };
+  },
+
+  /** 猫咪评分 */
+  async onTapStar(e: WechatMiniprogram.TouchEvent) {
+    if (!requireProfile()) return;
+    if (this.data.rateLoading) return;
+
+    const { rating } = e.currentTarget.dataset;
+    const { catId } = this.data;
+
+    this.setData({ rateLoading: true });
+
+    try {
+      const res = await apiRateCat({ catId, rating: Number(rating) });
+
+      if (res.code === 0) {
+        const { rating: myRating, ratingAvg, ratingCount } = res.data;
+        this.setData({
+          myRating,
+          ratingAvg,
+          ratingAvgDisplay: ratingAvg != null ? ratingAvg.toFixed(1) : '--',
+          ratingCount,
+        });
+        // 更新 cat 上的反范式字段，确保下次 loadCatDetail 时也是最新的
+        if (this.data.cat) {
+          (this.data.cat as ICat).ratingAvg = ratingAvg;
+          (this.data.cat as ICat).ratingCount = ratingCount;
+        }
+        showToast('评分成功', 'success');
+      } else {
+        showToast(res.message || '评分失败', 'error');
+      }
+    } catch (err) {
+      console.error('[Detail] 评分失败:', err);
+      showToast('网络异常，请重试', 'error');
+    } finally {
+      this.setData({ rateLoading: false });
+    }
   },
 });

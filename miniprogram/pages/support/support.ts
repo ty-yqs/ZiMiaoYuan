@@ -83,4 +83,8 @@ Page({
 
   /** 阻止冒泡 */
   noop() {},
+
+  onShareAppMessage() {
+    return { title: '投喂罐头', path: '/pages/support/support' };
+  },
 });

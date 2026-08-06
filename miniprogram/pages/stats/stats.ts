@@ -35,6 +35,10 @@ Page({
     this.loadStats();
   },
 
+  onShareAppMessage() {
+    return { title: '数据统计', path: '/pages/stats/stats' };
+  },
+
   async loadStats() {
     this.setData({ loading: true, error: '' });
 

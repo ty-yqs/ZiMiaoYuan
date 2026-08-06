@@ -49,6 +49,8 @@ interface ICat {
   };
   status: CatStatus;
   creator: string;            // 上传者 openid
+  ratingAvg?: number | null;  // 亲人指数平均分
+  ratingCount?: number;       // 评分人数
   createTime: Date;
   updateTime: Date;
 }
@@ -97,6 +99,17 @@ interface IAppOption {
     needRefreshDetail?: boolean; // 是否需要刷新详情页
   };
   checkLoginStatus: () => Promise<IUser | null>;
+}
+
+// ==================== 评分相关 ====================
+
+/** 用户评分记录 */
+interface IRating {
+  _id?: string;
+  catId: string;
+  rating: number;             // 1-5 星
+  createTime: Date;
+  updateTime: Date;
 }
 
 // ==================== 编辑提案 ====================

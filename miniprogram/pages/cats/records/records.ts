@@ -88,4 +88,10 @@ Page({
   formatDate(date: Date | string): string {
     return formatDate(date, 'YYYY-MM-DD HH:mm');
   },
+
+  onShareAppMessage() {
+    const { catId, type } = this.data;
+    const title = type === 'note' ? '便利贴' : '发现记录';
+    return { title, path: `/pages/cats/records/records?catId=${catId}&type=${type}` };
+  },
 });

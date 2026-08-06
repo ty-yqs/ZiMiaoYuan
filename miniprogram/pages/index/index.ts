@@ -86,4 +86,8 @@ Page({
 
   /** 阻止冒泡 */
   noop() {},
+
+  onShareAppMessage() {
+    return { title: '紫喵园', path: '/pages/index/index' };
+  },
 });

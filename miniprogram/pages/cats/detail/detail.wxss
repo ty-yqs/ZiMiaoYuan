@@ -126,6 +126,67 @@
   transform: scale(0.96);
 }
 
+/* ========== 亲人指数 ========== */
+.rating-card {
+  margin-top: var(--spacing-sm);
+}
+
+.rating-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.rating-avg-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.rating-avg-score {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.rating-avg-unit {
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+  margin-left: 4rpx;
+}
+
+.rating-count {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+/* 星级选择器 */
+.star-picker {
+  display: flex;
+  flex-direction: row;
+  gap: 16rpx;
+}
+
+.star-item {
+  padding: 8rpx;
+}
+
+.star-icon {
+  font-size: 48rpx;
+  color: #ddd;
+  transition: color 0.15s ease;
+}
+
+.star-active .star-icon {
+  color: var(--color-accent);
+}
+
+.star-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 /* ========== 简介 ========== */
 .desc-card {
   margin-top: var(--spacing-sm);

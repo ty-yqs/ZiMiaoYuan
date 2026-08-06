@@ -110,4 +110,8 @@ Page({
   onSkip() {
     wx.navigateBack();
   },
+
+  onShareAppMessage() {
+    return { title: '欢迎加入', path: '/pages/login/login' };
+  },
 });

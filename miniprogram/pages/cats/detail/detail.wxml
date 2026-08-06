@@ -50,9 +50,34 @@
       </view>
     </view>
 
+    <!-- 简介 -->
+    <view class="card desc-card" wx:if="{{cat.description}}">
+      <view class="section-title-sm">📝 简介</view>
+      <text class="desc-text">{{cat.description}}</text>
+    </view>
+
+    <!-- 亲人指数卡片 -->
+    <view class="card rating-card">
+      <view class="section-title-sm">亲人指数</view>
+      <view class="rating-summary">
+        <view class="rating-avg-row">
+          <text class="rating-avg-score">{{ratingAvgDisplay}}</text>
+          <text class="rating-avg-unit">分</text>
+        </view>
+        <text class="rating-count">{{ratingCount > 0 ? ratingCount + ' 人评分' : '暂无评分'}}</text>
+      </view>
+      <view class="star-picker">
+        <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+          class="star-item {{myRating >= item ? 'star-active' : ''}} {{rateLoading ? 'star-disabled' : ''}}"
+          data-rating="{{item}}" bind:tap="onTapStar">
+          <text class="star-icon">{{myRating >= item ? '★' : '☆'}}</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 健康状态卡片 -->
     <view class="card health-card">
-      <view class="section-title-sm">🏥 健康状态</view>
+      <view class="section-title-sm">健康状态</view>
       <view class="health-grid">
         <view
           class="health-item {{cat.health.sterilized ? 'done' : ''}} {{isAdmin ? 'editable' : ''}}"
@@ -73,16 +98,10 @@
       </view>
     </view>
 
-    <!-- 简介 -->
-    <view class="card desc-card" wx:if="{{cat.description}}">
-      <view class="section-title-sm">📝 简介</view>
-      <text class="desc-text">{{cat.description}}</text>
-    </view>
-
     <!-- ==================== 便利贴 ==================== -->
     <view class="card notes-card" wx:if="{{notes.length > 0}}">
       <view class="section-title-row">
-        <text class="section-title-sm">📑 便利贴 ({{totalNotes}})</text>
+        <text class="section-title-sm">便利贴 ({{totalNotes}})</text>
         <text class="section-more" wx:if="{{hasMoreNotes}}" data-type="note" bind:tap="onTapMoreRecords">查看更多 ›</text>
       </view>
 
@@ -98,7 +117,7 @@
     <!-- ==================== 发现记录 ==================== -->
     <view class="card records-card" wx:if="{{records.length > 0}}">
       <view class="section-title-row">
-        <text class="section-title-sm">📸 发现记录 ({{totalRecords}})</text>
+        <text class="section-title-sm">发现记录 ({{totalRecords}})</text>
         <text class="section-more" wx:if="{{hasMoreRecords}}" data-type="photo" bind:tap="onTapMoreRecords">查看更多 ›</text>
       </view>
 

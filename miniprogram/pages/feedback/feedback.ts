@@ -23,6 +23,10 @@ Page({
     this.setData({ contact: e.detail.value });
   },
 
+  onShareAppMessage() {
+    return { title: '反馈与建议', path: '/pages/feedback/feedback' };
+  },
+
   async onSubmit() {
     const content = this.data.content.trim();
     if (!content) {

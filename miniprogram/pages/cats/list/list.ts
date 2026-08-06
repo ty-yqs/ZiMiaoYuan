@@ -41,13 +41,6 @@ Page({
     this.loadCats(true);
   },
 
-  onShow() {
-    // 从其他页面返回时刷新
-    if (this.data.cats.length > 0) {
-      this.loadCats(true);
-    }
-  },
-
   /** 加载猫咪列表 */
   async loadCats(reset: boolean = false) {
     if (this.data.loading) return;
@@ -116,6 +109,10 @@ Page({
   async onPullDownRefresh() {
     await this.loadCats(true);
     wx.stopPullDownRefresh();
+  },
+
+  onShareAppMessage() {
+    return { title: '猫咪档案', path: '/pages/cats/list/list' };
   },
 
   /** 跳转上传页面 */

@@ -36,6 +36,7 @@ Component({
     relativeTime: '',
     ageLabel: '',
     cachedAvatar: '', // 缓存后的头像本地路径
+    ratingDisplay: '', // 预计算的平均分显示字符串
   },
 
   observers: {
@@ -59,6 +60,13 @@ Component({
     'cat.avatar'(val: string) {
       if (val) {
         this.loadCachedAvatar(val);
+      }
+    },
+    'cat.ratingAvg, cat.ratingCount'(avg: number | null, count: number) {
+      if (count > 0 && avg != null) {
+        this.setData({ ratingDisplay: Number(avg).toFixed(1) });
+      } else {
+        this.setData({ ratingDisplay: '' });
       }
     },
   },

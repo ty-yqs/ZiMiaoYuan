@@ -12,6 +12,7 @@ const COLLECTIONS = {
   USERS: 'users',
   CATS: 'cats',
   RECORDS: 'records',
+  RATINGS: 'ratings',
 };
 
 // 用户角色

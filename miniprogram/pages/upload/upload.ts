@@ -223,6 +223,10 @@ Page({
     this.setData({ 'health.vaccinated': !this.data.health.vaccinated });
   },
 
+  onShareAppMessage() {
+    return { title: '发现猫咪', path: '/pages/upload/upload' };
+  },
+
   // ============ 选择器 ============
   onShowColorPicker() {
     this.setData({ showColorPicker: true });

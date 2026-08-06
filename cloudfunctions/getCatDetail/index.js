@@ -32,10 +32,24 @@ exports.main = async (event, context) => {
       .limit(50)
       .get();
 
+    // 查询当前用户对该猫的评分
+    const { OPENID } = cloud.getWXContext();
+    let myRating = 0;
+    if (OPENID) {
+      const ratingRes = await getCollection(COLLECTIONS.RATINGS)
+        .where({ catId, _openid: OPENID })
+        .limit(1)
+        .get();
+      if (ratingRes.data.length > 0) {
+        myRating = ratingRes.data[0].rating;
+      }
+    }
+
     return success({
       cat,
       records: recordsRes.data,
       recordCount: recordsRes.data.length,
+      myRating,
     });
 
   } catch (err) {

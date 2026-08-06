@@ -273,4 +273,8 @@ Page({
   onTabChange(e: WechatMiniprogram.CustomEvent) {
     this.setData({ activeTab: e.detail.index || e.detail.name });
   },
+
+  onShareAppMessage() {
+    return { title: '管理后台', path: '/pages/admin/admin' };
+  },
 });
