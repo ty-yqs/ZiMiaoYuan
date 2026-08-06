@@ -50,7 +50,7 @@
   <!-- ==================== 快捷入口 ==================== -->
   <view class="section">
     <view class="section-header">
-      <text class="section-title">⚡ 快捷入口</text>
+      <text class="section-title">🕹️ 快捷入口</text>
     </view>
 
     <view class="quick-entries">

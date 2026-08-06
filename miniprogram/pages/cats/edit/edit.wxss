@@ -1,0 +1,224 @@
+/**
+ * 编辑猫咪信息页样式
+ */
+
+/* ========== 表单卡片 ========== */
+.form-card {
+  margin: var(--spacing-md);
+}
+
+.form-item {
+  margin-bottom: 28rpx;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 16rpx;
+  font-size: var(--font-md);
+  background: var(--color-bg-warm);
+  border-radius: var(--radius-sm);
+  box-sizing: border-box;
+}
+
+.form-picker {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 16rpx;
+  font-size: var(--font-md);
+  background: var(--color-bg-warm);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.form-picker .placeholder {
+  color: var(--color-text-hint);
+}
+
+.picker-arrow {
+  font-size: 32rpx;
+  color: var(--color-text-hint);
+}
+
+.form-textarea {
+  width: 100%;
+  height: 200rpx;
+  font-size: var(--font-md);
+  line-height: 1.6;
+  padding: 16rpx;
+  background: var(--color-bg-warm);
+  border-radius: var(--radius-sm);
+  box-sizing: border-box;
+}
+
+.form-count {
+  text-align: right;
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 8rpx;
+}
+
+/* ========== 健康状态 ========== */
+.health-toggles {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.health-toggle {
+  flex: 1;
+  padding: 16rpx 0;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  border: 2rpx solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.health-toggle.on {
+  border-color: var(--color-primary);
+  background: rgba(126, 200, 168, 0.08);
+}
+
+.health-toggle-text {
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+}
+
+.health-toggle.on .health-toggle-text {
+  color: var(--color-primary-dark);
+  font-weight: 500;
+}
+
+/* ========== 提示 ========== */
+.notice {
+  padding: 16rpx var(--spacing-md);
+}
+
+.notice-text {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  line-height: 1.6;
+}
+
+/* ========== 提交按钮 ========== */
+.submit-area {
+  padding: 20rpx var(--spacing-md);
+}
+
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: 48rpx;
+  border: none;
+  padding: 0;
+}
+
+/* ========== 选择器弹窗 ========== */
+.picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.picker-panel {
+  width: 100%;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx var(--spacing-md);
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.picker-title {
+  font-size: var(--font-md);
+  font-weight: 600;
+}
+
+.picker-close {
+  font-size: 32rpx;
+  color: var(--color-text-hint);
+  padding: 8rpx;
+}
+
+.picker-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--spacing-md);
+  gap: 16rpx;
+}
+
+.picker-list {
+  padding: var(--spacing-md);
+}
+
+/* 毛色选择网格项 */
+.picker-grid .picker-item {
+  width: calc(25% - 12rpx);
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  border: 2rpx solid transparent;
+}
+
+/* 性别/年龄列表项 */
+.picker-list .picker-item {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.picker-list .picker-item:last-child {
+  border-bottom: none;
+}
+
+.picker-item.active {
+  color: var(--color-primary);
+  background: rgba(126, 200, 168, 0.08);
+  border-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.picker-list .picker-item.active {
+  background: transparent;
+  border-color: transparent;
+  border-bottom-color: var(--color-primary);
+}

@@ -1,0 +1,9 @@
+{
+  "name": "getPendingEdits",
+  "version": "1.0.0",
+  "description": "管理员获取待审核编辑提案",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

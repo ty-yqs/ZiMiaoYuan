@@ -4,6 +4,7 @@
     "pages/cats/list/list",
     "pages/cats/detail/detail",
     "pages/cats/records/records",
+    "pages/cats/edit/edit",
     "pages/upload/upload",
     "pages/profile/profile",
     "pages/admin/admin",

@@ -68,6 +68,19 @@
       border="{{false}}"
       bind:click-input="onShowAgePicker"
     />
+
+    <!-- 健康状态 -->
+    <view class="health-section">
+      <text class="health-section-label">🏥 健康状态（点击按钮更改，不清楚就不改）</text>
+      <view class="health-toggles">
+        <view class="health-toggle {{health.sterilized ? 'on' : ''}}" bind:tap="onToggleSterilized">
+          <text class="health-toggle-text">{{health.sterilized ? '✅ 已绝育' : '❌ 未绝育'}}</text>
+        </view>
+        <view class="health-toggle {{health.vaccinated ? 'on' : ''}}" bind:tap="onToggleVaccinated">
+          <text class="health-toggle-text">{{health.vaccinated ? '✅ 已打疫苗' : '❌ 未打疫苗'}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 
   <!-- ==================== 位置 ==================== -->

@@ -112,14 +112,20 @@
       </view>
     </view>
 
+    <!-- 疫苗说明 -->
+    <view class="vaccine-note">
+      <text class="vaccine-note-text">* 此处疫苗指狂犬疫苗</text>
+    </view>
+
     <!-- 底部留白（为固定按钮让位） -->
     <view style="height: 100rpx;" />
 
     <!-- 底部操作按钮 -->
     <view class="bottom-btn-fixed safe-bottom">
       <view class="bottom-btn-row">
-        <button class="upload-record-btn" bind:tap="onUploadRecord">📸 上传猫照</button>
-        <button class="sticky-note-btn" bind:tap="onShowStickyNote">📝 写便利贴</button>
+        <button class="edit-btn" bind:tap="onTapEdit">编辑</button>
+        <button class="upload-record-btn" bind:tap="onUploadRecord">上传猫照</button>
+        <button class="sticky-note-btn" bind:tap="onShowStickyNote">写便利贴</button>
       </view>
     </view>
 

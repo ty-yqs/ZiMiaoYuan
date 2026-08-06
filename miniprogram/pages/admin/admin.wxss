@@ -2,6 +2,14 @@
  * 管理员后台样式
  */
 
+/* ========== Tab 内加载中 ========== */
+.tab-loading {
+  padding: 80rpx 0;
+  text-align: center;
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+}
+
 /* ========== 管理员卡片 ========== */
 .admin-card {
   margin: var(--spacing-sm) var(--spacing-md);
@@ -42,4 +50,145 @@
   flex-wrap: wrap;
   padding-top: var(--spacing-sm);
   border-top: 1rpx solid var(--color-border);
+}
+
+/* ========== 审核卡片（完整信息） ========== */
+.review-card {
+  padding: var(--spacing-sm);
+}
+
+/* 照片轮播 */
+.review-photos {
+  margin: -4rpx -4rpx 16rpx -4rpx;
+}
+
+.review-photo-scroll {
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.review-photo-item {
+  display: inline-block;
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: var(--radius-sm);
+  margin-right: 12rpx;
+  background: var(--color-bg-warm);
+  flex-shrink: 0;
+}
+
+/* 信息区 */
+.review-info {
+  padding: 0 4rpx;
+}
+
+.review-tags {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 12rpx;
+}
+
+.review-gender {
+  font-size: 22rpx;
+  color: var(--color-accent);
+}
+
+.review-detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rpx 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.review-detail-grid .admin-cat-detail {
+  font-size: 24rpx;
+  margin-bottom: 4rpx;
+}
+
+/* 健康状态 */
+.review-health {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.health-item {
+  font-size: 24rpx;
+  color: var(--color-text-hint);
+}
+
+.health-item.done {
+  color: var(--color-primary-dark);
+}
+
+/* 简介 */
+.review-desc {
+  margin-top: 8rpx;
+  padding: 12rpx;
+  background: var(--color-bg-warm);
+  border-radius: var(--radius-sm);
+}
+
+.review-desc-label {
+  font-size: 22rpx;
+  color: var(--color-text-hint);
+}
+
+.review-desc-text {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* ========== 编辑提案 ========== */
+.edit-proposal-info {
+  padding: 0 0 var(--spacing-sm) 0;
+}
+
+.edit-changes {
+  margin-top: 12rpx;
+  padding: 16rpx;
+  background: var(--color-bg-warm);
+  border-radius: var(--radius-sm);
+}
+
+.edit-change-label {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.edit-change-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rpx;
+  font-size: 24rpx;
+}
+
+.edit-change-item:last-child {
+  margin-bottom: 0;
+}
+
+.edit-change-key {
+  color: var(--color-text-hint);
+  min-width: 100rpx;
+}
+
+.edit-change-arrow {
+  color: var(--color-accent);
+  margin: 0 8rpx;
+  font-weight: 600;
+}
+
+.edit-change-val {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

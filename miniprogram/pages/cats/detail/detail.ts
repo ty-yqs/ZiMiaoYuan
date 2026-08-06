@@ -174,6 +174,15 @@ Page({
     });
   },
 
+  /** 跳转编辑页 */
+  onTapEdit() {
+    if (!requireProfile()) return;
+    const { catId } = this.data;
+    wx.navigateTo({
+      url: `${ROUTES.CAT_EDIT}?catId=${catId}`,
+    });
+  },
+
   /** 跳转上传记录页 */
   onUploadRecord() {
     if (!requireProfile()) return;

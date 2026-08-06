@@ -1,0 +1,159 @@
+<!--
+  编辑猫咪信息页
+-->
+<view class="page-container">
+
+  <!-- ==================== 加载中 ==================== -->
+  <view wx:if="{{loading}}" class="loading-tip">
+    <text>加载中...</text>
+  </view>
+
+  <!-- ==================== 错误 ==================== -->
+  <view wx:elif="{{error}}" class="empty-state">
+    <text class="empty-icon">😿</text>
+    <text class="empty-text">{{error}}</text>
+  </view>
+
+  <!-- ==================== 编辑表单 ==================== -->
+  <block wx:else>
+    <view class="card form-card">
+
+      <!-- 猫咪名称 -->
+      <view class="form-item">
+        <text class="form-label">猫咪名字</text>
+        <input
+          class="form-input"
+          value="{{cat_name}}"
+          placeholder="输入猫咪名字"
+          maxlength="20"
+          data-field="cat_name"
+          bind:input="onFieldChange"
+        />
+      </view>
+
+      <!-- 毛色 -->
+      <view class="form-item">
+        <text class="form-label">毛色</text>
+        <view class="form-picker" bind:tap="onShowColorPicker">
+          <text class="{{color ? '' : 'placeholder'}}">{{color || '请选择毛色'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </view>
+
+      <!-- 性别 -->
+      <view class="form-item">
+        <text class="form-label">性别</text>
+        <view class="form-picker" bind:tap="onShowGenderPicker">
+          <text class="{{gender ? '' : 'placeholder'}}">{{genderLabel || '请选择性别'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </view>
+
+      <!-- 年龄段 -->
+      <view class="form-item">
+        <text class="form-label">年龄段</text>
+        <view class="form-picker" bind:tap="onShowAgePicker">
+          <text class="{{age ? '' : 'placeholder'}}">{{ageLabel || '请选择年龄段'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </view>
+
+      <!-- 健康状态 -->
+      <view class="form-item">
+        <text class="form-label">🏥 健康状态（点击按钮更改）</text>
+        <view class="health-toggles">
+          <view class="health-toggle {{healthSterilized ? 'on' : ''}}" bind:tap="onToggleSterilized">
+            <text class="health-toggle-text">{{healthSterilized ? '✅ 已绝育' : '❌ 未绝育'}}</text>
+          </view>
+          <view class="health-toggle {{healthVaccinated ? 'on' : ''}}" bind:tap="onToggleVaccinated">
+            <text class="health-toggle-text">{{healthVaccinated ? '✅ 已打疫苗' : '❌ 未打疫苗'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 简介 -->
+      <view class="form-item">
+        <text class="form-label">简介</text>
+        <textarea
+          class="form-textarea"
+          value="{{description}}"
+          placeholder="介绍一下这只猫咪..."
+          maxlength="200"
+          data-field="description"
+          bind:input="onFieldChange"
+        />
+        <text class="form-count">{{description.length || 0}}/200</text>
+      </view>
+    </view>
+
+    <!-- 提示 -->
+    <view class="notice">
+      <text class="notice-text">💡 编辑提交后需管理员审核，通过后才会更新显示</text>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-area">
+      <button class="submit-btn" bind:tap="onSubmit" loading="{{submitting}}">
+        提交编辑
+      </button>
+    </view>
+  </block>
+
+</view>
+
+<!-- ==================== 毛色选择器弹窗 ==================== -->
+<view class="picker-overlay" wx:if="{{showColorPicker}}" bind:tap="onCloseColorPicker">
+  <view class="picker-panel" catch:tap="noop">
+    <view class="picker-header">
+      <text class="picker-title">选择毛色</text>
+      <text class="picker-close" bind:tap="onCloseColorPicker">✕</text>
+    </view>
+    <view class="picker-grid">
+      <view
+        wx:for="{{colorOptions}}"
+        wx:key="value"
+        class="picker-item {{color === item.value ? 'active' : ''}}"
+        data-value="{{item.value}}"
+        bind:tap="onSelectColor"
+      >{{item.text}}</view>
+    </view>
+  </view>
+</view>
+
+<!-- ==================== 性别选择器弹窗 ==================== -->
+<view class="picker-overlay" wx:if="{{showGenderPicker}}" bind:tap="onCloseGenderPicker">
+  <view class="picker-panel" catch:tap="noop">
+    <view class="picker-header">
+      <text class="picker-title">选择性别</text>
+      <text class="picker-close" bind:tap="onCloseGenderPicker">✕</text>
+    </view>
+    <view class="picker-list">
+      <view
+        wx:for="{{genderOptions}}"
+        wx:key="value"
+        class="picker-item picker-item-row {{gender === item.value ? 'active' : ''}}"
+        data-value="{{item.value}}"
+        bind:tap="onSelectGender"
+      >{{item.label}}</view>
+    </view>
+  </view>
+</view>
+
+<!-- ==================== 年龄段选择器弹窗 ==================== -->
+<view class="picker-overlay" wx:if="{{showAgePicker}}" bind:tap="onCloseAgePicker">
+  <view class="picker-panel" catch:tap="noop">
+    <view class="picker-header">
+      <text class="picker-title">选择年龄段</text>
+      <text class="picker-close" bind:tap="onCloseAgePicker">✕</text>
+    </view>
+    <view class="picker-list">
+      <view
+        wx:for="{{ageOptions}}"
+        wx:key="value"
+        class="picker-item picker-item-row {{age === item.value ? 'active' : ''}}"
+        data-value="{{item.value}}"
+        bind:tap="onSelectAge"
+      >{{item.label}}</view>
+    </view>
+  </view>
+</view>

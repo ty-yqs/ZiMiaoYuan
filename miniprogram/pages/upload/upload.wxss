@@ -71,6 +71,48 @@
   margin-top: 4rpx;
 }
 
+/* ========== 健康状态 ========== */
+.health-section {
+  padding: 16rpx 0;
+}
+
+.health-section-label {
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.health-toggles {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.health-toggle {
+  flex: 1;
+  padding: 16rpx 0;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  border: 2rpx solid var(--color-border);
+  background: var(--color-bg);
+  transition: all 0.15s ease;
+}
+
+.health-toggle.on {
+  border-color: var(--color-primary);
+  background: rgba(126, 200, 168, 0.08);
+}
+
+.health-toggle-text {
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+}
+
+.health-toggle.on .health-toggle-text {
+  color: var(--color-primary-dark);
+  font-weight: 500;
+}
+
 /* ========== 位置选择 ========== */
 .location-picker {
   display: flex;

@@ -8,13 +8,14 @@
     <view class="support-icon">🍰</view>
     <text class="support-title">投喂一个罐头吧！</text>
     <text class="support-desc">小程序维护不易，存储、流量和函数调用均为计费项目</text>
+    <text class="support-desc">小程序维护不易，存储、流量和函数调用均为计费项目</text>
     <text class="support-desc">每一份投喂都将用于小程序服务器与存储的维护费用</text>
     <text class="support-desc">感谢您对紫喵园的支持，每一只校园猫咪都会记得你的善意</text>
   </view>
 
   <!-- ==================== 投喂按钮 ==================== -->
   <view class="card support-action flex-column flex-center">
-    <text class="action-hint">您的每一份支持，都用于小程序服务器与存储维护</text>
+    <text class="action-hint">您的每一份支持，都将用于小程序服务器与存储维护</text>
     <button class="feed-btn" bind:tap="onShowQR">
       <text class="feed-btn-icon">🍰</text>
       <text>投喂罐头</text>

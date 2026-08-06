@@ -30,6 +30,10 @@ Page({
       latitude: 0,
       longitude: 0,
     },
+    health: {
+      sterilized: false,
+      vaccinated: false,
+    },
 
     // 选项
     colorOptions: config.CAT_COLORS.map(c => ({ text: c, value: c })),
@@ -174,6 +178,7 @@ Page({
           color: this.data.color,
           description: this.data.description,
           location: this.data.location,
+          health: this.data.health,
         });
 
         // 先隐藏 loading，再显示结果 toast（两者共享原生组件，否则 hideLoading 会关掉 toast）
@@ -195,6 +200,14 @@ Page({
     } finally {
       this.setData({ submitting: false });
     }
+  },
+
+  // ============ 健康状态 ============
+  onToggleSterilized() {
+    this.setData({ 'health.sterilized': !this.data.health.sterilized });
+  },
+  onToggleVaccinated() {
+    this.setData({ 'health.vaccinated': !this.data.health.vaccinated });
   },
 
   // ============ 选择器 ============

@@ -26,24 +26,26 @@ exports.main = async (event, context) => {
 
   const { catId, action, updates = {} } = event;
 
-  if (!catId) {
-    return fail('缺少猫咪ID');
+  if (!['approve', 'reject', 'update', 'delete', 'reviewEdit'].includes(action)) {
+    return fail('无效的操作类型，支持：approve / reject / update / delete / reviewEdit');
   }
 
-  if (!['approve', 'reject', 'update', 'delete'].includes(action)) {
-    return fail('无效的操作类型，支持：approve / reject / update / delete');
+  // reviewEdit 不需要 catId（使用 proposalId）
+  if (action !== 'reviewEdit' && !catId) {
+    return fail('缺少猫咪ID');
   }
 
   try {
     const catsColl = getCollection(COLLECTIONS.CATS);
-
-    // 确认猫咪存在
-    const catRes = await catsColl.doc(catId).get();
-    if (!catRes.data) {
-      return fail('猫咪不存在');
-    }
-
     const now = new Date();
+
+    // reviewEdit 不需要预先确认猫咪存在（在 case 内处理）
+    if (action !== 'reviewEdit') {
+      const catRes = await catsColl.doc(catId).get();
+      if (!catRes.data) {
+        return fail('猫咪不存在');
+      }
+    }
 
     switch (action) {
 
@@ -114,6 +116,53 @@ exports.main = async (event, context) => {
         await catsColl.doc(catId).remove();
         console.log('[adminUpdateCat] 猫咪已删除:', catId);
         return success(null, '已删除');
+      }
+
+      // ========== 审核编辑提案 ==========
+      case 'reviewEdit': {
+        const { proposalId, decision, adminNote = '' } = event;
+
+        if (!proposalId) {
+          return fail('缺少提案ID');
+        }
+        if (!['approve', 'reject'].includes(decision)) {
+          return fail('decision 必须为 approve 或 reject');
+        }
+
+        const proposalsColl = getCollection(COLLECTIONS.EDIT_PROPOSALS);
+
+        // 读取提案
+        const proposalRes = await proposalsColl.doc(proposalId).get();
+        if (!proposalRes.data) {
+          return fail('编辑提案不存在');
+        }
+
+        const proposal = proposalRes.data;
+        if (proposal.status !== 'pending') {
+          return fail('该提案已被处理');
+        }
+
+        if (decision === 'approve') {
+          // 应用修改到猫咪档案
+          await catsColl.doc(proposal.catId).update({
+            data: {
+              ...proposal.proposedChanges,
+              updateTime: now,
+            },
+          });
+          console.log('[adminUpdateCat] 编辑提案已通过:', proposalId, '猫咪:', proposal.catId);
+        }
+
+        // 更新提案状态
+        await proposalsColl.doc(proposalId).update({
+          data: {
+            status: decision === 'approve' ? 'approved' : 'rejected',
+            adminNote: adminNote || '',
+            updateTime: now,
+          },
+        });
+
+        return success(null, decision === 'approve' ? '编辑已通过' : '编辑已拒绝');
       }
 
       default:

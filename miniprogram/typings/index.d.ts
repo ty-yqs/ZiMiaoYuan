@@ -99,6 +99,24 @@ interface IAppOption {
   checkLoginStatus: () => Promise<IUser | null>;
 }
 
+// ==================== 编辑提案 ====================
+
+/** 编辑提案状态 */
+type EditProposalStatus = 'pending' | 'approved' | 'rejected';
+
+/** 编辑提案 */
+interface IEditProposal {
+  _id: string;
+  catId: string;
+  userId: string;
+  nickname: string;
+  proposedChanges: Partial<Pick<ICat, 'cat_name' | 'color' | 'gender' | 'age' | 'description'>>;
+  status: EditProposalStatus;
+  adminNote?: string;
+  createTime: Date;
+  updateTime: Date;
+}
+
 // ==================== 页面通用的 data 类型 ====================
 
 interface IPageData {
