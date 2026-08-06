@@ -94,6 +94,7 @@ interface IAppOption {
     env: string;              // 云环境ID
     userInfo?: IUser;
     isAdmin: boolean;
+    needRefreshDetail?: boolean; // 是否需要刷新详情页
   };
   checkLoginStatus: () => Promise<IUser | null>;
 }

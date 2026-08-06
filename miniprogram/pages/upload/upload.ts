@@ -10,6 +10,7 @@
 import { apiAddCat, apiUploadRecord } from '../../utils/api';
 import { showToast, showLoading, hideLoading, chooseImage, requireProfile } from '../../utils/util';
 const config = require('../../config/index');
+const app = getApp<IAppOption>();
 
 Page({
   data: {
@@ -151,8 +152,13 @@ Page({
           location: this.data.location,
         });
 
+        // 先隐藏 loading，再显示结果 toast（两者共享原生组件，否则 hideLoading 会关掉 toast）
+        hideLoading();
+
         if (res.code === 0) {
           showToast('记录成功', 'success');
+          // 标记详情页需要刷新
+          app.globalData.needRefreshDetail = true;
           setTimeout(() => wx.navigateBack(), 1500);
         } else {
           showToast(res.message || '提交失败', 'error');
@@ -170,9 +176,13 @@ Page({
           location: this.data.location,
         });
 
+        // 先隐藏 loading，再显示结果 toast（两者共享原生组件，否则 hideLoading 会关掉 toast）
+        hideLoading();
+
         if (res.code === 0) {
           showToast('提交成功，等待审核', 'success');
-          setTimeout(() => wx.navigateBack(), 1500);
+          // 延迟需大于 toast duration（2000ms），确保提示语完整展示后再返回
+          setTimeout(() => wx.navigateBack(), 2500);
         } else {
           showToast(res.message || '提交失败', 'error');
         }
@@ -180,9 +190,9 @@ Page({
 
     } catch (err: any) {
       console.error('[Upload] 提交失败:', err);
+      hideLoading();
       showToast('网络异常，请重试', 'error');
     } finally {
-      hideLoading();
       this.setData({ submitting: false });
     }
   },

@@ -21,7 +21,7 @@
     <input
       class="contact-input"
       value="{{contact}}"
-      placeholder="微信/手机号/邮箱，方便我们回复你"
+      placeholder="微信/手机号/邮箱，方便我们回复您"
       bind:input="onContactInput"
     />
   </view>

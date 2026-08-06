@@ -58,8 +58,9 @@ Page({
   },
 
   onShow() {
-    // 从上传页返回时自动刷新（首次加载由 onLoad 处理）
-    if (this.data.cat) {
+    // 仅当上传/发表完成后才刷新（首次加载由 onLoad 处理）
+    if (this.data.cat && app.globalData.needRefreshDetail) {
+      app.globalData.needRefreshDetail = false;
       this.loadCatDetail();
     }
   },

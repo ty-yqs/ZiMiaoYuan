@@ -13,6 +13,7 @@ App<IAppOption>({
     env: config.ENV_ID,
     userInfo: undefined,
     isAdmin: false,
+    needRefreshDetail: false,
   },
 
   onLaunch() {

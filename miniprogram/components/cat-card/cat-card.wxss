@@ -68,7 +68,6 @@
   margin-left: 20rpx;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   min-width: 0;
 }
 
@@ -76,11 +75,25 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 8rpx;
 }
 
-.card-row:last-child {
-  margin-bottom: 0;
+/* 每行固定高度，确保所有卡片元素位置一致 */
+.card-name-row {
+  height: 44rpx;
+}
+
+.card-desc-row {
+  height: 36rpx;
+  overflow: hidden;
+}
+
+.card-location-row {
+  height: 36rpx;
+}
+
+.card-footer {
+  height: 36rpx;
+  justify-content: space-between;
 }
 
 /* ========== 第一行：名字 + 毛色 ========== */
@@ -111,7 +124,17 @@
   margin-right: 8rpx;
 }
 
-/* ========== 第二行：地点 ========== */
+/* ========== 第二行：简介 ========== */
+.card-desc {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 36rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========== 第三行：地点 ========== */
 .row-icon {
   font-size: 24rpx;
   margin-right: 4rpx;
@@ -123,11 +146,7 @@
   color: var(--color-text-secondary);
 }
 
-/* ========== 第三行：健康 + 时间 ========== */
-.card-footer {
-  justify-content: space-between;
-}
-
+/* ========== 第四行：健康 ========== */
 .health-dots {
   display: flex;
   gap: 8rpx;

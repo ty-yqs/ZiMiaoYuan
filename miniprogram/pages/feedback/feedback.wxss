@@ -42,6 +42,7 @@
   font-size: var(--font-md);
   background: var(--color-bg-warm);
   border-radius: var(--radius-sm);
+  box-sizing: border-box;
 }
 
 .submit-area {

@@ -27,23 +27,30 @@
   <view class="card-body">
 
     <!-- 第一行：名字 + 年龄 + 毛色标签 -->
-    <view class="card-row">
+    <view class="card-row card-name-row">
       <text class="cat-name text-ellipsis">{{cat.cat_name || '未命名猫咪'}}</text>
       <text class="age-label" wx:if="{{ageLabel}}">{{ageLabel}}</text>
       <text class="color-tag">{{cat.color || '未知毛色'}}</text>
     </view>
 
-    <!-- 第二行：地点 -->
-    <view class="card-row" wx:if="{{showLocation && cat.location && cat.location.name}}">
-      <text class="row-icon">📍</text>
-      <text class="row-text text-ellipsis">{{cat.location.name}}</text>
+    <!-- 第二行：简介 -->
+    <view class="card-row card-desc-row">
+      <text class="card-desc text-ellipsis">{{cat.description || ''}}</text>
     </view>
 
-    <!-- 第三行：健康 + 时间 -->
+    <!-- 第三行：地点 -->
+    <view class="card-row card-location-row">
+      <block wx:if="{{showLocation && cat.location && cat.location.name}}">
+        <text class="row-icon">📍</text>
+        <text class="row-text text-ellipsis">{{cat.location.name}}</text>
+      </block>
+    </view>
+
+    <!-- 第四行：健康 -->
     <view class="card-row card-footer">
       <view class="health-dots">
-        <text class="dot on" wx:if="{{cat.health && cat.health.sterilized}}">绝</text>
-        <text class="dot on" wx:if="{{cat.health && cat.health.vaccinated}}">疫</text>
+        <text class="dot {{cat.health && cat.health.sterilized ? 'on' : ''}}">绝</text>
+        <text class="dot {{cat.health && cat.health.vaccinated ? 'on' : ''}}">疫</text>
       </view>
     </view>
 

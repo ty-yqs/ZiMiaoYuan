@@ -77,7 +77,7 @@
         bind:click="onFeedback"
       />
       <van-cell
-        title="🥫 投喂罐头"
+        title="🍰 投喂罐头"
         label="支持小程序运营维护"
         is-link
         bind:click="onSupport"
