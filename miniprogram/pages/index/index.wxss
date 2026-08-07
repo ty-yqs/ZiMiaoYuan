@@ -59,6 +59,11 @@
   color: var(--color-text-primary);
 }
 
+.section-title-icon {
+  height: 30rpx;
+  margin-right: 8rpx;
+}
+
 .section-more {
   font-size: var(--font-sm);
   color: var(--color-primary);

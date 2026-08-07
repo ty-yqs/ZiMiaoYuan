@@ -15,7 +15,6 @@
       <!-- 空状态 -->
       <block wx:elif="{{pendingCats.length === 0}}">
         <view class="empty-state">
-          <text class="empty-icon">✅</text>
           <text class="empty-text">没有待审核的猫咪</text>
         </view>
       </block>
@@ -50,22 +49,22 @@
           </view>
 
           <view class="review-detail-grid">
-            <text class="admin-cat-detail">🐱 毛色：{{item.color}}</text>
-            <text class="admin-cat-detail">📅 年龄：{{item.ageLabel || '未知'}}</text>
-            <text class="admin-cat-detail">📍 地点：{{item.location.name}}</text>
+            <text class="admin-cat-detail">毛色：{{item.color}}</text>
+            <text class="admin-cat-detail">年龄：{{item.ageLabel || '未知'}}</text>
+            <text class="admin-cat-detail">地点：{{item.location.name}}</text>
           </view>
 
           <view class="review-health">
             <text class="health-item {{item.health && item.health.sterilized ? 'done' : ''}}">
-              {{item.health && item.health.sterilized ? '✅ 已绝育' : '❌ 未绝育'}}
+              {{item.health && item.health.sterilized ? '已绝育' : '未绝育'}}
             </text>
             <text class="health-item {{item.health && item.health.vaccinated ? 'done' : ''}}">
-              {{item.health && item.health.vaccinated ? '✅ 已打疫苗' : '❌ 未打疫苗'}}
+              {{item.health && item.health.vaccinated ? '已打疫苗' : '未打疫苗'}}
             </text>
           </view>
 
           <view class="review-desc" wx:if="{{item.description}}">
-            <text class="review-desc-label">📝 简介：</text>
+            <text class="review-desc-label">简介：</text>
             <text class="review-desc-text">{{item.description}}</text>
           </view>
         </view>
@@ -96,7 +95,6 @@
 
       <block wx:elif="{{pendingEdits.length === 0}}">
         <view class="empty-state">
-          <text class="empty-icon">✅</text>
           <text class="empty-text">没有待审核的编辑</text>
         </view>
       </block>
@@ -104,7 +102,7 @@
       <block wx:else>
         <view wx:for="{{pendingEdits}}" wx:key="_id" class="card admin-card">
         <view class="edit-proposal-info">
-          <text class="admin-cat-name">🐱 {{item.catName}}</text>
+          <text class="admin-cat-name">{{item.catName}}</text>
           <text class="admin-cat-detail">提案者：{{item.nickname || '匿名猫友'}}</text>
           <text class="admin-cat-detail">提交时间：{{item.createTime}}</text>
 
@@ -123,7 +121,7 @@
 
           <!-- 关系变更 -->
           <view class="edit-changes" wx:if="{{item.hasRelChanges}}">
-            <text class="edit-change-label">🔗 关系变更：</text>
+            <text class="edit-change-label">关系变更：</text>
             <block wx:for="{{item.relChanges}}" wx:for-item="rc" wx:key="text">
               <view class="edit-change-item">
                 <van-tag wx:if="{{rc.action === 'add'}}" type="success" size="mini">新增</van-tag>
@@ -200,7 +198,6 @@
 
       <!-- 空状态 -->
       <view class="empty-state" wx:elif="{{!allCatsLoading}}">
-        <text class="empty-icon">😿</text>
         <text class="empty-text">还没有猫咪</text>
       </view>
 

@@ -47,7 +47,7 @@
   <view class="menu-section">
     <van-cell-group>
       <van-cell
-        title="📸 发现猫咪"
+        title="发现猫咪"
         label="上传你发现的校园猫咪"
         is-link
         url="/pages/upload/upload"
@@ -57,7 +57,7 @@
     <!-- 管理员入口 -->
     <van-cell-group wx:if="{{isAdmin}}" title="管理功能">
       <van-cell
-        title="🔧 管理后台"
+        title="管理后台"
         label="审核猫咪、管理数据"
         is-link
         bind:click="onGoAdmin"
@@ -66,24 +66,24 @@
 
     <van-cell-group title="其他">
       <van-cell
-        title="💡 关于紫喵园"
+        title="关于紫喵园"
         is-link
         bind:click="onAbout"
       />
       <van-cell
-        title="💬 反馈与建议"
+        title="反馈与建议"
         label="提交 猫咪领养/失踪/死亡反馈 或 小程序修改建议"
         is-link
         bind:click="onFeedback"
       />
       <van-cell
-        title="🍰 投喂罐头"
+        title="投喂罐头"
         label="支持小程序运营维护"
         is-link
         bind:click="onSupport"
       />
       <van-cell
-        title="🗑️ 清除图片缓存"
+        title="清除图片缓存"
         label="当前缓存 {{cacheCount}} 张图片（{{cacheSize}}），清除后图片将重新从云端加载"
         is-link
         bind:click="onClearCache"

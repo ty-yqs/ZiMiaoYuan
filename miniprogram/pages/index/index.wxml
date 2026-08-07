@@ -18,7 +18,10 @@
   <!-- ==================== 今日猫咪推荐 ==================== -->
   <view class="section">
     <view class="section-header flex-between">
-      <text class="section-title">🐾 今日猫咪推荐</text>
+      <view class="section-title flex-row">
+        <image class="section-title-icon" src="/images/icons/cloud.sun@4x.png" mode="heightFix" />
+        <text>今日猫咪推荐</text>
+      </view>
       <text class="section-more" bind:tap="onTapAllCats">查看全部 ›</text>
     </view>
 
@@ -50,7 +53,10 @@
   <!-- ==================== 快捷入口 ==================== -->
   <view class="section">
     <view class="section-header">
-      <text class="section-title">🕹️ 快捷入口</text>
+      <view class="section-title flex-row">
+        <image class="section-title-icon" src="/images/icons/camera.viewfinder@4x.png" mode="heightFix" />
+        <text>快捷入口</text>
+      </view>
     </view>
 
     <view class="quick-entries">

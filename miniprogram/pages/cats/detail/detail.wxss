@@ -51,6 +51,11 @@
   margin-right: 12rpx;
 }
 
+.info-icon-img {
+  height: 32rpx;
+  margin-right: 12rpx;
+}
+
 .info-text {
   font-size: var(--font-sm);
   color: var(--color-text-secondary);
@@ -172,14 +177,8 @@
   padding: 8rpx;
 }
 
-.star-icon {
-  font-size: 48rpx;
-  color: #ddd;
-  transition: color 0.15s ease;
-}
-
-.star-active .star-icon {
-  color: var(--color-accent);
+.star-icon-img {
+  height: 44rpx;
 }
 
 .star-disabled {

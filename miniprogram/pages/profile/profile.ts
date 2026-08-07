@@ -212,7 +212,7 @@ Page({
   onAbout() {
     wx.showModal({
       title: '关于紫喵园',
-      content: '紫喵园 — 校园猫咪数字档案平台\n\n记录校园里每一只可爱的猫咪 🐱\n\nVersion 1.0.0',
+      content: '紫喵园 — 校园猫咪数字档案平台\n\n记录校园里每一只可爱的猫咪\n\nVersion 1.0.0',
       showCancel: false,
     });
   },

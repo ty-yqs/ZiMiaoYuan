@@ -44,14 +44,14 @@
     <!-- 总记录数 -->
     <view class="card record-summary">
       <view class="flex-row flex-between">
-        <text class="section-title">📸 累计记录</text>
+        <text class="section-title">累计记录</text>
         <text class="record-total">{{recordCount}} 条</text>
       </view>
     </view>
 
     <!-- 性别分布 -->
     <view class="card distro-card">
-      <text class="section-title">🐱 性别分布</text>
+      <text class="section-title">性别分布</text>
       <view class="distro-list">
         <view class="distro-item" wx:for="{{catsByGender}}" wx:key="name">
           <text class="distro-name">{{item.label}}</text>
@@ -65,7 +65,7 @@
 
     <!-- 毛色分布 -->
     <view class="card distro-card">
-      <text class="section-title">🎨 毛色分布</text>
+      <text class="section-title">毛色分布</text>
       <view class="distro-list">
         <view class="distro-item" wx:for="{{catsByColor}}" wx:key="name">
           <text class="distro-name">{{item.label}}</text>
@@ -79,7 +79,7 @@
 
     <!-- 年龄段分布 -->
     <view class="card distro-card">
-      <text class="section-title">🎂 年龄段分布</text>
+      <text class="section-title">年龄分布</text>
       <view class="distro-list">
         <view class="distro-item" wx:for="{{catsByAge}}" wx:key="name">
           <text class="distro-name">{{item.label}}</text>
@@ -93,7 +93,7 @@
 
     <!-- 特殊状态猫咪 -->
     <view class="card distro-card">
-      <text class="section-title">📋 其他状态</text>
+      <text class="section-title">其他状态</text>
       <view class="distro-list">
         <view class="distro-item special-item">
           <text class="distro-name">已领养</text>

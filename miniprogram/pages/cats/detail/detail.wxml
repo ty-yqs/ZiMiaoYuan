@@ -50,7 +50,7 @@
       </view>
 
       <view class="info-row flex-row">
-        <text class="info-icon">📅</text>
+        <image class="info-icon-img" src="/images/icons/calendar@4x.png" mode="heightFix" />
         <text class="info-text">{{cat.ageLabel || 'UnKnown Error'}}</text>
       </view>
     </view>
@@ -73,9 +73,9 @@
       </view>
       <view class="star-picker">
         <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
-          class="star-item {{myRating >= item ? 'star-active' : ''}} {{rateLoading ? 'star-disabled' : ''}}"
+          class="star-item {{rateLoading ? 'star-disabled' : ''}}"
           data-rating="{{item}}" bind:tap="onTapStar">
-          <text class="star-icon">{{myRating >= item ? '★' : '☆'}}</text>
+          <image class="star-icon-img" src="/images/icons/{{myRating === 0 ? 'star' : (myRating >= item ? 'star.yellow.fill' : 'star.yellow')}}@4x.png" mode="heightFix" />
         </view>
       </view>
     </view>
@@ -183,7 +183,7 @@
 <view class="sticky-note-overlay" wx:if="{{showStickyNote}}" bind:tap="onCloseStickyNote">
   <view class="sticky-note-panel" catch:tap="noop">
     <view class="sticky-note-header">
-      <text class="sticky-note-title">📝 写便利贴</text>
+      <text class="sticky-note-title">写便利贴</text>
       <text class="sticky-note-close" bind:tap="onCloseStickyNote">✕</text>
     </view>
     <textarea
