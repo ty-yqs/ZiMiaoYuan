@@ -13,6 +13,7 @@ const COLLECTIONS = {
   CATS: 'cats',
   RECORDS: 'records',
   EDIT_PROPOSALS: 'editProposals',
+  RELATIONSHIPS: 'relationships',
 };
 
 // 用户角色

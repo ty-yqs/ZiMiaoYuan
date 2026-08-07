@@ -159,6 +159,28 @@
   margin-right: 8rpx;
 }
 
+/* 去喵星标签 */
+.passed-away-tag {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #9B9B9B;
+  background: rgba(155, 155, 155, 0.12);
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  margin-right: 8rpx;
+}
+
+/* 失踪标签 */
+.missing-tag {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #9B9B9B;
+  background: rgba(155, 155, 155, 0.12);
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  margin-right: 8rpx;
+}
+
 .health-dots {
   display: flex;
   gap: 8rpx;

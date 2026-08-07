@@ -10,7 +10,7 @@
 const cloud = require('wx-server-sdk');
 const {
   COLLECTIONS, CAT_STATUS, ROLES,
-  success, fail, getCollection, getUserByOpenid,
+  success, fail, getCollection, getDB, getUserByOpenid,
 } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -26,8 +26,8 @@ exports.main = async (event, context) => {
 
   const { catId, action, updates = {} } = event;
 
-  if (!['approve', 'reject', 'update', 'delete', 'reviewEdit', 'toggleAdopted'].includes(action)) {
-    return fail('无效的操作类型，支持：approve / reject / update / delete / reviewEdit / toggleAdopted');
+  if (!['approve', 'reject', 'update', 'delete', 'reviewEdit', 'toggleAdopted', 'togglePassedAway', 'toggleMissing'].includes(action)) {
+    return fail('无效的操作类型，支持：approve / reject / update / delete / reviewEdit / toggleAdopted / togglePassedAway / toggleMissing');
   }
 
   // reviewEdit 不需要 catId（使用 proposalId）
@@ -112,6 +112,20 @@ exports.main = async (event, context) => {
           console.log('[adminUpdateCat] 已删除关联记录:', recordsRes.data.length, '条');
         }
 
+        // 删除关联的关系记录
+        const _ = getDB().command;
+        const relRes = await getCollection(COLLECTIONS.RELATIONSHIPS)
+          .where(_.or([{ catId1: catId }, { catId2: catId }]))
+          .get();
+
+        if (relRes.data.length > 0) {
+          const deleteRelPromises = relRes.data.map(r =>
+            getCollection(COLLECTIONS.RELATIONSHIPS).doc(r._id).remove()
+          );
+          await Promise.all(deleteRelPromises);
+          console.log('[adminUpdateCat] 已删除关联关系:', relRes.data.length, '条');
+        }
+
         // 删除猫咪档案
         await catsColl.doc(catId).remove();
         console.log('[adminUpdateCat] 猫咪已删除:', catId);
@@ -150,6 +164,61 @@ exports.main = async (event, context) => {
               updateTime: now,
             },
           });
+
+          // 应用关系变更
+          const relChanges = proposal.proposedRelationshipChanges;
+          if (relChanges) {
+            const relationshipsColl = getCollection(COLLECTIONS.RELATIONSHIPS);
+            const catId = proposal.catId;
+
+            // 添加新关系
+            if (relChanges.add && relChanges.add.length > 0) {
+              for (const add of relChanges.add) {
+                let relCatId1, relCatId2;
+                if (add.type === 'parent_child') {
+                  relCatId1 = add.parentIsCurrent ? catId : add.otherCatId;
+                  relCatId2 = add.parentIsCurrent ? add.otherCatId : catId;
+                } else {
+                  relCatId1 = catId < add.otherCatId ? catId : add.otherCatId;
+                  relCatId2 = catId < add.otherCatId ? add.otherCatId : catId;
+                }
+
+                // 检查已存在
+                const existRes = await relationshipsColl
+                  .where({ catId1: relCatId1, catId2: relCatId2, type: add.type })
+                  .limit(1)
+                  .get();
+
+                if (existRes.data.length === 0) {
+                  await relationshipsColl.add({
+                    data: {
+                      catId1: relCatId1,
+                      catId2: relCatId2,
+                      type: add.type,
+                      description: add.description || '',
+                      createTime: now,
+                      updateTime: now,
+                    },
+                  });
+                  console.log('[adminUpdateCat] 已添加关系:', relCatId1, '<=>', relCatId2, add.type);
+                }
+              }
+            }
+
+            // 删除关系
+            if (relChanges.remove && relChanges.remove.length > 0) {
+              for (const item of relChanges.remove) {
+                const relId = typeof item === 'string' ? item : item.relationshipId;
+                try {
+                  await relationshipsColl.doc(relId).remove();
+                  console.log('[adminUpdateCat] 已删除关系:', relId);
+                } catch (e) {
+                  console.warn('[adminUpdateCat] 删除关系失败（可能已不存在）:', relId, e.message);
+                }
+              }
+            }
+          }
+
           console.log('[adminUpdateCat] 编辑提案已通过:', proposalId, '猫咪:', proposal.catId);
         }
 
@@ -174,6 +243,28 @@ exports.main = async (event, context) => {
         });
         console.log('[adminUpdateCat] 领养状态已切换:', catId, newAdopted);
         return success({ adopted: newAdopted }, newAdopted ? '已标记为已领养' : '已取消领养标记');
+      }
+
+      // ========== 切换去喵星状态 ==========
+      case 'togglePassedAway': {
+        const cat = await catsColl.doc(catId).get();
+        const newPassedAway = !cat.data.passedAway;
+        await catsColl.doc(catId).update({
+          data: { passedAway: newPassedAway, updateTime: now },
+        });
+        console.log('[adminUpdateCat] 去喵星状态已切换:', catId, newPassedAway);
+        return success({ passedAway: newPassedAway }, newPassedAway ? '已标记为去喵星' : '已取消去喵星标记');
+      }
+
+      // ========== 切换失踪状态 ==========
+      case 'toggleMissing': {
+        const cat = await catsColl.doc(catId).get();
+        const newMissing = !cat.data.missing;
+        await catsColl.doc(catId).update({
+          data: { missing: newMissing, updateTime: now },
+        });
+        console.log('[adminUpdateCat] 失踪状态已切换:', catId, newMissing);
+        return success({ missing: newMissing }, newMissing ? '已标记为失踪' : '已取消失踪标记');
       }
 
       default:

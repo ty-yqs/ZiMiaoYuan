@@ -8,6 +8,7 @@
     "van-tag": "@vant/weapp/tag/index",
     "van-button": "@vant/weapp/button/index",
     "van-dialog": "@vant/weapp/dialog/index",
-    "van-empty": "@vant/weapp/empty/index"
+    "van-empty": "@vant/weapp/empty/index",
+    "cat-card": "/components/cat-card/cat-card"
   }
 }

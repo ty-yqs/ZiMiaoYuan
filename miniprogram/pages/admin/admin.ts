@@ -10,6 +10,7 @@
 import { apiGetCats, apiAdminUpdateCat, apiGetPendingEdits } from '../../utils/api';
 import { showToast, showConfirm } from '../../utils/util';
 import { getCachedImageUrls } from '../../utils/imageCache';
+const config = require('../../config/index');
 
 const app = getApp<IAppOption>();
 
@@ -34,6 +35,10 @@ Page({
     activeTab: 0,
     pendingCats: [] as ICat[],
     allCats: [] as ICat[],
+    allCatsPage: 1,
+    allCatsHasMore: true,
+    allCatsLoading: false,
+    allCatsTotal: 0,
     pendingEdits: [] as IEditProposal[],
     loading: true,
     error: '',
@@ -71,17 +76,45 @@ Page({
       this.cachePendingPhotos(cats);
     }
 
-    // 加载全部猫咪
-    const allRes = await apiGetCats({ status: 'all', pageSize: 50 });
-    if (allRes.code === 0) {
-      this.setData({ allCats: allRes.data.cats || [] });
-      this.cacheAvatars(allRes.data.cats || [], 'allCats');
-    }
+    // 加载全部猫咪（首页，分页）
+    await this.loadAllCats(true);
 
     // 加载待审核编辑
     await this.loadPendingEdits();
 
     this.setData({ loading: false });
+  },
+
+  /** 加载全部猫咪（分页） */
+  async loadAllCats(reset: boolean = false) {
+    if (this.data.allCatsLoading) return;
+
+    const page = reset ? 1 : this.data.allCatsPage;
+    this.setData({ allCatsLoading: true });
+
+    const res = await apiGetCats({ status: 'all', page, pageSize: config.PAGE_SIZE });
+
+    if (res.code === 0) {
+      const { cats, total } = res.data;
+      const newCats = reset ? cats : [...this.data.allCats, ...cats];
+      this.setData({
+        allCats: newCats,
+        allCatsPage: page + 1,
+        allCatsHasMore: newCats.length < total,
+        allCatsTotal: total,
+        allCatsLoading: false,
+      });
+    } else {
+      this.setData({ allCatsLoading: false });
+    }
+  },
+
+  /** 触底加载更多 */
+  onReachBottom() {
+    // 只在全部猫咪 tab 时加载更多
+    if (this.data.activeTab === 2 && this.data.allCatsHasMore) {
+      this.loadAllCats(false);
+    }
   },
 
   /** 加载待审核编辑提案 */
@@ -107,13 +140,53 @@ Page({
         return String(value);
       };
 
-      const pendingEdits = (res.data || []).map((edit: IEditProposal) => ({
-        ...edit,
-        changesList: Object.entries(edit.proposedChanges).map(([key, value]) => ({
+      const REL_TYPE_LABELS: Record<string, string> = {
+        parent_child: '亲子',
+        sibling: '兄弟姐妹',
+        mate: '伴侣',
+        ex_mate: '前伴侣',
+        friend: '好朋友',
+        rival: '对头',
+        other: '其他',
+      };
+
+      const pendingEdits = (res.data || []).map((edit: IEditProposal) => {
+        // 字段变更
+        const changesList = Object.entries(edit.proposedChanges).map(([key, value]) => ({
           key: FIELD_LABELS[key] || key,
           value: formatValue(key, value),
-        })),
-      }));
+        }));
+
+        // 关系变更
+        const relChanges: Array<{ text: string; action: string }> = [];
+        const relData = (edit as any).proposedRelationshipChanges;
+        if (relData) {
+          if (relData.add && relData.add.length > 0) {
+            for (const a of relData.add) {
+              const typeLabel = REL_TYPE_LABELS[a.type] || a.type;
+              relChanges.push({
+                text: `${typeLabel} - ${a.otherCatName || '未知猫咪'}`,
+                action: 'add',
+              });
+            }
+          }
+          if (relData.remove && relData.remove.length > 0) {
+            for (const r of relData.remove) {
+              relChanges.push({
+                text: `${r.label || '未知'} - ${r.otherCatName || '未知猫咪'}`,
+                action: 'remove',
+              });
+            }
+          }
+        }
+
+        return {
+          ...edit,
+          changesList,
+          relChanges,
+          hasRelChanges: relChanges.length > 0,
+        };
+      });
       this.setData({ pendingEdits });
     }
   },
@@ -216,6 +289,42 @@ Page({
       const allCats = this.data.allCats.map((cat: ICat) => {
         if (cat._id === catId) {
           return { ...cat, adopted: res.data.adopted };
+        }
+        return cat;
+      });
+      this.setData({ allCats });
+    } else {
+      showToast(res.message || '操作失败', 'error');
+    }
+  },
+
+  async onTogglePassedAway(e: WechatMiniprogram.TouchEvent) {
+    const { catId } = e.currentTarget.dataset;
+    const res = await apiAdminUpdateCat({ catId, action: 'togglePassedAway' });
+
+    if (res.code === 0) {
+      showToast(res.data.passedAway ? '已标记为去喵星' : '已取消去喵星标记', 'success');
+      const allCats = this.data.allCats.map((cat: ICat) => {
+        if (cat._id === catId) {
+          return { ...cat, passedAway: res.data.passedAway };
+        }
+        return cat;
+      });
+      this.setData({ allCats });
+    } else {
+      showToast(res.message || '操作失败', 'error');
+    }
+  },
+
+  async onToggleMissing(e: WechatMiniprogram.TouchEvent) {
+    const { catId } = e.currentTarget.dataset;
+    const res = await apiAdminUpdateCat({ catId, action: 'toggleMissing' });
+
+    if (res.code === 0) {
+      showToast(res.data.missing ? '已标记为失踪' : '已取消失踪标记', 'success');
+      const allCats = this.data.allCats.map((cat: ICat) => {
+        if (cat._id === catId) {
+          return { ...cat, missing: res.data.missing };
         }
         return cat;
       });

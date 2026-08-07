@@ -234,6 +234,73 @@
   font-size: 44rpx;
 }
 
+/* ========== 猫咪关系 ========== */
+.relationship-card {
+  margin-top: var(--spacing-sm);
+}
+
+.relationship-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.relationship-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background: var(--color-bg-warm);
+  border-radius: var(--radius-sm);
+  border: 2rpx solid transparent;
+}
+
+.relationship-item:active {
+  background: rgba(126, 200, 168, 0.08);
+  border-color: var(--color-primary-light);
+}
+
+.rel-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: var(--radius-round);
+  margin-right: var(--spacing-sm);
+  flex-shrink: 0;
+  background: var(--color-bg-warm);
+}
+
+.rel-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rel-label {
+  font-size: var(--font-xs);
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 2rpx;
+}
+
+.rel-cat-name {
+  font-size: var(--font-md);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.rel-desc {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 2rpx;
+}
+
+.rel-arrow {
+  font-size: 28rpx;
+  color: var(--color-text-hint);
+  flex-shrink: 0;
+  margin-left: var(--spacing-xs);
+}
+
 /* ========== 便利贴板块 ========== */
 .notes-card {
   margin-top: var(--spacing-sm);

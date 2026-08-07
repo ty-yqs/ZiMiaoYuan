@@ -48,6 +48,8 @@ interface ICat {
     vaccinated: boolean;
   };
   adopted?: boolean;           // 是否已被领养
+  passedAway?: boolean;        // 是否去喵星
+  missing?: boolean;           // 是否失踪
   status: CatStatus;
   creator: string;            // 上传者 openid
   ratingAvg?: number | null;  // 亲人指数平均分
@@ -100,6 +102,36 @@ interface IAppOption {
     needRefreshDetail?: boolean; // 是否需要刷新详情页
   };
   checkLoginStatus: () => Promise<IUser | null>;
+}
+
+// ==================== 猫咪关系 ====================
+
+/** 关系类型 */
+type RelationType = 'parent_child' | 'sibling' | 'mate' | 'ex_mate' | 'friend' | 'rival' | 'other';
+
+/** 猫咪关系（数据库原始文档） */
+interface IRelationshipRaw {
+  _id: string;
+  catId1: string;            // parent_child: 父母方；对称类型: 按 _id 字典序
+  catId2: string;            // parent_child: 子女方；对称类型: 按 _id 字典序
+  type: RelationType;
+  description?: string;
+  createTime: Date;
+  updateTime: Date;
+}
+
+/** 猫咪关系（前端展示用，已填充对方猫咪信息） */
+interface IRelationship {
+  _id: string;
+  otherCat: {
+    _id: string;
+    cat_name: string;
+    avatar: string;
+    gender: CatGender;
+  };
+  type: RelationType;
+  label: string;             // 关系标签，双方显示相同（如 "母女"、"兄弟"、"伴侣"）
+  description?: string;
 }
 
 // ==================== 评分相关 ====================

@@ -8,7 +8,7 @@
     <textarea
       class="feedback-textarea"
       value="{{content}}"
-      placeholder="请输入你的反馈与建议..."
+      placeholder="请输入您的反馈和建议..."
       maxlength="500"
       auto-focus
       bind:input="onInput"

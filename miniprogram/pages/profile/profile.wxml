@@ -72,7 +72,7 @@
       />
       <van-cell
         title="💬 反馈与建议"
-        label="提交修改反馈与建议"
+        label="提交 猫咪领养/失踪/死亡反馈 或 小程序修改建议"
         is-link
         bind:click="onFeedback"
       />

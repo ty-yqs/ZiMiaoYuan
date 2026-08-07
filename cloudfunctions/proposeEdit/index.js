@@ -24,7 +24,7 @@ exports.main = async (event, context) => {
     return fail('请先登录');
   }
 
-  const { catId, updates = {} } = event;
+  const { catId, updates = {}, proposedRelationshipChanges } = event;
 
   if (!catId) {
     return fail('缺少猫咪ID');
@@ -38,7 +38,13 @@ exports.main = async (event, context) => {
     }
   }
 
-  if (Object.keys(proposedChanges).length === 0) {
+  // 检查是否有关系变更
+  const hasRelChanges = proposedRelationshipChanges && (
+    (proposedRelationshipChanges.add && proposedRelationshipChanges.add.length > 0) ||
+    (proposedRelationshipChanges.remove && proposedRelationshipChanges.remove.length > 0)
+  );
+
+  if (Object.keys(proposedChanges).length === 0 && !hasRelChanges) {
     return fail('没有可提交的修改');
   }
 
@@ -83,6 +89,7 @@ exports.main = async (event, context) => {
       userId: OPENID,
       nickname,
       proposedChanges,
+      proposedRelationshipChanges: proposedRelationshipChanges || null,
       status: 'pending',
       createTime: now,
       updateTime: now,

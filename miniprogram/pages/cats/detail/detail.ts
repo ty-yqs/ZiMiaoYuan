@@ -50,6 +50,9 @@ Page({
     ratingCount: 0,
     ratingAvgDisplay: '--',
     rateLoading: false,
+
+    // 猫咪关系
+    relationships: [] as IRelationship[],
   },
 
   onLoad(options: Record<string, string>) {
@@ -116,6 +119,8 @@ Page({
         ratingAvg: cat.ratingAvg != null ? Number(cat.ratingAvg) : null,
         ratingAvgDisplay: cat.ratingAvg != null ? Number(cat.ratingAvg).toFixed(1) : '--',
         ratingCount: cat.ratingCount || 0,
+        // 关系数据（已在云函数中填充对方猫咪信息）
+        relationships: res.data.relationships || [],
         loading: false,
       });
 
@@ -349,6 +354,16 @@ Page({
       showToast('网络异常，请重试', 'error');
     } finally {
       this.setData({ rateLoading: false });
+    }
+  },
+
+  /** 点击关系中的对方猫咪，跳转其详情页 */
+  onTapRelatedCat(e: WechatMiniprogram.TouchEvent) {
+    const { catId } = e.currentTarget.dataset;
+    if (catId) {
+      wx.navigateTo({
+        url: `${ROUTES.CAT_DETAIL}?catId=${catId}`,
+      });
     }
   },
 });

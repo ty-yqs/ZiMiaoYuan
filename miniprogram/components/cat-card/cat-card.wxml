@@ -32,6 +32,8 @@
       <text class="age-label" wx:if="{{ageLabel}}">{{ageLabel}}</text>
       <text class="color-tag">{{cat.color || '未知毛色'}}</text>
       <text class="adopted-tag" wx:if="{{cat.adopted}}">已领养</text>
+      <text class="passed-away-tag" wx:if="{{cat.passedAway}}">去喵星</text>
+      <text class="missing-tag" wx:if="{{cat.missing}}">失踪</text>
     </view>
 
     <!-- 第二行：简介 -->

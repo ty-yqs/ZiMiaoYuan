@@ -86,6 +86,55 @@
       </view>
     </view>
 
+    <!-- 猫咪关系管理（纳入审核流程） -->
+    <view class="card form-card">
+      <view class="form-item">
+        <text class="form-label">🔗 猫咪关系</text>
+
+        <!-- 待添加的关系 -->
+        <view class="rel-mgmt-list" wx:if="{{pendingRelAdds.length > 0}}">
+          <view class="rel-mgmt-item rel-pending-add" wx:for="{{pendingRelAdds}}" wx:key="otherCat._id">
+            <view class="rel-mgmt-info">
+              <text class="rel-mgmt-badge">📥</text>
+              <text class="rel-mgmt-label">{{item.label}}</text>
+              <text class="rel-mgmt-name">- {{item.otherCat.cat_name}}</text>
+              <text class="rel-mgmt-pending-tag">待审核</text>
+            </view>
+            <view class="rel-mgmt-undo" data-index="{{index}}" catch:tap="onUndoPendingRelAdd">撤销</view>
+          </view>
+        </view>
+
+        <!-- 现有关系列表（只读展示） -->
+        <view class="rel-mgmt-list" wx:if="{{relationships.length > 0}}">
+          <view
+            wx:for="{{relationships}}"
+            wx:key="_id"
+            class="rel-mgmt-item"
+          >
+            <view class="rel-mgmt-info">
+              <text class="rel-mgmt-badge">
+                <text wx:if="{{item.type === 'parent_child'}}">👨‍👩‍👧</text>
+                <text wx:elif="{{item.type === 'sibling'}}">🐱</text>
+                <text wx:elif="{{item.type === 'mate'}}">💕</text>
+                <text wx:elif="{{item.type === 'ex_mate'}}">💔</text>
+                <text wx:elif="{{item.type === 'friend'}}">🤝</text>
+                <text wx:elif="{{item.type === 'rival'}}">⚡</text>
+                <text wx:else>🔗</text>
+              </text>
+              <text class="rel-mgmt-label">{{item.label}}</text>
+              <text class="rel-mgmt-name">- {{item.otherCat.cat_name}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 添加关系按钮 -->
+        <view class="add-rel-btn" bind:tap="onShowRelationshipModal">
+          <text class="add-rel-icon">+</text>
+          <text class="add-rel-text">添加关系</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 提示 -->
     <view class="notice">
       <text class="notice-text">💡 编辑提交后需管理员审核，通过后才会更新显示</text>
@@ -155,5 +204,94 @@
         bind:tap="onSelectAge"
       >{{item.label}}</view>
     </view>
+  </view>
+</view>
+
+<!-- ==================== 添加关系弹窗 ==================== -->
+<view class="picker-overlay" wx:if="{{showRelationshipModal}}" bind:tap="onCloseRelationshipModal">
+  <view class="picker-panel" catch:tap="noop" style="max-height: 80vh;">
+    <view class="picker-header">
+      <text class="picker-title">添加关系</text>
+      <text class="picker-close" bind:tap="onCloseRelationshipModal">✕</text>
+    </view>
+
+    <!-- 搜索对方猫咪 -->
+    <view class="rel-search-section">
+      <input
+        class="rel-search-input"
+        value="{{relSearchKeyword || ''}}"
+        placeholder="搜索猫咪名字..."
+        bind:input="onRelSearchInput"
+      />
+      <view class="rel-search-results" wx:if="{{relSearchResults.length > 0}}">
+        <view
+          wx:for="{{relSearchResults}}"
+          wx:key="_id"
+          class="rel-search-item {{relSelectedCat && relSelectedCat._id === item._id ? 'active' : ''}}"
+          data-cat="{{item}}"
+          bind:tap="onSelectSearchCat"
+        >
+          <text>{{item.cat_name}}</text>
+          <view class="rel-search-meta">
+            <image wx:if="{{item.gender === 'male'}}" class="rel-search-gender-icon" src="/images/gender-male-color.svg" />
+            <image wx:elif="{{item.gender === 'female'}}" class="rel-search-gender-icon" src="/images/gender-female-color.svg" />
+            <text>· {{item.color}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="rel-search-empty" wx:elif="{{relSearchKeyword && !relSearching && relSearchResults.length === 0}}">
+        <text>未找到匹配的猫咪</text>
+      </view>
+      <view class="rel-selected-hint" wx:if="{{relSelectedCat}}">
+        <text>已选择：{{relSelectedCat.cat_name}}</text>
+      </view>
+    </view>
+
+    <!-- 关系类型选择 -->
+    <view class="rel-type-section" wx:if="{{relSelectedCat}}">
+      <text class="rel-type-title">选择关系类型</text>
+      <view class="rel-type-grid">
+        <view
+          wx:for="{{relationshipTypes}}"
+          wx:key="value"
+          class="rel-type-item {{relSelectedType === item.value ? 'active' : ''}}"
+          data-type="{{item.value}}"
+          bind:tap="onSelectRelType"
+        >
+          <text class="rel-type-label-text">{{item.label}}</text>
+        </view>
+      </view>
+
+      <!-- parent_child 方向切换 -->
+      <view class="rel-direction-toggle" wx:if="{{relSelectedType === 'parent_child'}}">
+        <text class="rel-direction-text">亲子方向：</text>
+        <view class="rel-direction-switch" bind:tap="onToggleParentDirection">
+          <text class="{{relParentIsCurrent ? 'active' : ''}}">本猫是父母</text>
+          <text class="{{!relParentIsCurrent ? 'active' : ''}}">对方是父母</text>
+        </view>
+      </view>
+
+      <!-- other 类型描述 -->
+      <view class="rel-desc-section" wx:if="{{relSelectedType === 'other'}}">
+        <textarea
+          class="rel-desc-input"
+          value="{{relDescription || ''}}"
+          placeholder="描述这两个猫咪的关系..."
+          maxlength="100"
+          bind:input="onRelDescInput"
+        />
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="rel-submit-area" wx:if="{{relSelectedCat && relSelectedType}}">
+      <button
+        class="rel-submit-btn"
+        bind:tap="onSubmitRelationship"
+        loading="{{relSubmitting}}"
+        disabled="{{!relSelectedType || !relSelectedCat}}"
+      >确认添加</button>
+    </view>
+
   </view>
 </view>

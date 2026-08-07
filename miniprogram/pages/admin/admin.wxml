@@ -117,6 +117,20 @@
                 <text class="edit-change-val">{{change.value}}</text>
               </view>
             </block>
+            <!-- 无字段变更时提示 -->
+            <text wx:if="{{item.changesList.length === 0}}" class="edit-change-empty">无字段修改</text>
+          </view>
+
+          <!-- 关系变更 -->
+          <view class="edit-changes" wx:if="{{item.hasRelChanges}}">
+            <text class="edit-change-label">🔗 关系变更：</text>
+            <block wx:for="{{item.relChanges}}" wx:for-item="rc" wx:key="text">
+              <view class="edit-change-item">
+                <van-tag wx:if="{{rc.action === 'add'}}" type="success" size="mini">新增</van-tag>
+                <van-tag wx:else type="danger" size="mini">删除</van-tag>
+                <text class="edit-change-suffix">{{rc.text}}</text>
+              </view>
+            </block>
           </view>
         </view>
 
@@ -139,45 +153,61 @@
       </block>
     </van-tab>
 
-    <van-tab title="全部猫咪 ({{allCats.length}})">
-      <block wx:if="{{loading}}">
-        <view class="tab-loading"><text>加载中...</text></view>
-      </block>
-
-      <block wx:else>
-        <view wx:for="{{allCats}}" wx:key="_id" class="card admin-card">
-        <view class="flex-row">
-          <image class="admin-cat-img" src="{{item.avatar}}" mode="aspectFill" />
-          <view class="flex-1 admin-cat-info">
-            <text class="admin-cat-name">{{item.cat_name || '未命名'}}</text>
-            <text class="admin-cat-detail">毛色：{{item.color}}</text>
-            <view class="flex-row">
-              <van-tag wx:if="{{item.status === 'pending'}}" type="warning" size="mini">待审核</van-tag>
-              <van-tag wx:elif="{{item.status === 'approved'}}" type="success" size="mini">已审核</van-tag>
-              <van-tag wx:else type="danger" size="mini">已拒绝</van-tag>
-            </view>
+    <van-tab title="全部猫咪 ({{allCatsTotal}})">
+      <!-- 瀑布流猫咪卡片 -->
+      <block wx:if="{{allCats.length > 0}}">
+        <view wx:for="{{allCats}}" wx:key="_id">
+          <cat-card cat="{{item}}" showLocation="{{false}}" />
+          <view class="admin-card-actions flex-row">
+            <van-button
+              type="{{item.adopted ? 'default' : 'primary'}}"
+              size="small"
+              color="#E8A87C"
+              data-cat-id="{{item._id}}"
+              bind:click="onToggleAdopted"
+            >{{item.adopted ? '取消领养' : '标记已领养'}}</van-button>
+            <van-button
+              type="{{item.passedAway ? 'default' : 'primary'}}"
+              size="small"
+              color="#9B9B9B"
+              data-cat-id="{{item._id}}"
+              bind:click="onTogglePassedAway"
+            >{{item.passedAway ? '取消去喵星' : '标记去喵星'}}</van-button>
+            <van-button
+              type="{{item.missing ? 'default' : 'primary'}}"
+              size="small"
+              color="#9B9B9B"
+              data-cat-id="{{item._id}}"
+              bind:click="onToggleMissing"
+            >{{item.missing ? '取消失踪' : '标记失踪'}}</van-button>
+            <van-button
+              type="danger"
+              size="small"
+              plain
+              hairline
+              data-cat-id="{{item._id}}"
+              bind:click="onDelete"
+            >删除</van-button>
           </view>
         </view>
 
-        <view class="admin-actions flex-row">
-          <van-button
-            type="{{item.adopted ? 'default' : 'primary'}}"
-            size="small"
-            color="#E8A87C"
-            data-cat-id="{{item._id}}"
-            bind:click="onToggleAdopted"
-          >{{item.adopted ? '取消领养' : '标记已领养'}}</van-button>
-          <van-button
-            type="danger"
-            size="small"
-            plain
-            hairline
-            data-cat-id="{{item._id}}"
-            bind:click="onDelete"
-          >删除</van-button>
+        <!-- 加载更多 -->
+        <view class="load-more">
+          <text wx:if="{{allCatsLoading}}">正在加载...</text>
+          <text wx:elif="{{!allCatsHasMore}}">—— 已经到底了 ——</text>
         </view>
-      </view>
       </block>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:elif="{{!allCatsLoading}}">
+        <text class="empty-icon">😿</text>
+        <text class="empty-text">还没有猫咪</text>
+      </view>
+
+      <!-- 首次加载中 -->
+      <view class="tab-loading" wx:else>
+        <text>加载中...</text>
+      </view>
     </van-tab>
   </van-tabs>
 

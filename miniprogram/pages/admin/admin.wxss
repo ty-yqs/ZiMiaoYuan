@@ -52,6 +52,22 @@
   border-top: 1rpx solid var(--color-border);
 }
 
+/* 全部猫咪 tab 下的卡片操作按钮 */
+.admin-card-actions {
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding: 0 var(--spacing-md) var(--spacing-sm) var(--spacing-md);
+}
+
+/* 加载更多 */
+.load-more {
+  padding: 32rpx 0;
+  text-align: center;
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
 /* ========== 审核卡片（完整信息） ========== */
 .review-card {
   padding: var(--spacing-sm);
@@ -191,4 +207,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.edit-change-empty {
+  font-size: 24rpx;
+  color: var(--color-text-hint);
+}
+
+.edit-change-suffix {
+  font-size: 24rpx;
+  color: var(--color-text-primary);
+  margin-left: 8rpx;
 }

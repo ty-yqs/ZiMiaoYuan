@@ -43,6 +43,8 @@
         </view>
         <view class="flex-row" style="gap: 8rpx;">
           <van-tag wx:if="{{cat.adopted}}" type="warning" color="#E8A87C">已领养</van-tag>
+          <van-tag wx:if="{{cat.passedAway}}" type="default" color="#9B9B9B">去喵星</van-tag>
+          <van-tag wx:if="{{cat.missing}}" type="default" color="#9B9B9B">失踪</van-tag>
           <van-tag type="primary" color="#7EC8A8">{{cat.color}}</van-tag>
         </view>
       </view>
@@ -97,6 +99,28 @@
         >
           <text class="health-icon">{{cat.health.vaccinated ? '✅' : '❌'}}</text>
           <text class="health-label">{{cat.health.vaccinated ? '已打疫苗' : '未打疫苗'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 猫咪关系卡片 -->
+    <view class="card relationship-card" wx:if="{{relationships.length > 0}}">
+      <view class="section-title-sm">猫咪关系</view>
+      <view class="relationship-list">
+        <view
+          class="relationship-item"
+          wx:for="{{relationships}}"
+          wx:key="_id"
+          data-cat-id="{{item.otherCat._id}}"
+          bind:tap="onTapRelatedCat"
+        >
+          <image class="rel-avatar" src="{{item.otherCat.avatar}}" mode="aspectFill" />
+          <view class="rel-info">
+            <text class="rel-label">{{item.label}}</text>
+            <text class="rel-cat-name">{{item.otherCat.cat_name || '未知猫咪'}}</text>
+            <text class="rel-desc" wx:if="{{item.type === 'other' && item.description}}">{{item.description}}</text>
+          </view>
+          <text class="rel-arrow">›</text>
         </view>
       </view>
     </view>
