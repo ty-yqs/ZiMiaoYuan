@@ -33,6 +33,12 @@ Page({
     this.loadFeaturedCats();
   },
 
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
+    }
+  },
+
   /** 加载推荐猫咪（随机推荐2只，仅首次进入时加载） */
   async loadFeaturedCats() {
     this.setData({ loading: true, error: '' });

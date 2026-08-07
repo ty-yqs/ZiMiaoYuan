@@ -21,6 +21,7 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
+    "custom": true,
     "color": "#999999",
     "selectedColor": "#7EC8A8",
     "backgroundColor": "#FFFFFF",
@@ -29,26 +30,26 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "images/icons/home.png",
-        "selectedIconPath": "images/icons/home-active.png"
+        "iconPath": "images/icons/house@4x.png",
+        "selectedIconPath": "images/icons/house.fill@4x.png"
       },
       {
         "pagePath": "pages/cats/list/list",
         "text": "档案",
-        "iconPath": "images/icons/examples.png",
-        "selectedIconPath": "images/icons/examples-active.png"
+        "iconPath": "images/icons/list.clipboard@4x.png",
+        "selectedIconPath": "images/icons/list.clipboard.fill@4x.png"
       },
       {
         "pagePath": "pages/stats/stats",
         "text": "统计",
-        "iconPath": "images/icons/goods.png",
-        "selectedIconPath": "images/icons/goods-active.png"
+        "iconPath": "images/icons/chart.bar@4x.png",
+        "selectedIconPath": "/images/icons/chart.bar.fill@4x.png"
       },
       {
         "pagePath": "pages/profile/profile",
         "text": "我的",
-        "iconPath": "images/icons/usercenter.png",
-        "selectedIconPath": "images/icons/usercenter-active.png"
+        "iconPath": "images/icons/person@4x.png",
+        "selectedIconPath": "images/icons/person.fill@4x.png"
       }
     ]
   },

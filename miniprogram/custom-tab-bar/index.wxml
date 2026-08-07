@@ -1,0 +1,20 @@
+<!-- 自定义底部标签栏 -->
+<view class="tab-bar">
+  <view
+    wx:for="{{list}}"
+    wx:key="index"
+    class="tab-item {{index === 1 ? 'tab-item-sm' : ''}}"
+    bind:tap="switchTab"
+    data-index="{{index}}"
+    data-path="{{item.pagePath}}"
+  >
+    <image
+      class="tab-icon"
+      src="{{selected === index ? item.selectedIconPath : item.iconPath}}"
+    />
+    <text
+      class="tab-text"
+      style="color: {{selected === index ? selectedColor : color}}"
+    >{{item.text}}</text>
+  </view>
+</view>

@@ -16,8 +16,36 @@
 }
 
 .filter-bar {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
   background: var(--color-bg-card);
   border-bottom: 1rpx solid var(--color-border);
+}
+
+.filter-dropdown-wrap {
+  flex: 4;
+}
+
+.filter-dropdown-wrap .van-dropdown-menu {
+  width: 100%;
+  box-shadow: none;
+}
+
+/* ========== 亲人排序按钮 ========== */
+.sort-btn {
+  flex: 1;
+  text-align: center;
+  font-size: 30rpx;
+  line-height: 100rpx;
+  color: #323233;
+  white-space: nowrap;
+  padding-right: 6px;
+}
+
+.sort-btn.sort-active {
+  color: var(--color-primary);
+  font-weight: 500;
 }
 
 
@@ -38,7 +66,7 @@
 .fab {
   position: fixed;
   right: 40rpx;
-  bottom: calc(120rpx + var(--safe-area-bottom));
+  bottom: calc(160rpx + var(--safe-area-bottom));
   width: 100rpx;
   height: 100rpx;
   background: var(--color-primary);

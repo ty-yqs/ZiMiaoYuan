@@ -36,6 +36,12 @@ Page({
     this.loadStats();
   },
 
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 });
+    }
+  },
+
   onShareAppMessage() {
     return { title: '数据统计', path: '/pages/stats/stats' };
   },

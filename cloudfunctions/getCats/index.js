@@ -18,6 +18,8 @@ exports.main = async (event, context) => {
     age = '',
     keyword = '',
     status = '', // 管理员可传 'pending' 等
+    sortBy = 'createTime',
+    sortOrder = 'desc',
   } = event;
 
   try {
@@ -60,8 +62,8 @@ exports.main = async (event, context) => {
       where,
       page: Math.max(1, parseInt(page) || 1),
       pageSize: Math.min(50, parseInt(pageSize) || 10),
-      orderBy: 'createTime',
-      order: 'desc',
+      orderBy: sortBy,
+      order: sortOrder,
     });
 
     return success({

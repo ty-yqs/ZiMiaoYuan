@@ -56,7 +56,9 @@ exports.main = async (event, context) => {
     // ==================== 当日访问量（仅读取，集合可能还不存在） ====================
     let todayVisits = 0;
     try {
-      const today = new Date();
+      // 使用北京时间 (UTC+8)
+      const now = new Date();
+      const today = new Date(now.getTime() + 8 * 60 * 60 * 1000);
       const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
       const visitsColl = getCollection(COLLECTIONS.DAILY_VISITS);

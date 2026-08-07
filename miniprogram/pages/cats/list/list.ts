@@ -19,6 +19,10 @@ Page({
     filterGender: '',
     filterAge: '',
 
+    // 排序
+    sortByRating: false,
+    sortOrder: 'desc' as 'desc' | 'asc',
+
     // 筛选选项
     colorOptions: [
       { text: '全部毛色', value: '' },
@@ -42,6 +46,12 @@ Page({
     this.loadCats(true);
   },
 
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
+  },
+
   /** 加载猫咪列表 */
   async loadCats(reset: boolean = false) {
     if (this.data.loading) return;
@@ -57,6 +67,8 @@ Page({
       color: this.data.filterColor,
       gender: this.data.filterGender,
       age: this.data.filterAge,
+      sortBy: this.data.sortByRating ? 'ratingAvg' : 'createTime',
+      sortOrder: this.data.sortOrder,
     });
 
     if (res.code === 0) {
@@ -96,6 +108,22 @@ Page({
   /** 筛选年龄 */
   onFilterAge(e: WechatMiniprogram.CustomEvent) {
     this.setData({ filterAge: e.detail || '' });
+    this.loadCats(true);
+  },
+
+  /** 切换亲人指数排序：默认 → 从高到低 → 从低到高 → 默认 */
+  onToggleSort() {
+    const { sortByRating, sortOrder } = this.data;
+    if (!sortByRating) {
+      // 默认 → 亲人指数从高到低
+      this.setData({ sortByRating: true, sortOrder: 'desc' });
+    } else if (sortOrder === 'desc') {
+      // 从高到低 → 从低到高
+      this.setData({ sortOrder: 'asc' });
+    } else {
+      // 从低到高 → 恢复默认（按时间）
+      this.setData({ sortByRating: false, sortOrder: 'desc' });
+    }
     this.loadCats(true);
   },
 

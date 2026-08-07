@@ -17,26 +17,26 @@
       />
     </view>
     <view class="filter-bar">
-      <van-dropdown-menu active-color="#7EC8A8">
-        <van-dropdown-item
-          options="{{colorOptions}}"
-          value="{{filterColor}}"
-          bind:change="onFilterColor"
-          title="毛色"
-        />
-        <van-dropdown-item
-          options="{{genderOptions}}"
-          value="{{filterGender}}"
-          bind:change="onFilterGender"
-          title="性别"
-        />
-        <van-dropdown-item
-          options="{{ageOptions}}"
-          value="{{filterAge}}"
-          bind:change="onFilterAge"
-          title="年龄"
-        />
-      </van-dropdown-menu>
+      <view class="filter-dropdown-wrap">
+        <van-dropdown-menu active-color="#7EC8A8">
+          <van-dropdown-item
+            options="{{colorOptions}}"
+            value="{{filterColor}}"
+            bind:change="onFilterColor"
+          />
+          <van-dropdown-item
+            options="{{genderOptions}}"
+            value="{{filterGender}}"
+            bind:change="onFilterGender"
+          />
+          <van-dropdown-item
+            options="{{ageOptions}}"
+            value="{{filterAge}}"
+            bind:change="onFilterAge"
+          />
+        </van-dropdown-menu>
+      </view>
+      <text class="sort-btn {{sortByRating ? 'sort-active' : ''}}" bind:tap="onToggleSort">亲人{{sortByRating ? (sortOrder === 'desc' ? '↓' : '↑') : ''}}</text>
     </view>
   </view>
 

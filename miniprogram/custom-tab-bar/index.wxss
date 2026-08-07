@@ -1,0 +1,42 @@
+/**
+ * 自定义底部标签栏样式
+ */
+
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: calc(100rpx + var(--safe-area-bottom, 0));
+  padding-bottom: var(--safe-area-bottom, 0);
+  background: #fff;
+  border-top: 1rpx solid #eee;
+  z-index: 999;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 140rpx;
+}
+
+.tab-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.tab-item-sm .tab-icon {
+  width: 30rpx;
+  height: 50rpx;
+}
+
+.tab-text {
+  margin-top: 4rpx;
+  font-size: 20rpx;
+}

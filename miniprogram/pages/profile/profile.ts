@@ -38,6 +38,10 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 3 });
+    }
+
     // 检查是否已设置昵称和头像
     if (!requireProfile()) return;
 
