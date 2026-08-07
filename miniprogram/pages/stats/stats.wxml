@@ -22,7 +22,7 @@
       <view class="stat-card">
         <text class="stat-card-icon">🐱</text>
         <text class="stat-card-number">{{catCount}}</text>
-        <text class="stat-card-label">在册猫咪</text>
+        <text class="stat-card-label">在校猫咪</text>
       </view>
       <view class="stat-card">
         <text class="stat-card-icon">🖊️</text>
@@ -89,6 +89,39 @@
           <text class="distro-count">{{item.count}}</text>
         </view>
       </view>
+    </view>
+
+    <!-- 特殊状态猫咪 -->
+    <view class="card distro-card">
+      <text class="section-title">📋 其他状态</text>
+      <view class="distro-list">
+        <view class="distro-item special-item">
+          <text class="distro-name">已领养</text>
+          <view class="distro-bar-bg">
+            <view class="distro-bar-fill special-bar" style="width: {{maxSpecialCount > 0 ? adoptedCount / maxSpecialCount * 100 : 0}}%;" />
+          </view>
+          <text class="distro-count">{{adoptedCount}}</text>
+        </view>
+        <view class="distro-item special-item">
+          <text class="distro-name">去喵星</text>
+          <view class="distro-bar-bg">
+            <view class="distro-bar-fill special-bar" style="width: {{maxSpecialCount > 0 ? passedAwayCount / maxSpecialCount * 100 : 0}}%;" />
+          </view>
+          <text class="distro-count">{{passedAwayCount}}</text>
+        </view>
+        <view class="distro-item special-item">
+          <text class="distro-name">失踪</text>
+          <view class="distro-bar-bg">
+            <view class="distro-bar-fill special-bar" style="width: {{maxSpecialCount > 0 ? missingCount / maxSpecialCount * 100 : 0}}%;" />
+          </view>
+          <text class="distro-count">{{missingCount}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 统计说明 -->
+    <view class="stats-note">
+      <text>* 以上数据均基于在平台登记的数据进行统计。除「其他状态」外，以上统计均不包含已领养、去喵星、失踪的猫咪</text>
     </view>
 
     <!-- 底部安全区 -->

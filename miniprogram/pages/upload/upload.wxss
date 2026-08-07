@@ -143,6 +143,15 @@
   margin-top: var(--spacing-lg);
 }
 
+.upload-hint {
+  margin: var(--spacing-md) var(--spacing-md) 0;
+}
+
+.upload-hint text {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
 /* ========== 选择器弹窗 ========== */
 .picker-grid {
   display: grid;

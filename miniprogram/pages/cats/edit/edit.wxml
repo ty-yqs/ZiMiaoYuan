@@ -137,7 +137,7 @@
 
     <!-- 提示 -->
     <view class="notice">
-      <text class="notice-text">💡 编辑提交后需管理员审核，通过后才会更新显示</text>
+      <text class="notice-text">* 编辑提交后需管理员审核，通过后才会更新显示</text>
     </view>
 
     <!-- 提交按钮 -->

@@ -105,6 +105,10 @@
     />
   </view>
 
+  <view class="upload-hint" wx:if="{{!targetCatId}}">
+      <text>* 第一张照片建议选择猫咪正脸照，将默认设为头像。提交后需管理员审核，通过后才会更新显示</text>
+    </view>
+
   <!-- ==================== 提交按钮 ==================== -->
   <view class="submit-area safe-bottom">
     <van-button

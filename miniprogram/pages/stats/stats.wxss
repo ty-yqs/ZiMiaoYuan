@@ -120,3 +120,16 @@
   color: var(--color-primary-dark);
   flex-shrink: 0;
 }
+
+.special-bar {
+  background: linear-gradient(90deg, #9B9B9B, #C4C4C4);
+}
+
+.stats-note {
+  margin: var(--spacing-sm) var(--spacing-md);
+}
+
+.stats-note text {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}

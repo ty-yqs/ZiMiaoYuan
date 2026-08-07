@@ -12,28 +12,55 @@
  * - todayVisits:     当日访问量
  */
 const cloud = require('wx-server-sdk');
-const { COLLECTIONS, CAT_STATUS, success, fail, getCollection } = require('./db');
+const { COLLECTIONS, CAT_STATUS, success, fail, getCollection, getDB } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 exports.main = async (event, context) => {
   try {
-    // ==================== 并行查询所有基础统计 ====================
-    const approvedWhere = { status: CAT_STATUS.APPROVED };
+    const _ = getDB().command;
 
+    // 活跃猫咪：已审核 且 未被领养/去喵星/失踪
+    const activeWhere = {
+      status: CAT_STATUS.APPROVED,
+      adopted: _.neq(true),
+      passedAway: _.neq(true),
+      missing: _.neq(true),
+    };
+
+    // ==================== 并行查询所有基础统计 ====================
     const [
       catTotalRes,
       sterilizedRes,
       vaccinatedRes,
-      recordTotalRes,
       allCatsRes,
+      excludedCatsRes,
+      adoptedRes,
+      passedAwayRes,
+      missingRes,
     ] = await Promise.all([
-      getCollection(COLLECTIONS.CATS).where(approvedWhere).count(),
-      getCollection(COLLECTIONS.CATS).where({ ...approvedWhere, 'health.sterilized': true }).count(),
-      getCollection(COLLECTIONS.CATS).where({ ...approvedWhere, 'health.vaccinated': true }).count(),
-      getCollection(COLLECTIONS.RECORDS).count(),
-      getCollection(COLLECTIONS.CATS).where(approvedWhere).field({ color: true, gender: true, age: true, cat_name: true }).get(),
+      getCollection(COLLECTIONS.CATS).where(activeWhere).count(),
+      getCollection(COLLECTIONS.CATS).where({ ...activeWhere, 'health.sterilized': true }).count(),
+      getCollection(COLLECTIONS.CATS).where({ ...activeWhere, 'health.vaccinated': true }).count(),
+      getCollection(COLLECTIONS.CATS).where(activeWhere).field({ color: true, gender: true, age: true, cat_name: true }).get(),
+      getCollection(COLLECTIONS.CATS).where(_.or([
+        { adopted: true }, { passedAway: true }, { missing: true },
+      ])).field({ _id: true }).get(),
+      getCollection(COLLECTIONS.CATS).where({ adopted: true }).count(),
+      getCollection(COLLECTIONS.CATS).where({ passedAway: true }).count(),
+      getCollection(COLLECTIONS.CATS).where({ missing: true }).count(),
     ]);
+
+    // 记录数：排除已领养/去喵星/失踪的猫
+    const excludedIds = excludedCatsRes.data.map(c => c._id);
+    let recordTotalRes;
+    if (excludedIds.length > 0) {
+      recordTotalRes = await getCollection(COLLECTIONS.RECORDS)
+        .where({ catId: _.nin(excludedIds) })
+        .count();
+    } else {
+      recordTotalRes = await getCollection(COLLECTIONS.RECORDS).count();
+    }
 
     // ==================== 计算分布 ====================
     const cats = allCatsRes.data;
@@ -98,6 +125,9 @@ exports.main = async (event, context) => {
       catsByAge: sortByCount(ageMap),
       recordCount: recordTotalRes.total,
       todayVisits,
+      adoptedCount: adoptedRes.total,
+      passedAwayCount: passedAwayRes.total,
+      missingCount: missingRes.total,
     });
 
   } catch (err) {

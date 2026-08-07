@@ -2,6 +2,7 @@
  * 投喂罐头 — 赞助支持页
  */
 import { showToast } from '../../utils/util';
+import { getCachedImageUrl } from '../../utils/imageCache';
 
 const app = getApp<IAppOption>();
 
@@ -20,15 +21,22 @@ Page({
     this.loadSupporters();
   },
 
-  /** 加载收款二维码（通过云函数绕过权限限制） */
+  /** 加载收款二维码（优先本地缓存，否则通过云函数获取并缓存） */
   async loadQRCode() {
     try {
       const res = await wx.cloud.callFunction({
         name: 'getSponsorQR',
         data: {},
       });
-      if (res.result.code === 0 && res.result.data?.url) {
-        this.setData({ qrUrl: res.result.data.url });
+      if (res.result.code === 0 && res.result.data) {
+        const { url, cloudFileID } = res.result.data;
+        // 尝试缓存到本地，下次打开直接使用本地文件
+        if (cloudFileID) {
+          const cachedPath = await getCachedImageUrl(cloudFileID);
+          this.setData({ qrUrl: cachedPath || url });
+        } else {
+          this.setData({ qrUrl: url });
+        }
       }
     } catch (err) {
       console.error('[Support] 加载二维码失败:', err);

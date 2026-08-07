@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
       fileList: ['cloud://cloud2-d1gbjipxm9c21dd8d.636c-cloud2-d1gbjipxm9c21dd8d-1464135428/sponsor/sponsor.jpg'],
     });
     if (res.fileList && res.fileList.length > 0 && res.fileList[0].tempFileURL) {
-      return { code: 0, data: { url: res.fileList[0].tempFileURL } };
+      return { code: 0, data: { url: res.fileList[0].tempFileURL, cloudFileID: res.fileList[0].fileID } };
     }
     return { code: -1, message: '获取二维码失败' };
   } catch (err) {
