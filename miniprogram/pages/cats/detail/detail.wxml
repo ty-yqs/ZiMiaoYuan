@@ -89,7 +89,7 @@
           data-field="sterilized"
           bind:tap="onToggleHealth"
         >
-          <text class="health-icon">{{cat.health.sterilized ? '✅' : '❌'}}</text>
+          <image class="health-icon-img" src="/images/icons/{{cat.health.sterilized ? 'figure.child.and.lock.fill' : 'figure.child.and.lock.open'}}@4x.png" mode="heightFix" />
           <text class="health-label">{{cat.health.sterilized ? '已绝育' : '未绝育'}}</text>
         </view>
         <view
@@ -97,7 +97,7 @@
           data-field="vaccinated"
           bind:tap="onToggleHealth"
         >
-          <text class="health-icon">{{cat.health.vaccinated ? '✅' : '❌'}}</text>
+          <image class="health-icon-img" src="/images/icons/{{cat.health.vaccinated ? 'shield.lefthalf.filled.badge.checkmark' : 'shield'}}@4x.png" mode="heightFix" />
           <text class="health-label">{{cat.health.vaccinated ? '已打疫苗' : '未打疫苗'}}</text>
         </view>
       </view>

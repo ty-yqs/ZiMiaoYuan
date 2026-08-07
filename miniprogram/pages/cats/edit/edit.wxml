@@ -60,13 +60,13 @@
 
       <!-- 健康状态 -->
       <view class="form-item">
-        <text class="form-label">🏥 健康状态（点击按钮更改）</text>
+        <text class="form-label">健康状态（点击按钮更改）</text>
         <view class="health-toggles">
           <view class="health-toggle {{healthSterilized ? 'on' : ''}}" bind:tap="onToggleSterilized">
-            <text class="health-toggle-text">{{healthSterilized ? '✅ 已绝育' : '❌ 未绝育'}}</text>
+            <text class="health-toggle-text">{{healthSterilized ? '已绝育' : '未绝育'}}</text>
           </view>
           <view class="health-toggle {{healthVaccinated ? 'on' : ''}}" bind:tap="onToggleVaccinated">
-            <text class="health-toggle-text">{{healthVaccinated ? '✅ 已打疫苗' : '❌ 未打疫苗'}}</text>
+            <text class="health-toggle-text">{{healthVaccinated ? '已打疫苗' : '未打疫苗'}}</text>
           </view>
         </view>
       </view>
@@ -89,7 +89,7 @@
     <!-- 猫咪关系管理（纳入审核流程） -->
     <view class="card form-card">
       <view class="form-item">
-        <text class="form-label">🔗 猫咪关系</text>
+        <text class="form-label">猫咪关系</text>
 
         <!-- 待添加的关系 -->
         <view class="rel-mgmt-list" wx:if="{{pendingRelAdds.length > 0}}">

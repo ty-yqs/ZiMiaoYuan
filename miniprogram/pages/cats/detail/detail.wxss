@@ -107,8 +107,8 @@
   flex: 1;
 }
 
-.health-icon {
-  font-size: var(--font-lg);
+.health-icon-img {
+  height: 48rpx;
   margin-bottom: 4rpx;
 }
 
