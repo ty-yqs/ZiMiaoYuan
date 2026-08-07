@@ -112,6 +112,7 @@
   background: rgba(126, 200, 168, 0.12);
   padding: 4rpx 14rpx;
   border-radius: 20rpx;
+  margin-right: 8rpx;
 }
 
 .age-label {
@@ -147,6 +148,17 @@
 }
 
 /* ========== 第四行：健康 ========== */
+/* 已领养标签 */
+.adopted-tag {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #E8A87C;
+  background: rgba(232, 168, 124, 0.12);
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  margin-right: 8rpx;
+}
+
 .health-dots {
   display: flex;
   gap: 8rpx;

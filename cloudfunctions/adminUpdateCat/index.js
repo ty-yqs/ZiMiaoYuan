@@ -26,8 +26,8 @@ exports.main = async (event, context) => {
 
   const { catId, action, updates = {} } = event;
 
-  if (!['approve', 'reject', 'update', 'delete', 'reviewEdit'].includes(action)) {
-    return fail('无效的操作类型，支持：approve / reject / update / delete / reviewEdit');
+  if (!['approve', 'reject', 'update', 'delete', 'reviewEdit', 'toggleAdopted'].includes(action)) {
+    return fail('无效的操作类型，支持：approve / reject / update / delete / reviewEdit / toggleAdopted');
   }
 
   // reviewEdit 不需要 catId（使用 proposalId）
@@ -163,6 +163,17 @@ exports.main = async (event, context) => {
         });
 
         return success(null, decision === 'approve' ? '编辑已通过' : '编辑已拒绝');
+      }
+
+      // ========== 切换领养状态 ==========
+      case 'toggleAdopted': {
+        const cat = await catsColl.doc(catId).get();
+        const newAdopted = !cat.data.adopted;
+        await catsColl.doc(catId).update({
+          data: { adopted: newAdopted, updateTime: now },
+        });
+        console.log('[adminUpdateCat] 领养状态已切换:', catId, newAdopted);
+        return success({ adopted: newAdopted }, newAdopted ? '已标记为已领养' : '已取消领养标记');
       }
 
       default:

@@ -31,6 +31,7 @@
       <text class="cat-name text-ellipsis">{{cat.cat_name || '未命名猫咪'}}</text>
       <text class="age-label" wx:if="{{ageLabel}}">{{ageLabel}}</text>
       <text class="color-tag">{{cat.color || '未知毛色'}}</text>
+      <text class="adopted-tag" wx:if="{{cat.adopted}}">已领养</text>
     </view>
 
     <!-- 第二行：简介 -->

@@ -161,6 +161,13 @@
 
         <view class="admin-actions flex-row">
           <van-button
+            type="{{item.adopted ? 'default' : 'primary'}}"
+            size="small"
+            color="#E8A87C"
+            data-cat-id="{{item._id}}"
+            bind:click="onToggleAdopted"
+          >{{item.adopted ? '取消领养' : '标记已领养'}}</van-button>
+          <van-button
             type="danger"
             size="small"
             plain

@@ -206,6 +206,25 @@ Page({
     }
   },
 
+  async onToggleAdopted(e: WechatMiniprogram.TouchEvent) {
+    const { catId } = e.currentTarget.dataset;
+    const res = await apiAdminUpdateCat({ catId, action: 'toggleAdopted' });
+
+    if (res.code === 0) {
+      showToast(res.data.adopted ? '已标记为已领养' : '已取消领养标记', 'success');
+      // 就地更新列表中的猫咪数据，避免全量刷新
+      const allCats = this.data.allCats.map((cat: ICat) => {
+        if (cat._id === catId) {
+          return { ...cat, adopted: res.data.adopted };
+        }
+        return cat;
+      });
+      this.setData({ allCats });
+    } else {
+      showToast(res.message || '操作失败', 'error');
+    }
+  },
+
   async onDelete(e: WechatMiniprogram.TouchEvent) {
     const { catId } = e.currentTarget.dataset;
     const confirmed = await showConfirm(

@@ -8,6 +8,7 @@ Page({
   data: {
     content: '',
     contact: '',
+    canSubmit: false,
     submitting: false,
   },
 
@@ -20,7 +21,8 @@ Page({
   },
 
   onInput(e: WechatMiniprogram.Input) {
-    this.setData({ content: e.detail.value });
+    const content = e.detail.value;
+    this.setData({ content, canSubmit: !!content.trim() });
   },
 
   onContactInput(e: WechatMiniprogram.Input) {

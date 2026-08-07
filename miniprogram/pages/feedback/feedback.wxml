@@ -30,7 +30,7 @@
     <button
       class="submit-btn"
       bind:tap="onSubmit"
-      disabled="{{!content.trim()}}"
+      disabled="{{!canSubmit}}"
       loading="{{submitting}}"
     >提交反馈</button>
   </view>

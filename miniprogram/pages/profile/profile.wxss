@@ -89,17 +89,3 @@
   font-size: var(--font-xs);
   color: var(--color-text-hint);
 }
-
-/* ========== 备案信息 ========== */
-.icp-footer {
-  text-align: center;
-  padding: 0 0 40rpx 0;
-}
-
-.icp-text {
-  display: block;
-  font-size: 22rpx;
-  color: var(--color-text-hint);
-  opacity: 0.7;
-  line-height: 1.5;
-}

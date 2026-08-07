@@ -97,12 +97,8 @@
 
   <!-- ==================== 底部品牌 ==================== -->
   <view class="brand-footer">
-    <text class="brand-text">🐱 紫喵园 · 记录校园里的每一只小猫</text>
-  </view>
-
-  <!-- ==================== 备案信息 ==================== -->
-  <view class="icp-footer">
-    <text class="icp-text">粤ICP备2025496586号-3X</text>
+    <text class="brand-text">紫喵园 · 记录校园里的每一只小猫\n</text>
+    <text class="brand-text">粤ICP备2025496586号-3X\n\n</text>
   </view>
 
 </view>

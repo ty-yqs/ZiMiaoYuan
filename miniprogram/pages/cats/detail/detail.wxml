@@ -41,7 +41,10 @@
           <image class="gender-icon" wx:if="{{cat.gender === 'male'}}" src="/images/gender-male-color.svg" />
           <image class="gender-icon" wx:if="{{cat.gender === 'female'}}" src="/images/gender-female-color.svg" />
         </view>
-        <van-tag type="primary" color="#7EC8A8">{{cat.color}}</van-tag>
+        <view class="flex-row" style="gap: 8rpx;">
+          <van-tag wx:if="{{cat.adopted}}" type="warning" color="#E8A87C">已领养</van-tag>
+          <van-tag type="primary" color="#7EC8A8">{{cat.color}}</van-tag>
+        </view>
       </view>
 
       <view class="info-row flex-row">

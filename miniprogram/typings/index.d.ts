@@ -47,6 +47,7 @@ interface ICat {
     sterilized: boolean;
     vaccinated: boolean;
   };
+  adopted?: boolean;           // 是否已被领养
   status: CatStatus;
   creator: string;            // 上传者 openid
   ratingAvg?: number | null;  // 亲人指数平均分
