@@ -231,11 +231,14 @@
           data-cat="{{item}}"
           bind:tap="onSelectSearchCat"
         >
-          <text>{{item.cat_name}}</text>
-          <view class="rel-search-meta">
-            <image wx:if="{{item.gender === 'male'}}" class="rel-search-gender-icon" src="/images/gender-male-color.svg" />
-            <image wx:elif="{{item.gender === 'female'}}" class="rel-search-gender-icon" src="/images/gender-female-color.svg" />
-            <text>· {{item.color}}</text>
+          <image class="rel-search-avatar" src="{{item.avatar}}" mode="aspectFill" />
+          <view class="rel-search-info">
+            <text class="rel-search-name">{{item.cat_name}}</text>
+            <view class="rel-search-meta">
+              <image wx:if="{{item.gender === 'male'}}" class="rel-search-gender-icon" src="/images/gender-male-color.svg" />
+              <image wx:elif="{{item.gender === 'female'}}" class="rel-search-gender-icon" src="/images/gender-female-color.svg" />
+              <text>· {{item.color}}</text>
+            </view>
           </view>
         </view>
       </view>

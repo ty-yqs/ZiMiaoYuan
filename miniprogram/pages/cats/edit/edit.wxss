@@ -376,7 +376,6 @@
 
 .rel-search-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 16rpx var(--spacing-sm);
   font-size: var(--font-sm);
@@ -393,11 +392,35 @@
   font-weight: 600;
 }
 
+.rel-search-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  background: var(--color-bg-warm);
+}
+
+.rel-search-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rel-search-name {
+  font-size: var(--font-sm);
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
 .rel-search-meta {
   display: flex;
   align-items: center;
   font-size: var(--font-xs);
   color: var(--color-text-hint);
+  flex-shrink: 0;
 }
 
 .rel-search-gender-icon {

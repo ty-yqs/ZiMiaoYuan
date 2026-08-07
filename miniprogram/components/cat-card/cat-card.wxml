@@ -4,7 +4,7 @@
   @param showRecentTime - 是否显示最近发现时间
   @param mode          - 卡片模式: default | compact
 -->
-<view class="cat-card card {{mode}}" bind:tap="onTapCard">
+<view class="cat-card card {{mode}} {{cat.passedAway ? 'passed-away' : ''}}" bind:tap="onTapCard">
 
   <!-- ========== 头像区 ========== -->
   <view class="card-avatar">

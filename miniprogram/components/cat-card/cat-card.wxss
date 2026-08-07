@@ -36,6 +36,16 @@
   height: 100%;
 }
 
+/* 去喵星的猫咪头像黑白显示 */
+.cat-card.passed-away .avatar-img {
+  filter: grayscale(100%);
+}
+
+.cat-card.passed-away .gender-badge.male,
+.cat-card.passed-away .gender-badge.female {
+  background: #9B9B9B;
+}
+
 /* 性别角标 */
 .gender-badge {
   position: absolute;
