@@ -173,10 +173,10 @@
 }
 
 .picker-grid {
-  display: flex;
-  flex-wrap: wrap;
-  padding: var(--spacing-md);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16rpx;
+  padding: var(--spacing-md);
 }
 
 .picker-list {
@@ -185,7 +185,6 @@
 
 /* 毛色选择网格项 */
 .picker-grid .picker-item {
-  width: calc(25% - 12rpx);
   height: 72rpx;
   display: flex;
   align-items: center;

@@ -47,7 +47,9 @@ Page({
     const res = await apiGetCats({ page: 1, pageSize: 50 });
 
     if (res.code === 0) {
-      const cats = res.data.cats || [];
+      const cats = (res.data.cats || []).filter(
+        (c: ICat) => !c.adopted && !c.passedAway && !c.missing
+      );
       // Fisher-Yates 洗牌后取前 2 只
       for (let i = cats.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
