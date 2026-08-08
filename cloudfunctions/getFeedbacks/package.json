@@ -1,0 +1,9 @@
+{
+  "name": "getFeedbacks",
+  "version": "1.0.0",
+  "description": "获取用户反馈列表（管理员）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

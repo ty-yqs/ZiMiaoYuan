@@ -1,0 +1,48 @@
+<!--
+  查看反馈页（管理员）
+-->
+<view class="page-container">
+
+  <!-- ==================== 加载中 ==================== -->
+  <view wx:if="{{loading}}" class="loading-tip">
+    <text>加载中...</text>
+  </view>
+
+  <!-- ==================== 空状态 ==================== -->
+  <view wx:elif="{{feedbacks.length === 0}}" class="empty-state">
+    <text class="empty-text">暂无反馈</text>
+  </view>
+
+  <!-- ==================== 反馈列表 ==================== -->
+  <block wx:else>
+    <view
+      wx:for="{{feedbacks}}"
+      wx:key="_id"
+      class="card feedback-item"
+    >
+      <!-- 头部：昵称 + 时间 -->
+      <view class="feedback-header">
+        <text class="feedback-nickname">{{item.nickname}}</text>
+        <text class="feedback-time">{{item.createTimeText}}</text>
+      </view>
+
+      <!-- 内容 -->
+      <view class="feedback-content">
+        <text class="feedback-text">{{item.content}}</text>
+      </view>
+
+      <!-- 联系方式 -->
+      <view class="feedback-contact" wx:if="{{item.contact}}">
+        <text class="feedback-contact-label">联系方式：</text>
+        <text class="feedback-contact-text">{{item.contact}}</text>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{hasMore}}" class="load-more">
+      <text wx:if="{{loadingMore}}" class="load-more-text">加载中...</text>
+      <text wx:else class="load-more-text" bind:tap="onLoadMore">加载更多</text>
+    </view>
+  </block>
+
+</view>

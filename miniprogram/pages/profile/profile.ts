@@ -208,6 +208,11 @@ Page({
     wx.navigateTo({ url: ROUTES.ADMIN });
   },
 
+  /** 跳转查看反馈页面 */
+  onGoFeedbacks() {
+    wx.navigateTo({ url: ROUTES.ADMIN_FEEDBACKS });
+  },
+
   /** 关于小程序 */
   onAbout() {
     wx.showModal({

@@ -34,7 +34,6 @@ exports.main = async (event, context) => {
       sterilizedRes,
       vaccinatedRes,
       allCatsRes,
-      excludedCatsRes,
       adoptedRes,
       passedAwayRes,
       missingRes,
@@ -43,24 +42,13 @@ exports.main = async (event, context) => {
       getCollection(COLLECTIONS.CATS).where({ ...activeWhere, 'health.sterilized': true }).count(),
       getCollection(COLLECTIONS.CATS).where({ ...activeWhere, 'health.vaccinated': true }).count(),
       getCollection(COLLECTIONS.CATS).where(activeWhere).field({ color: true, gender: true, age: true, cat_name: true }).get(),
-      getCollection(COLLECTIONS.CATS).where(_.or([
-        { adopted: true }, { passedAway: true }, { missing: true },
-      ])).field({ _id: true }).get(),
       getCollection(COLLECTIONS.CATS).where({ adopted: true }).count(),
       getCollection(COLLECTIONS.CATS).where({ passedAway: true }).count(),
       getCollection(COLLECTIONS.CATS).where({ missing: true }).count(),
     ]);
 
-    // 记录数：排除已领养/去喵星/失踪的猫
-    const excludedIds = excludedCatsRes.data.map(c => c._id);
-    let recordTotalRes;
-    if (excludedIds.length > 0) {
-      recordTotalRes = await getCollection(COLLECTIONS.RECORDS)
-        .where({ catId: _.nin(excludedIds) })
-        .count();
-    } else {
-      recordTotalRes = await getCollection(COLLECTIONS.RECORDS).count();
-    }
+    // 记录数：统计所有猫咪的记录
+    const recordTotalRes = await getCollection(COLLECTIONS.RECORDS).count();
 
     // ==================== 计算分布 ====================
     const cats = allCatsRes.data;
