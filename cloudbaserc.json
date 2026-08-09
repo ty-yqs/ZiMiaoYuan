@@ -1,0 +1,112 @@
+{
+  "version": "2.0",
+  "envId": "cloud2-d1gbjipxm9c21dd8d",
+  "functionRoot": "./cloudfunctions",
+  "functions": [
+    {
+      "name": "addCat",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "adminUpdateCat",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getCatDetail",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getCats",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getFeedbacks",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getPendingCounts",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getPendingEdits",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getPendingRecords",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getSponsorQR",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getStats",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getSupporters",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getUserStats",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "login",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "proposeEdit",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "rateCat",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "reviewRecord",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "submitFeedback",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "trackVisit",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "updateCatRelationship",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "updateUser",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "uploadRecord",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    }
+  ]
+}
