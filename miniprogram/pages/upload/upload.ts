@@ -12,6 +12,9 @@ import { showToast, showLoading, hideLoading, chooseImage, requireProfile } from
 const config = require('../../config/index');
 const app = getApp<IAppOption>();
 
+// 审核结果通知模板ID
+const SUBSCRIBE_TMPL_ID = 'ImPQfyZeWGBqwauOUmFfI7SiCXfiNgrgb_CDt7v7U-Q';
+
 Page({
   data: {
     // 是否为已有猫咪添加记录
@@ -145,6 +148,10 @@ Page({
     }
 
     if (this.data.submitting) return;
+
+    // 必须在 tap 手势回调中直接调用，不能等异步完成后
+    this.requestSubscribe();
+
     this.setData({ submitting: true });
     showLoading('压缩中...');
 
@@ -175,8 +182,6 @@ Page({
 
         if (res.code === 0) {
           showToast('记录成功，等待管理员审核', 'success');
-          // 标记详情页需要刷新
-          // app.globalData.needRefreshDetail = true;
           setTimeout(() => wx.navigateBack(), 1500);
         } else {
           showToast(res.message || '提交失败', 'error');
@@ -200,7 +205,6 @@ Page({
 
         if (res.code === 0) {
           showToast('提交成功，等待审核', 'success');
-          // 延迟需大于 toast duration（2000ms），确保提示语完整展示后再返回
           setTimeout(() => wx.navigateBack(), 2500);
         } else {
           showToast(res.message || '提交失败', 'error');
@@ -222,6 +226,19 @@ Page({
   },
   onToggleVaccinated() {
     this.setData({ 'health.vaccinated': !this.data.health.vaccinated });
+  },
+
+  /** 请求订阅审核结果通知 */
+  requestSubscribe() {
+    wx.requestSubscribeMessage({
+      tmplIds: [SUBSCRIBE_TMPL_ID],
+      success: (res: any) => {
+        console.log('[Upload] 订阅结果:', res);
+      },
+      fail: (err: any) => {
+        console.log('[Upload] 订阅失败:', err);
+      },
+    });
   },
 
   onShareAppMessage() {

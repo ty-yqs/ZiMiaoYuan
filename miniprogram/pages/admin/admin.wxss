@@ -348,3 +348,8 @@
   border: none;
   padding: 0;
 }
+
+.reject-confirm-btn[disabled] {
+  background: #ddd;
+  color: #999;
+}

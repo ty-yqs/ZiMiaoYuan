@@ -60,6 +60,7 @@ exports.main = async (event, context) => {
         vaccinated: health.vaccinated || false,
       },
       status: CAT_STATUS.PENDING, // 新猫咪默认待审核
+      _openid: OPENID,           // 云函数需手动设置文档所有者
       creator: OPENID,
       createTime: now,
       updateTime: now,

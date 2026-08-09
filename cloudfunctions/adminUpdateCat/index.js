@@ -15,6 +15,45 @@ const {
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
+// 审核结果通知模板ID
+const SUBSCRIBE_TMPL_ID = 'ImPQfyZeWGBqwauOUmFfI7SiCXfiNgrgb_CDt7v7U-Q';
+
+/**
+ * 发送审核结果订阅消息
+ * @param {string} openid - 接收者 openid
+ * @param {string} result - 审核结果：'通过' | '拒绝'
+ * @param {Date} submitTime - 提交时间
+ * @param {string} reason - 拒绝理由（通过时传 '无'）
+ * @param {string} page - 跳转页面路径（可选）
+ */
+async function sendReviewNotification(openid, result, submitTime, reason, page = '') {
+  if (!openid) return;
+
+  const timeStr = submitTime
+    ? (() => {
+        const d = new Date(submitTime.getTime() + 8 * 3600000);
+        return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')} ${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
+      })()
+    : '';
+
+  try {
+    await cloud.openapi.subscribeMessage.send({
+      touser: openid,
+      templateId: SUBSCRIBE_TMPL_ID,
+      page: page || '',
+      data: {
+        phrase1: { value: result },
+        date4: { value: timeStr },
+        thing5: { value: reason || '无' },
+      },
+    });
+    console.log('[adminUpdateCat] 通知已发送:', openid, result);
+  } catch (err) {
+    // 推送失败不影响审核本身（用户可能未订阅）
+    console.warn('[adminUpdateCat] 推送通知失败:', err.message);
+  }
+}
+
 exports.main = async (event, context) => {
   const { OPENID } = cloud.getWXContext();
 
@@ -40,11 +79,13 @@ exports.main = async (event, context) => {
     const now = new Date();
 
     // reviewEdit 不需要预先确认猫咪存在（在 case 内处理）
+    let catData = null;
     if (action !== 'reviewEdit') {
       const catRes = await catsColl.doc(catId).get();
       if (!catRes.data) {
         return fail('猫咪不存在');
       }
+      catData = catRes.data;
     }
 
     switch (action) {
@@ -57,6 +98,9 @@ exports.main = async (event, context) => {
             updateTime: now,
           },
         });
+        const submitterOpenid = catData.creator || catData._openid;
+        console.log('[adminUpdateCat] 准备发送通过通知, openid:', submitterOpenid, 'creator:', catData.creator, '_openid:', catData._openid);
+        await sendReviewNotification(submitterOpenid, '通过', catData.createTime, '无', `/pages/index/index`);
         console.log('[adminUpdateCat] 审核通过:', catId);
         return success(null, '已审核通过');
 
@@ -70,6 +114,9 @@ exports.main = async (event, context) => {
             updateTime: now,
           },
         });
+        const rejectOpenid = catData.creator || catData._openid;
+        console.log('[adminUpdateCat] 准备发送拒绝通知, openid:', rejectOpenid, 'creator:', catData.creator, '_openid:', catData._openid);
+        await sendReviewNotification(rejectOpenid, '拒绝', catData.createTime, reason || '未填写', `/pages/index/index`);
         console.log('[adminUpdateCat] 审核拒绝:', catId, reason ? '原因:' + reason : '');
         return success(null, '已拒绝');
       }
@@ -222,11 +269,13 @@ exports.main = async (event, context) => {
             }
           }
 
-          console.log('[adminUpdateCat] 编辑提案已通过:', proposalId, '猫咪:', proposal.catId);
+          const editOpenid = proposal.userId || proposal._openid;
+          console.log('[adminUpdateCat] 准备发送编辑通过通知, openid:', editOpenid);
+          await sendReviewNotification(editOpenid, '通过', proposal.createTime, '无', `/pages/index/index`);
         }
 
         // 更新提案状态
-        const updateData: Record<string, any> = {
+        const updateData = {
           status: decision === 'approve' ? 'approved' : 'rejected',
           updateTime: now,
         };
@@ -236,6 +285,14 @@ exports.main = async (event, context) => {
           updateData.adminNote = adminNote || '';
         }
         await proposalsColl.doc(proposalId).update({ data: updateData });
+
+        // 发送审核通知（编辑拒绝时）
+        if (decision === 'reject') {
+          const editRejectOpenid = proposal.userId || proposal._openid;
+          const rejectReason = updateData.rejectReason || '';
+          console.log('[adminUpdateCat] 准备发送编辑拒绝通知, openid:', editRejectOpenid);
+          await sendReviewNotification(editRejectOpenid, '拒绝', proposal.createTime, rejectReason || '未填写', `/pages/index/index`);
+        }
 
         return success(null, decision === 'approve' ? '编辑已通过' : '编辑已拒绝');
       }

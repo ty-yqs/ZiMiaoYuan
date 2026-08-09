@@ -4,7 +4,7 @@
  * 显示用户信息、贡献统计、管理员入口
  */
 import { ROUTES } from '../../utils/constants';
-import { apiGetUserStats } from '../../utils/api';
+import { apiGetUserStats, apiGetPendingCounts } from '../../utils/api';
 import { getCachedImageUrl, getCacheSize, clearImageCache } from '../../utils/imageCache';
 import { showToast, showConfirm, requireProfile } from '../../utils/util';
 
@@ -24,6 +24,9 @@ Page({
       catCount: 0,
       recordCount: 0,
     },
+
+    // 待审核角标
+    pendingCount: 0,
 
     // 缓存信息
     cacheSize: '计算中...',
@@ -56,6 +59,7 @@ Page({
       this.loadUserStats();
       this.loadCacheSize();
       this.loadCachedAvatar(userInfo.avatar);
+      this.loadPendingCounts();
     }
   },
 
@@ -86,6 +90,7 @@ Page({
         await this.loadUserStats();
         this.loadCacheSize();
         this.loadCachedAvatar(user.avatar);
+        this.loadPendingCounts();
       } else {
         this.setData({ isLoggedIn: false });
       }
@@ -117,6 +122,19 @@ Page({
       }
     } catch (err) {
       console.error('[Profile] 加载统计失败:', err);
+    }
+  },
+
+  /** 加载待审核数量（仅管理员） */
+  async loadPendingCounts() {
+    if (!this.data.isAdmin) return;
+    try {
+      const res = await apiGetPendingCounts();
+      if (res.code === 0 && res.data) {
+        this.setData({ pendingCount: res.data.total || 0 });
+      }
+    } catch (err) {
+      console.error('[Profile] 加载待审核数量失败:', err);
     }
   },
 

@@ -57,11 +57,15 @@
     <!-- 管理员入口 -->
     <van-cell-group wx:if="{{isAdmin}}" title="管理功能">
       <van-cell
-        title="管理后台"
         label="审核猫咪、管理数据"
         is-link
         bind:click="onGoAdmin"
-      />
+      >
+        <view slot="title" class="admin-title-row">
+          <text>管理后台</text>
+          <text wx:if="{{pendingCount > 0}}" class="pending-badge">{{pendingCount > 99 ? '99+' : pendingCount}}</text>
+        </view>
+      </van-cell>
       <van-cell
         title="查看反馈"
         label="查看用户反馈与建议"

@@ -79,6 +79,25 @@
   margin-top: var(--spacing-md);
 }
 
+/* ========== 待审核角标 ========== */
+.admin-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.pending-badge {
+  min-width: 36rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #fff;
+  background: #e74c3c;
+  border-radius: 18rpx;
+  padding: 0 8rpx;
+}
+
 /* ========== 底部品牌 ========== */
 .brand-footer {
   text-align: center;

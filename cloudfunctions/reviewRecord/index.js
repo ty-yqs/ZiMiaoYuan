@@ -15,6 +15,39 @@ const {
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
+// 审核结果通知模板ID
+const SUBSCRIBE_TMPL_ID = 'ImPQfyZeWGBqwauOUmFfI7SiCXfiNgrgb_CDt7v7U-Q';
+
+/**
+ * 发送审核结果订阅消息
+ */
+async function sendReviewNotification(openid, result, submitTime, reason, page) {
+  if (!openid) return;
+
+  const timeStr = submitTime
+    ? (() => {
+        const d = new Date(submitTime.getTime() + 8 * 3600000);
+        return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')} ${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
+      })()
+    : '';
+
+  try {
+    await cloud.openapi.subscribeMessage.send({
+      touser: openid,
+      templateId: SUBSCRIBE_TMPL_ID,
+      page: page || '',
+      data: {
+        phrase1: { value: result },
+        date4: { value: timeStr },
+        thing5: { value: reason || '无' },
+      },
+    });
+    console.log('[reviewRecord] 通知已发送:', openid, result);
+  } catch (err) {
+    console.warn('[reviewRecord] 推送通知失败:', err.message);
+  }
+}
+
 exports.main = async (event, context) => {
   const { OPENID } = cloud.getWXContext();
 
@@ -43,6 +76,10 @@ exports.main = async (event, context) => {
       return fail('该记录已处理');
     }
 
+    // 获取提交者 openid（新记录有 userId，旧记录回退 _openid）
+    const submitterOpenid = record.userId || record._openid;
+    console.log('[reviewRecord] 提交者 openid:', submitterOpenid, 'record.userId:', record.userId, 'record._openid:', record._openid);
+
     if (action === 'approve') {
       // 通过：更新记录状态
       await getCollection(COLLECTIONS.RECORDS).doc(recordId).update({
@@ -57,6 +94,8 @@ exports.main = async (event, context) => {
         });
       }
 
+      console.log('[reviewRecord] 准备发送通过通知, openid:', submitterOpenid);
+      await sendReviewNotification(submitterOpenid, '通过', record.createTime, '无', `/pages/index/index`);
       console.log('[reviewRecord] 记录已通过:', recordId);
       return success(null, '记录已通过审核');
     }
@@ -67,6 +106,8 @@ exports.main = async (event, context) => {
         data: { status: 'rejected', rejectReason: reason.trim() },
       });
 
+      console.log('[reviewRecord] 准备发送拒绝通知, openid:', submitterOpenid);
+      await sendReviewNotification(submitterOpenid, '拒绝', record.createTime, reason || '未填写', `/pages/index/index`);
       console.log('[reviewRecord] 记录已拒绝:', recordId);
       return success(null, '记录已拒绝');
     }

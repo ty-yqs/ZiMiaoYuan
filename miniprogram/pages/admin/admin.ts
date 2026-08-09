@@ -47,6 +47,7 @@ Page({
     showRejectModal: false,
     rejectTarget: null as { type: string; id: string } | null,
     rejectReason: '',
+    rejectReasonValid: false,
     error: '',
   },
 
@@ -279,6 +280,7 @@ Page({
       showRejectModal: true,
       rejectTarget: { type: 'cat', id: catId },
       rejectReason: '',
+      rejectReasonValid: false,
     });
   },
 
@@ -382,6 +384,7 @@ Page({
       showRejectModal: true,
       rejectTarget: { type: 'edit', id: proposalId },
       rejectReason: '',
+      rejectReasonValid: false,
     });
   },
 
@@ -427,22 +430,31 @@ Page({
       showRejectModal: true,
       rejectTarget: { type: 'record', id: recordId },
       rejectReason: '',
+      rejectReasonValid: false,
     });
   },
 
   // ==================== 驳回弹窗 ====================
 
   onCloseRejectModal() {
-    this.setData({ showRejectModal: false, rejectTarget: null, rejectReason: '' });
+    this.setData({ showRejectModal: false, rejectTarget: null, rejectReason: '', rejectReasonValid: false });
   },
 
   onRejectReasonInput(e: WechatMiniprogram.Input) {
-    this.setData({ rejectReason: e.detail.value || '' });
+    const value = e.detail.value || '';
+    this.setData({
+      rejectReason: value,
+      rejectReasonValid: !!value.trim(),
+    });
   },
 
   async onConfirmReject() {
     const { rejectTarget, rejectReason } = this.data;
     if (!rejectTarget) return;
+    if (!rejectReason.trim()) {
+      showToast('请输入驳回理由', 'none');
+      return;
+    }
 
     try {
       if (rejectTarget.type === 'cat') {

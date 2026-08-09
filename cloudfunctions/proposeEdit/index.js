@@ -86,6 +86,7 @@ exports.main = async (event, context) => {
 
     const proposal = {
       catId,
+      _openid: OPENID,
       userId: OPENID,
       nickname,
       proposedChanges,

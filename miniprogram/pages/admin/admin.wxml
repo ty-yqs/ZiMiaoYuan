@@ -280,14 +280,14 @@
     <textarea
       class="reject-textarea"
       value="{{rejectReason}}"
-      placeholder="请输入驳回理由（选填）"
+      placeholder="请输入驳回理由（必填）"
       maxlength="200"
       auto-focus
       bind:input="onRejectReasonInput"
     />
     <view class="reject-footer">
       <button class="reject-cancel-btn" bind:tap="onCloseRejectModal">取消</button>
-      <button class="reject-confirm-btn" bind:tap="onConfirmReject">确认拒绝</button>
+      <button class="reject-confirm-btn" bind:tap="onConfirmReject" disabled="{{!rejectReasonValid}}">确认拒绝</button>
     </view>
   </view>
 </view>

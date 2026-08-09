@@ -280,6 +280,11 @@ Page({
     if (!text) return;
     if (this.data.submitNoteLoading) return;
 
+    // 必须在 tap 手势回调中直接调用，不能等异步完成后
+    wx.requestSubscribeMessage({
+      tmplIds: ['ImPQfyZeWGBqwauOUmFfI7SiCXfiNgrgb_CDt7v7U-Q'],
+    });
+
     this.setData({ submitNoteLoading: true });
     showLoading('提交中...');
 
