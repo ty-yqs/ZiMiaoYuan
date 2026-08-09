@@ -32,20 +32,26 @@ exports.main = async (event, context) => {
       .limit(1)
       .get();
 
-    // 用户已存在，直接返回
+    // 用户已存在，更新最后登录时间并返回
     if (userRes.data.length > 0) {
       const user = userRes.data[0];
+      const lastLoginTime = new Date();
+      await usersColl.doc(user._id).update({
+        data: { lastLoginTime },
+      });
       console.log('[login] 老用户登录:', user.nickname || user._openid);
-      return success(user, '登录成功');
+      return success({ ...user, lastLoginTime }, '登录成功');
     }
 
     // 新用户，自动注册
+    const now = new Date();
     const newUser = {
       _openid: OPENID,
       nickname: '',
       avatar: '',
       role: 'student',
-      createTime: new Date(),
+      createTime: now,
+      lastLoginTime: now,
     };
 
     const addRes = await usersColl.add({ data: newUser });
