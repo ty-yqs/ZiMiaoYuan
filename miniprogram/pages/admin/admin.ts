@@ -7,7 +7,7 @@
  * - 审核编辑提案
  * - 删除错误数据
  */
-import { apiGetCats, apiAdminUpdateCat, apiGetPendingEdits } from '../../utils/api';
+import { apiGetCats, apiAdminUpdateCat, apiGetPendingEdits, apiGetPendingRecords, apiReviewRecord } from '../../utils/api';
 import { showToast, showConfirm } from '../../utils/util';
 import { getCachedImageUrls } from '../../utils/imageCache';
 const config = require('../../config/index');
@@ -40,7 +40,13 @@ Page({
     allCatsLoading: false,
     allCatsTotal: 0,
     pendingEdits: [] as IEditProposal[],
+    pendingRecords: [] as any[],
     loading: true,
+
+    // 驳回弹窗
+    showRejectModal: false,
+    rejectTarget: null as { type: string; id: string } | null,
+    rejectReason: '',
     error: '',
   },
 
@@ -64,7 +70,7 @@ Page({
     this.setData({ loading: true });
 
     // 加载待审核猫咪
-    const pendingRes = await apiGetCats({ status: 'pending', pageSize: 50 });
+    const pendingRes = await apiGetCats({ status: 'pending', pageSize: 50, resolveUser: true });
     if (pendingRes.code === 0) {
       const cats = (pendingRes.data.cats || []).map((cat: ICat) => ({
         ...cat,
@@ -81,6 +87,9 @@ Page({
 
     // 加载待审核编辑
     await this.loadPendingEdits();
+
+    // 加载待审核记录
+    await this.loadPendingRecords();
 
     this.setData({ loading: false });
   },
@@ -266,17 +275,11 @@ Page({
 
   async onReject(e: WechatMiniprogram.TouchEvent) {
     const { catId } = e.currentTarget.dataset;
-    const confirmed = await showConfirm('确认拒绝吗？该猫咪将不会显示在列表中。');
-    if (!confirmed) return;
-
-    const res = await apiAdminUpdateCat({ catId, action: 'reject' });
-
-    if (res.code === 0) {
-      showToast('已拒绝', 'success');
-      this.loadData();
-    } else {
-      showToast(res.message || '操作失败', 'error');
-    }
+    this.setData({
+      showRejectModal: true,
+      rejectTarget: { type: 'cat', id: catId },
+      rejectReason: '',
+    });
   },
 
   async onToggleAdopted(e: WechatMiniprogram.TouchEvent) {
@@ -375,21 +378,116 @@ Page({
 
   async onRejectEdit(e: WechatMiniprogram.TouchEvent) {
     const { proposalId } = e.currentTarget.dataset;
-    const confirmed = await showConfirm('确认拒绝此编辑吗？猫咪信息将不会变更。');
+    this.setData({
+      showRejectModal: true,
+      rejectTarget: { type: 'edit', id: proposalId },
+      rejectReason: '',
+    });
+  },
+
+  // ==================== 记录审核 ====================
+
+  /** 加载待审核记录 */
+  async loadPendingRecords() {
+    const res = await apiGetPendingRecords();
+    if (res.code === 0) {
+      const RECORD_TYPE_LABELS: Record<string, string> = {
+        photo: '📸 新照片',
+        note: '📝 便利贴',
+      };
+      const records = (res.data || []).map((r: any) => ({
+        ...r,
+        typeLabel: RECORD_TYPE_LABELS[r.type] || r.type,
+        createTimeText: this.formatTime(r.createTime),
+      }));
+      this.setData({ pendingRecords: records });
+    }
+  },
+
+  /** 通过记录 */
+  async onApproveRecord(e: WechatMiniprogram.TouchEvent) {
+    const { recordId } = e.currentTarget.dataset;
+    const confirmed = await showConfirm('确认通过此记录吗？照片将追加到猫咪档案。');
     if (!confirmed) return;
 
-    const res = await apiAdminUpdateCat({
-      action: 'reviewEdit',
-      proposalId,
-      decision: 'reject',
-    });
+    const res = await apiReviewRecord({ recordId, action: 'approve' });
 
     if (res.code === 0) {
-      showToast('编辑已拒绝', 'success');
-      this.loadData();
+      showToast('记录已通过', 'success');
+      this.loadPendingRecords();
     } else {
       showToast(res.message || '操作失败', 'error');
     }
+  },
+
+  /** 拒绝记录 */
+  async onRejectRecord(e: WechatMiniprogram.TouchEvent) {
+    const { recordId } = e.currentTarget.dataset;
+    this.setData({
+      showRejectModal: true,
+      rejectTarget: { type: 'record', id: recordId },
+      rejectReason: '',
+    });
+  },
+
+  // ==================== 驳回弹窗 ====================
+
+  onCloseRejectModal() {
+    this.setData({ showRejectModal: false, rejectTarget: null, rejectReason: '' });
+  },
+
+  onRejectReasonInput(e: WechatMiniprogram.Input) {
+    this.setData({ rejectReason: e.detail.value || '' });
+  },
+
+  async onConfirmReject() {
+    const { rejectTarget, rejectReason } = this.data;
+    if (!rejectTarget) return;
+
+    try {
+      if (rejectTarget.type === 'cat') {
+        const res = await apiAdminUpdateCat({ catId: rejectTarget.id, action: 'reject', reason: rejectReason });
+        if (res.code === 0) {
+          showToast('已拒绝', 'success');
+          this.loadData();
+        } else {
+          showToast(res.message || '操作失败', 'error');
+        }
+      } else if (rejectTarget.type === 'edit') {
+        const res = await apiAdminUpdateCat({
+          action: 'reviewEdit',
+          proposalId: rejectTarget.id,
+          decision: 'reject',
+          reason: rejectReason,
+        });
+        if (res.code === 0) {
+          showToast('编辑已拒绝', 'success');
+          this.loadData();
+        } else {
+          showToast(res.message || '操作失败', 'error');
+        }
+      } else if (rejectTarget.type === 'record') {
+        const res = await apiReviewRecord({ recordId: rejectTarget.id, action: 'reject', reason: rejectReason });
+        if (res.code === 0) {
+          showToast('记录已拒绝', 'success');
+          this.loadPendingRecords();
+        } else {
+          showToast(res.message || '操作失败', 'error');
+        }
+      }
+    } catch (err) {
+      showToast('操作失败', 'error');
+    }
+
+    this.onCloseRejectModal();
+  },
+
+  /** 格式化时间 */
+  formatTime(date: Date): string {
+    if (!date) return '';
+    const d = new Date(date);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   },
 
   /** 预览照片 */
@@ -402,6 +500,9 @@ Page({
   onTabChange(e: WechatMiniprogram.CustomEvent) {
     this.setData({ activeTab: e.detail.index || e.detail.name });
   },
+
+  /** 空方法，阻止事件冒泡 */
+  noop() {},
 
   onShareAppMessage() {
     return { title: '管理后台', path: '/pages/admin/admin' };

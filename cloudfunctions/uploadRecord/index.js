@@ -1,7 +1,7 @@
 /**
  * uploadRecord 云函数 — 为已有猫咪上传发现记录
  *
- * 同时更新猫咪档案的 updateTime
+ * 记录提交后状态为 pending，需管理员审核通过后方可公开显示
  */
 const cloud = require('wx-server-sdk');
 const { COLLECTIONS, success, fail, getCollection } = require('./db');
@@ -54,12 +54,13 @@ exports.main = async (event, context) => {
     const now = new Date();
     const isNote = !photo; // 无照片即为便利贴
 
-    // Step 1: 创建发现记录
+    // 创建发现记录（待审核）
     const recordData = {
       catId,
       userId: OPENID,
       nickname,
       type: isNote ? 'note' : 'photo',
+      status: 'pending',     // 需管理员审核
       photo,
       location: {
         name: location.name || '',
@@ -73,19 +74,14 @@ exports.main = async (event, context) => {
     const recordRes = await getCollection(COLLECTIONS.RECORDS).add({ data: recordData });
     recordData._id = recordRes._id;
 
-    // Step 2: 更新猫咪档案的 updateTime，有照片则追加到 photos 数组
-    const _ = cloud.database().command;
-    const updateData = { updateTime: now };
-    if (photo) {
-      updateData.photos = _.push([photo]);
-    }
+    // 仅更新猫咪档案的 updateTime（照片等审核通过后再追加）
     await getCollection(COLLECTIONS.CATS).doc(catId).update({
-      data: updateData,
+      data: { updateTime: now },
     });
 
-    console.log('[uploadRecord] 记录已创建:', recordRes._id);
+    console.log('[uploadRecord] 待审核记录已创建:', recordRes._id);
 
-    return success(recordData, '记录成功');
+    return success(recordData, '提交成功，等待管理员审核');
 
   } catch (err) {
     console.error('[uploadRecord] 异常:', err);

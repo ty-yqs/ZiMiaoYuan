@@ -219,3 +219,132 @@
   color: var(--color-text-primary);
   margin-left: 8rpx;
 }
+
+/* ========== 提交者信息 ========== */
+.review-submitter {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 6rpx;
+}
+
+/* ========== 记录审核 ========== */
+.record-review-info {
+  padding: var(--spacing-sm) 0;
+}
+
+.record-review-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: 8rpx;
+}
+
+.record-cat-name {
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.record-review-meta {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 4rpx;
+}
+
+.record-review-desc {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-bg-warm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.record-review-photo {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-sm);
+  background: var(--color-bg-warm);
+}
+
+/* ========== 驳回弹窗 ========== */
+.reject-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reject-panel {
+  width: 600rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.reject-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx var(--spacing-md);
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.reject-title {
+  font-size: var(--font-md);
+  font-weight: 600;
+}
+
+.reject-close {
+  font-size: 32rpx;
+  color: var(--color-text-hint);
+  padding: 8rpx;
+}
+
+.reject-textarea {
+  width: 100%;
+  height: 160rpx;
+  padding: var(--spacing-md);
+  font-size: var(--font-sm);
+  box-sizing: border-box;
+}
+
+.reject-footer {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+}
+
+.reject-cancel-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  font-size: var(--font-sm);
+  background: var(--color-bg);
+  border-radius: 36rpx;
+  border: none;
+  padding: 0;
+}
+
+.reject-confirm-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  font-size: var(--font-sm);
+  color: #fff;
+  background: #e74c3c;
+  border-radius: 36rpx;
+  border: none;
+  padding: 0;
+}

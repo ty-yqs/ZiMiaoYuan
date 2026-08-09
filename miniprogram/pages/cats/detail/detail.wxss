@@ -477,6 +477,15 @@
   box-sizing: border-box;
 }
 
+.sticky-note-hint {
+  padding: var(--spacing-xs) 0 0;
+}
+
+.sticky-note-hint text {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
 .sticky-note-footer {
   display: flex;
   justify-content: space-between;

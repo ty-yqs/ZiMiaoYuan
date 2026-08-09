@@ -174,9 +174,9 @@ Page({
         hideLoading();
 
         if (res.code === 0) {
-          showToast('记录成功', 'success');
+          showToast('记录成功，等待管理员审核', 'success');
           // 标记详情页需要刷新
-          app.globalData.needRefreshDetail = true;
+          // app.globalData.needRefreshDetail = true;
           setTimeout(() => wx.navigateBack(), 1500);
         } else {
           showToast(res.message || '提交失败', 'error');

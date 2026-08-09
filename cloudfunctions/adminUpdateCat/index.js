@@ -61,15 +61,18 @@ exports.main = async (event, context) => {
         return success(null, '已审核通过');
 
       // ========== 审核拒绝 ==========
-      case 'reject':
+      case 'reject': {
+        const { reason = '' } = event;
         await catsColl.doc(catId).update({
           data: {
             status: CAT_STATUS.REJECTED,
+            rejectReason: reason.trim(),
             updateTime: now,
           },
         });
-        console.log('[adminUpdateCat] 审核拒绝:', catId);
+        console.log('[adminUpdateCat] 审核拒绝:', catId, reason ? '原因:' + reason : '');
         return success(null, '已拒绝');
+      }
 
       // ========== 修改信息 ==========
       case 'update': {
@@ -223,13 +226,16 @@ exports.main = async (event, context) => {
         }
 
         // 更新提案状态
-        await proposalsColl.doc(proposalId).update({
-          data: {
-            status: decision === 'approve' ? 'approved' : 'rejected',
-            adminNote: adminNote || '',
-            updateTime: now,
-          },
-        });
+        const updateData: Record<string, any> = {
+          status: decision === 'approve' ? 'approved' : 'rejected',
+          updateTime: now,
+        };
+        if (decision === 'reject') {
+          updateData.rejectReason = (event.reason || adminNote || '').trim();
+        } else {
+          updateData.adminNote = adminNote || '';
+        }
+        await proposalsColl.doc(proposalId).update({ data: updateData });
 
         return success(null, decision === 'approve' ? '编辑已通过' : '编辑已拒绝');
       }

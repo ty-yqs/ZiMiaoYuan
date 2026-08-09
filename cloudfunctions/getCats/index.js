@@ -5,7 +5,7 @@
  * 仅返回已审核通过的猫咪
  */
 const cloud = require('wx-server-sdk');
-const { COLLECTIONS, CAT_STATUS, success, fail, paginatedQuery } = require('./db');
+const { COLLECTIONS, CAT_STATUS, success, fail, paginatedQuery, getCollection } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
@@ -20,6 +20,7 @@ exports.main = async (event, context) => {
     status = '', // 管理员可传 'pending' 等
     sortBy = 'createTime',
     sortOrder = 'desc',
+    resolveUser = false, // 是否解析提交者昵称
   } = event;
 
   try {
@@ -66,7 +67,32 @@ exports.main = async (event, context) => {
       order: sortOrder,
     });
 
+    // 解析提交者昵称
+    let cats = result.list;
+    if (resolveUser) {
+      const openids = [...new Set(cats.map(c => c._openid).filter(Boolean))];
+      const userMap: Record<string, string> = {};
+
+      if (openids.length > 0) {
+        const _ = cloud.database().command;
+        const usersRes = await getCollection(COLLECTIONS.USERS)
+          .where({ _openid: _.in(openids) })
+          .field({ _openid: true, nickname: true })
+          .get();
+
+        for (const u of usersRes.data) {
+          userMap[u._openid] = u.nickname || '未知用户';
+        }
+      }
+
+      cats = cats.map(c => ({
+        ...c,
+        submitterNickname: userMap[c._openid] || '未知用户',
+      }));
+    }
+
     return success({
+      cats,
       cats: result.list,
       total: result.total,
       page: result.page,

@@ -293,7 +293,7 @@ Page({
     this.setData({ submitNoteLoading: false });
 
     if (res.code === 0) {
-      showToast('便利贴已贴上', 'success');
+      showToast('便利贴已提交，等待审核', 'success');
       this.onCloseStickyNote();
       this.loadCatDetail();
     } else {

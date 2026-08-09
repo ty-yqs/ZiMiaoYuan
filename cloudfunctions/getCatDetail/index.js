@@ -60,9 +60,10 @@ exports.main = async (event, context) => {
 
     const cat = catRes.data;
 
-    // 查询关联的发现记录（按时间倒序）
+    // 查询关联的发现记录（按时间倒序，排除待审核）
+    const _ = cloud.database().command;
     const recordsRes = await getCollection(COLLECTIONS.RECORDS)
-      .where({ catId })
+      .where({ catId, status: _.neq('pending') })
       .orderBy('createTime', 'desc')
       .limit(50)
       .get();
@@ -81,7 +82,7 @@ exports.main = async (event, context) => {
     }
 
     // 查询猫咪关系，并填充对方猫咪信息
-    const _ = getDB().command;
+    // _ 已在上方声明
     const relRes = await getCollection(COLLECTIONS.RELATIONSHIPS)
       .where(_.or([{ catId1: catId }, { catId2: catId }]))
       .orderBy('createTime', 'desc')

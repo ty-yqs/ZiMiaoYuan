@@ -47,8 +47,10 @@ exports.main = async (event, context) => {
       getCollection(COLLECTIONS.CATS).where({ missing: true }).count(),
     ]);
 
-    // 记录数：统计所有猫咪的记录
-    const recordTotalRes = await getCollection(COLLECTIONS.RECORDS).count();
+    // 记录数：统计所有已审核的记录
+    const recordTotalRes = await getCollection(COLLECTIONS.RECORDS)
+      .where({ status: _.neq('pending') })
+      .count();
 
     // ==================== 计算分布 ====================
     const cats = allCatsRes.data;

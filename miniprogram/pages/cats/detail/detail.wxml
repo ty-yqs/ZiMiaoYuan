@@ -194,6 +194,9 @@
       auto-focus
       bind:input="onStickyNoteInput"
     />
+    <view class="sticky-note-hint">
+      <text>* 提交后需管理员审核，通过后才会更新显示。</text>
+    </view>
     <view class="sticky-note-footer">
       <text class="sticky-note-count">{{stickyNoteText.length || 0}}/200</text>
       <button class="sticky-note-submit" bind:tap="onSubmitStickyNote" disabled="{{!stickyNoteValid}}">贴上</button>

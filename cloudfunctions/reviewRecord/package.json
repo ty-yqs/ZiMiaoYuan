@@ -1,0 +1,9 @@
+{
+  "name": "reviewRecord",
+  "version": "1.0.0",
+  "description": "管理员审核记录（新照片/便利贴）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

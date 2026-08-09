@@ -78,7 +78,7 @@
       />
       <van-cell
         title="反馈与建议"
-        label="提交 猫咪领养/失踪/死亡反馈 或 小程序修改建议"
+        label="提交 猫咪领养/去喵星/失踪反馈 或 小程序优化建议"
         is-link
         bind:click="onFeedback"
       />
@@ -90,7 +90,7 @@
       />
       <van-cell
         title="清除图片缓存"
-        label="当前缓存 {{cacheCount}} 张图片（{{cacheSize}}），清除后图片将重新从云端加载"
+        label="当前缓存 {{cacheSize}}，清除后图片将重新从云端加载"
         is-link
         bind:click="onClearCache"
       />

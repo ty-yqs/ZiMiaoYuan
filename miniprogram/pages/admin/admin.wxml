@@ -48,6 +48,8 @@
             <text class="review-gender" wx:if="{{item.genderLabel}}">{{item.genderLabel}}</text>
           </view>
 
+          <text class="review-submitter" wx:if="{{item.submitterNickname}}">提交者：{{item.submitterNickname}}</text>
+
           <view class="review-detail-grid">
             <text class="admin-cat-detail">毛色：{{item.color}}</text>
             <text class="admin-cat-detail">年龄：{{item.ageLabel || '未知'}}</text>
@@ -151,6 +153,64 @@
       </block>
     </van-tab>
 
+    <van-tab title="记录审核 ({{pendingRecords.length}})">
+      <block wx:if="{{loading}}">
+        <view class="tab-loading"><text>加载中...</text></view>
+      </block>
+
+      <block wx:elif="{{pendingRecords.length === 0}}">
+        <view class="empty-state">
+          <text class="empty-text">没有待审核的记录</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view wx:for="{{pendingRecords}}" wx:key="_id" class="card admin-card">
+
+          <view class="record-review-info">
+            <view class="record-review-header">
+              <van-tag wx:if="{{item.type === 'photo'}}" type="primary" size="mini">{{item.typeLabel}}</van-tag>
+              <van-tag wx:else color="#F2A65A" size="mini">{{item.typeLabel}}</van-tag>
+              <text class="record-cat-name">{{item.catName}}</text>
+            </view>
+
+            <text class="record-review-meta">提交者：{{item.nickname || '匿名猫友'}}</text>
+            <text class="record-review-meta">时间：{{item.createTimeText}}</text>
+
+            <view class="record-review-desc" wx:if="{{item.description}}">
+              <text>{{item.description}}</text>
+            </view>
+
+            <image
+              wx:if="{{item.type === 'photo' && item.photo}}"
+              class="record-review-photo"
+              src="{{item.photo}}"
+              mode="aspectFill"
+              data-url="{{item.photo}}"
+              data-urls="{{[item.photo]}}"
+              bind:tap="onPreviewPhotos"
+            />
+          </view>
+
+          <view class="admin-actions flex-row">
+            <van-button
+              type="primary"
+              size="small"
+              color="#7EC8A8"
+              data-record-id="{{item._id}}"
+              bind:click="onApproveRecord"
+            >通过</van-button>
+            <van-button
+              type="danger"
+              size="small"
+              data-record-id="{{item._id}}"
+              bind:click="onRejectRecord"
+            >拒绝</van-button>
+          </view>
+        </view>
+      </block>
+    </van-tab>
+
     <van-tab title="全部猫咪 ({{allCatsTotal}})">
       <!-- 瀑布流猫咪卡片 -->
       <block wx:if="{{allCats.length > 0}}">
@@ -208,4 +268,26 @@
     </van-tab>
   </van-tabs>
 
+</view>
+
+<!-- ==================== 驳回理由弹窗 ==================== -->
+<view class="reject-overlay" wx:if="{{showRejectModal}}" bind:tap="onCloseRejectModal">
+  <view class="reject-panel" catch:tap="noop">
+    <view class="reject-header">
+      <text class="reject-title">驳回理由</text>
+      <text class="reject-close" bind:tap="onCloseRejectModal">✕</text>
+    </view>
+    <textarea
+      class="reject-textarea"
+      value="{{rejectReason}}"
+      placeholder="请输入驳回理由（选填）"
+      maxlength="200"
+      auto-focus
+      bind:input="onRejectReasonInput"
+    />
+    <view class="reject-footer">
+      <button class="reject-cancel-btn" bind:tap="onCloseRejectModal">取消</button>
+      <button class="reject-confirm-btn" bind:tap="onConfirmReject">确认拒绝</button>
+    </view>
+  </view>
 </view>
