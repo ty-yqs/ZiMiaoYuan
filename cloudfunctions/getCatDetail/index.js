@@ -60,10 +60,10 @@ exports.main = async (event, context) => {
 
     const cat = catRes.data;
 
-    // 查询关联的发现记录（按时间倒序，排除待审核）
+    // 查询关联的发现记录（按时间倒序，仅展示审核通过的）
     const _ = cloud.database().command;
     const recordsRes = await getCollection(COLLECTIONS.RECORDS)
-      .where({ catId, status: _.neq('pending') })
+      .where({ catId, status: 'approved' })
       .orderBy('createTime', 'desc')
       .limit(50)
       .get();

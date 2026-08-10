@@ -49,7 +49,7 @@ exports.main = async (event, context) => {
 
     // 记录数：统计所有已审核的记录
     const recordTotalRes = await getCollection(COLLECTIONS.RECORDS)
-      .where({ status: _.neq('pending') })
+      .where({ status: 'approved' })
       .count();
 
     // ==================== 计算分布 ====================

@@ -71,7 +71,7 @@ exports.main = async (event, context) => {
     let cats = result.list;
     if (resolveUser) {
       const openids = [...new Set(cats.map(c => c._openid).filter(Boolean))];
-      const userMap: Record<string, string> = {};
+      const userMap = {};
 
       if (openids.length > 0) {
         const _ = cloud.database().command;
