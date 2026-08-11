@@ -1,0 +1,141 @@
+<!--
+  我的提交页
+  展示当前用户的所有提交记录及审核状态
+-->
+<view class="page-container">
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrapper">
+    <van-loading type="spinner" size="48rpx" color="#7EC8A8" />
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view wx:elif="{{error}}" class="error-wrapper">
+    <van-empty description="{{error}}" />
+    <view class="retry-btn" bind:tap="loadSubmissions">点击重试</view>
+  </view>
+
+  <!-- 正常内容 -->
+  <block wx:else>
+    <van-tabs
+      active="{{activeTab}}"
+      color="#7EC8A8"
+      bind:change="onTabChange"
+    >
+      <!-- ==================== Tab 1: 猫咪提交 ==================== -->
+      <van-tab title="新增猫咪 ({{cats.length}})">
+        <view wx:if="{{cats.length === 0}}" class="empty-tab">
+          <van-empty description="暂无猫咪提交" />
+        </view>
+        <view wx:else class="submission-list">
+          <view
+            wx:for="{{cats}}"
+            wx:key="_id"
+            class="submission-card card"
+            data-id="{{item._id}}"
+            data-status="{{item.status}}"
+            bind:tap="onTapCat"
+          >
+            <view class="submission-header flex-row">
+              <image
+                wx:if="{{item.avatar}}"
+                class="submission-thumb"
+                src="{{item.avatar}}"
+                mode="aspectFill"
+              />
+              <view class="submission-info flex-1">
+                <text class="submission-name">{{item.cat_name || '未命名猫咪'}}</text>
+                <text class="submission-time">{{item.createTimeText}}</text>
+              </view>
+              <van-tag
+                type="{{item.statusTag.type}}"
+                size="medium"
+                color="{{item.statusTag.color}}"
+              >{{item.statusTag.text}}</van-tag>
+            </view>
+            <view wx:if="{{item.status === 'rejected' && item.rejectReason}}" class="reject-reason">
+              <text class="reject-label">拒绝原因：</text>
+              <text>{{item.rejectReason}}</text>
+            </view>
+          </view>
+        </view>
+      </van-tab>
+
+      <!-- ==================== Tab 2: 记录提交 ==================== -->
+      <van-tab title="提交记录 ({{records.length}})">
+        <view wx:if="{{records.length === 0}}" class="empty-tab">
+          <van-empty description="暂无记录提交" />
+        </view>
+        <view wx:else class="submission-list">
+          <view
+            wx:for="{{records}}"
+            wx:key="_id"
+            class="submission-card card"
+            data-catid="{{item.catId}}"
+            data-status="{{item.status}}"
+            catch:tap="onTapRecordCat"
+          >
+            <view class="submission-header flex-row">
+              <view class="submission-info flex-1">
+                <view class="flex-row">
+                  <text class="submission-name">{{item.typeLabel}}</text>
+                  <text class="submission-cat-link">{{item.catName}}</text>
+                </view>
+                <text class="submission-time">{{item.createTimeText}}</text>
+              </view>
+              <van-tag
+                type="{{item.statusTag.type}}"
+                size="medium"
+              >{{item.statusTag.text}}</van-tag>
+            </view>
+            <view wx:if="{{item.description}}" class="submission-desc">
+              <text>{{item.description}}</text>
+            </view>
+            <view wx:if="{{item.status === 'rejected' && item.rejectReason}}" class="reject-reason">
+              <text class="reject-label">拒绝原因：</text>
+              <text>{{item.rejectReason}}</text>
+            </view>
+          </view>
+        </view>
+      </van-tab>
+
+      <!-- ==================== Tab 3: 编辑提案 ==================== -->
+      <van-tab title="信息编辑 ({{editProposals.length}})">
+        <view wx:if="{{editProposals.length === 0}}" class="empty-tab">
+          <van-empty description="暂无编辑提案" />
+        </view>
+        <view wx:else class="submission-list">
+          <view
+            wx:for="{{editProposals}}"
+            wx:key="_id"
+            class="submission-card card"
+            data-catid="{{item.catId}}"
+            data-status="{{item.status}}"
+            catch:tap="onTapProposalCat"
+          >
+            <view class="submission-header flex-row">
+              <view class="submission-info flex-1">
+                <text class="submission-name">{{item.catName}}</text>
+                <text class="submission-time">{{item.createTimeText}}</text>
+              </view>
+              <van-tag
+                type="{{item.statusTag.type}}"
+                size="medium"
+              >{{item.statusTag.text}}</van-tag>
+            </view>
+            <view class="submission-desc">
+              <text class="changes-label">变更内容：</text>
+              <text>{{item.changesSummary}}</text>
+            </view>
+            <view wx:if="{{item.status === 'rejected' && item.rejectReason}}" class="reject-reason">
+              <text class="reject-label">拒绝原因：</text>
+              <text>{{item.rejectReason}}</text>
+            </view>
+          </view>
+        </view>
+      </van-tab>
+    </van-tabs>
+  </block>
+
+</view>

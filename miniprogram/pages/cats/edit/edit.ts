@@ -9,6 +9,9 @@ const config = require('../../../config/index');
 
 const app = getApp<IAppOption>();
 
+// 审核结果通知模板ID
+const SUBSCRIBE_TMPL_ID = 'ImPQfyZeWGBqwauOUmFfI7SiCXfiNgrgb_CDt7v7U-Q';
+
 Page({
   data: {
     catId: '',
@@ -163,11 +166,28 @@ Page({
     return { title: '编辑猫咪信息', path: `/pages/cats/edit/edit?catId=${this.data.catId}` };
   },
 
+  /** 请求订阅审核结果通知 */
+  requestSubscribe() {
+    wx.requestSubscribeMessage({
+      tmplIds: [SUBSCRIBE_TMPL_ID],
+      success: (res: any) => {
+        console.log('[Edit] 订阅结果:', res);
+      },
+      fail: (err: any) => {
+        console.log('[Edit] 订阅失败:', err);
+      },
+    });
+  },
+
   /** 提交编辑 */
   async onSubmit() {
     if (!requireProfile()) return;
 
     if (this.data.submitting) return;
+
+    // 必须在 tap 手势回调中直接调用，不能等异步完成后
+    this.requestSubscribe();
+
     this.setData({ submitting: true });
     showLoading('提交中...');
 

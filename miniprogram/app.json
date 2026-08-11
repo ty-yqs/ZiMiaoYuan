@@ -7,6 +7,7 @@
     "pages/cats/edit/edit",
     "pages/upload/upload",
     "pages/profile/profile",
+    "pages/profile/submissions/submissions",
     "pages/admin/admin",
     "pages/stats/stats",
     "pages/login/login",

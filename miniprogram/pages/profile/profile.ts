@@ -211,7 +211,15 @@ Page({
     }
   },
 
-  /** 跳转反馈与建议页 */
+  /** 跳转发现猫咪页 */
+  onUpload() {
+    wx.navigateTo({ url: ROUTES.UPLOAD });
+  },
+
+  /** 跳转我的提交页 */
+  onMySubmissions() {
+    wx.navigateTo({ url: ROUTES.MY_SUBMISSIONS });
+  },
   onFeedback() {
     wx.navigateTo({ url: ROUTES.FEEDBACK });
   },

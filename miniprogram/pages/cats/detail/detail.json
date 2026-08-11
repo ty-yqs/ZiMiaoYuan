@@ -5,6 +5,7 @@
     "van-tag": "@vant/weapp/tag/index",
     "van-divider": "@vant/weapp/divider/index",
     "van-empty": "@vant/weapp/empty/index",
+    "van-loading": "@vant/weapp/loading/index",
     "van-action-sheet": "@vant/weapp/action-sheet/index"
   }
 }

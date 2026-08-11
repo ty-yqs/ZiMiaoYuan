@@ -52,6 +52,12 @@
         is-link
         url="/pages/upload/upload"
       />
+      <van-cell
+        title="我的提交"
+        label="查看提交记录与审核状态"
+        is-link
+        bind:click="onMySubmissions"
+      />
     </van-cell-group>
 
     <!-- 管理员入口 -->
