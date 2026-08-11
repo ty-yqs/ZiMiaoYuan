@@ -2,6 +2,22 @@
  * 首页样式
  */
 
+/* ========== 错误 ========== */
+.error-wrapper {
+  padding-top: 80rpx;
+  text-align: center;
+}
+
+.retry-btn {
+  display: inline-block;
+  margin-top: var(--spacing-md);
+  padding: 12rpx 40rpx;
+  color: var(--color-primary);
+  font-size: var(--font-md);
+  border: 1rpx solid var(--color-primary);
+  border-radius: var(--radius-round);
+}
+
 /* ========== Banner 区域 ========== */
 .banner {
   display: flex;

@@ -4,14 +4,15 @@
 <view class="page-container">
 
   <!-- ==================== 加载中 ==================== -->
-  <view wx:if="{{loading}}" class="loading-tip">
-    <text>加载中...</text>
+  <view wx:if="{{loading}}" class="loading-wrapper">
+    <van-loading type="spinner" size="48rpx" color="#7EC8A8" />
+    <text class="loading-text">加载中...</text>
   </view>
 
   <!-- ==================== 错误 ==================== -->
-  <view wx:elif="{{error}}" class="empty-state">
-    <text class="empty-icon">😿</text>
-    <text class="empty-text">{{error}}</text>
+  <view wx:elif="{{error}}" class="error-wrapper">
+    <van-empty description="{{error}}" />
+    <view class="retry-btn" bind:tap="loadCatInfo">点击重试</view>
   </view>
 
   <!-- ==================== 编辑表单 ==================== -->

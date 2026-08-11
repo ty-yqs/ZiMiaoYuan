@@ -43,8 +43,27 @@
   <!-- 占位，防止被 fixed 头部遮挡 -->
   <view class="list-spacer" />
 
+  <!-- ==================== 加载中 ==================== -->
+  <view wx:if="{{loading && cats.length === 0}}" class="loading-wrapper">
+    <van-loading type="spinner" size="48rpx" color="#7EC8A8" />
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- ==================== 错误 ==================== -->
+  <view wx:elif="{{error && cats.length === 0}}" class="error-wrapper">
+    <van-empty description="{{error}}" />
+    <view class="retry-btn" bind:tap="loadCats">点击重试</view>
+  </view>
+
+  <!-- ==================== 空状态 ==================== -->
+  <view wx:elif="{{cats.length === 0}}" class="empty-state">
+    <text class="empty-icon">😿</text>
+    <text class="empty-text">还没有猫咪档案</text>
+    <button class="add-btn" bind:tap="onTapUpload">去发现第一只猫</button>
+  </view>
+
   <!-- ==================== 猫咪列表 ==================== -->
-  <block wx:if="{{cats.length > 0}}">
+  <block wx:else>
     <cat-card
       wx:for="{{cats}}"
       wx:key="_id"
@@ -54,23 +73,10 @@
 
     <!-- 加载更多 -->
     <view class="load-more">
-      <text wx:if="{{loading}}">正在加载...</text>
+      <van-loading wx:if="{{loading}}" type="spinner" size="32rpx" color="#7EC8A8" />
       <text wx:elif="{{!hasMore}}">—— 已经到底了 ——</text>
     </view>
   </block>
-
-  <!-- 空状态 -->
-  <view class="empty-state" wx:else>
-    <text class="empty-icon">😿</text>
-    <text class="empty-text">还没有猫咪档案</text>
-    <button class="add-btn" bind:tap="onTapUpload">去发现第一只猫</button>
-  </view>
-
-  <!-- 错误状态 -->
-  <view class="error-tip" wx:if="{{error && cats.length === 0}}">
-    <text>{{error}}</text>
-    <button class="retry-btn" bind:tap="loadCats">重试</button>
-  </view>
 
   <!-- 发布按钮 -->
   <view class="fab" bind:tap="onTapUpload">

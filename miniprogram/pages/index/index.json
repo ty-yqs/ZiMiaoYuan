@@ -3,6 +3,7 @@
   "usingComponents": {
     "cat-card": "/components/cat-card/cat-card",
     "van-search": "@vant/weapp/search/index",
-    "van-skeleton": "@vant/weapp/skeleton/index"
+    "van-skeleton": "@vant/weapp/skeleton/index",
+    "van-empty": "@vant/weapp/empty/index"
   }
 }

@@ -10,6 +10,7 @@ Page({
   data: {
     feedbacks: [] as any[],
     loading: true,
+    error: '',
     loadingMore: false,
     hasMore: false,
 
@@ -30,7 +31,7 @@ Page({
 
   /** 加载反馈列表 */
   async loadFeedbacks() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, error: '' });
 
     try {
       const res = await apiGetFeedbacks({
@@ -51,13 +52,17 @@ Page({
           loading: false,
         });
       } else {
-        wx.showToast({ title: res.message || '加载失败', icon: 'none' });
-        this.setData({ loading: false });
+        this.setData({
+          error: res.message || '加载失败',
+          loading: false,
+        });
       }
     } catch (err) {
       console.error('[Feedbacks] 加载失败:', err);
-      wx.showToast({ title: '加载失败', icon: 'none' });
-      this.setData({ loading: false });
+      this.setData({
+        error: '网络异常，请重试',
+        loading: false,
+      });
     }
   },
 

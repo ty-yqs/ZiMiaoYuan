@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "编辑猫咪信息",
-  "usingComponents": {}
+  "usingComponents": {
+    "van-loading": "@vant/weapp/loading/index",
+    "van-empty": "@vant/weapp/empty/index"
+  }
 }

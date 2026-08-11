@@ -53,7 +53,7 @@ Page({
   onLoad(options: Record<string, string>) {
     wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     if (options.catId) {
-      this.setData({ targetCatId: options.catId, maxPhotos: 1 });
+      this.setData({ targetCatId: options.catId, maxPhotos: 3 });
       wx.setNavigationBarTitle({ title: '记录发现' });
     }
   },
@@ -69,7 +69,7 @@ Page({
   /** 选择图片 */
   async onChooseImage() {
     try {
-      const maxCount = this.data.targetCatId ? 1 : 3;
+      const maxCount = this.data.maxPhotos;
       const remaining = maxCount - this.data.photos.length;
       if (remaining <= 0) {
         showToast(`最多上传${maxCount}张图片`, 'error');

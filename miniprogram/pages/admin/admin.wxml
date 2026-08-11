@@ -9,7 +9,7 @@
     <van-tab title="待审核 ({{pendingCats.length}})">
       <!-- 加载中 -->
       <block wx:if="{{loading}}">
-        <view class="tab-loading"><text>加载中...</text></view>
+        <view class="tab-loading"><van-loading type="spinner" size="48rpx" color="#7EC8A8" /><text class="loading-text">加载中...</text></view>
       </block>
 
       <!-- 空状态 -->
@@ -92,7 +92,7 @@
 
     <van-tab title="编辑审核 ({{pendingEdits.length}})">
       <block wx:if="{{loading}}">
-        <view class="tab-loading"><text>加载中...</text></view>
+        <view class="tab-loading"><van-loading type="spinner" size="48rpx" color="#7EC8A8" /><text class="loading-text">加载中...</text></view>
       </block>
 
       <block wx:elif="{{pendingEdits.length === 0}}">
@@ -155,7 +155,7 @@
 
     <van-tab title="记录审核 ({{pendingRecords.length}})">
       <block wx:if="{{loading}}">
-        <view class="tab-loading"><text>加载中...</text></view>
+        <view class="tab-loading"><van-loading type="spinner" size="48rpx" color="#7EC8A8" /><text class="loading-text">加载中...</text></view>
       </block>
 
       <block wx:elif="{{pendingRecords.length === 0}}">
@@ -251,7 +251,7 @@
 
         <!-- 加载更多 -->
         <view class="load-more">
-          <text wx:if="{{allCatsLoading}}">正在加载...</text>
+          <van-loading wx:if="{{allCatsLoading}}" type="spinner" size="32rpx" color="#7EC8A8" />
           <text wx:elif="{{!allCatsHasMore}}">—— 已经到底了 ——</text>
         </view>
       </block>
@@ -263,7 +263,8 @@
 
       <!-- 首次加载中 -->
       <view class="tab-loading" wx:else>
-        <text>加载中...</text>
+        <van-loading type="spinner" size="48rpx" color="#7EC8A8" />
+        <text class="loading-text">加载中...</text>
       </view>
     </van-tab>
   </van-tabs>
