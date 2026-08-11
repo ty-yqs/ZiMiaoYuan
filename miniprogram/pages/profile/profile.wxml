@@ -83,6 +83,7 @@
     <van-cell-group title="其他">
       <van-cell
         title="关于紫喵园"
+        label="查看小程序简介、开发团队及开源地址"
         is-link
         bind:click="onAbout"
       />

@@ -109,9 +109,3 @@
   color: #fff;
 }
 
-.skip-btn {
-  text-align: center;
-  padding: 32rpx 0;
-  font-size: var(--font-sm);
-  color: var(--color-text-hint);
-}

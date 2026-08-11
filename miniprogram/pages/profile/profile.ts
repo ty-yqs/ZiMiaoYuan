@@ -4,9 +4,9 @@
  * 显示用户信息、贡献统计、管理员入口
  */
 import { ROUTES } from '../../utils/constants';
-import { apiGetUserStats, apiGetPendingCounts } from '../../utils/api';
+import { apiGetUserStats, apiGetPendingCounts, apiUpdateUser } from '../../utils/api';
 import { getCachedImageUrl, getCacheSize, clearImageCache } from '../../utils/imageCache';
-import { showToast, showConfirm, requireProfile } from '../../utils/util';
+import { showToast, showConfirm, showLoading, hideLoading, requireProfile } from '../../utils/util';
 
 const app = getApp<IAppOption>();
 
@@ -151,22 +151,50 @@ Page({
     }
   },
 
-  /** 获取头像 */
+  /** 更新头像 */
   async onGetAvatar(e: WechatMiniprogram.CustomEvent) {
     const { avatarUrl } = e.detail;
-    // 上传到云存储
+    showLoading('上传中...');
     try {
       // 先压缩头像（减少存储和流量）
       const compressRes = await wx.compressImage({ src: avatarUrl, quality: 80 });
       const cloudPath = `users/avatars/${Date.now()}.jpg`;
-      const res = await wx.cloud.uploadFile({
+      const uploadRes = await wx.cloud.uploadFile({
         cloudPath,
         filePath: compressRes.tempFilePath,
       });
-      // TODO: 调用云函数更新用户头像
-      console.log('[Profile] 头像上传成功:', res.fileID);
+
+      // 调用云函数更新用户头像
+      const updateRes = await apiUpdateUser({ avatar: uploadRes.fileID });
+
+      hideLoading();
+
+      if (updateRes.code === 0 && updateRes.data) {
+        // 更新全局状态
+        app.globalData.userInfo = updateRes.data;
+        wx.setStorageSync('userInfo', updateRes.data);
+
+        // 更新页面数据
+        this.setData({
+          userInfo: updateRes.data,
+          cachedAvatar: '', // 先清空以触发重新缓存
+        });
+
+        showToast('头像更新成功', 'success');
+
+        // 重新加载缓存头像
+        setTimeout(() => {
+          if (updateRes.data?.avatar) {
+            this.loadCachedAvatar(updateRes.data.avatar);
+          }
+        }, 300);
+      } else {
+        showToast(updateRes.message || '头像更新失败', 'error');
+      }
     } catch (err) {
+      hideLoading();
       console.error('[Profile] 头像上传失败:', err);
+      showToast('头像上传失败，请重试', 'error');
     }
   },
 
@@ -241,10 +269,6 @@ Page({
 
   /** 关于小程序 */
   onAbout() {
-    wx.showModal({
-      title: '关于紫喵园',
-      content: '紫喵园 — 校园猫咪数字档案平台\n\n记录校园里每一只可爱的猫咪\n\nVersion 1.3.0',
-      showCancel: false,
-    });
+    wx.navigateTo({ url: ROUTES.ABOUT });
   },
 });

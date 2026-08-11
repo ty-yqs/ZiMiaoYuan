@@ -1,0 +1,64 @@
+<!--
+  关于紫喵园
+-->
+<view class="page-container">
+
+  <!-- ==================== 品牌区 ==================== -->
+  <view class="hero-section">
+    <view class="app-icon-wrapper">
+      <image class="app-icon" src="/images/zimiaoyuan.jpg" mode="aspectFill" />
+    </view>
+    <text class="app-name">紫喵园</text>
+    <text class="app-subtitle">ZiMiaoYuan</text>
+    <text class="app-version">Version {{version}}</text>
+  </view>
+
+  <!-- ==================== 简介卡片 ==================== -->
+  <view class="about-card card">
+    <text class="about-title">关于我们</text>
+    <text class="about-desc">紫喵园是一款专注校园流浪猫管理的小程序。我们致力于用数字化的方式记录校园猫咪、建立档案，助力校园TNR（诱捕-绝育-放归）科学管理，让每一只校园猫咪都被温柔以待。</text>
+  </view>
+
+  <!-- ==================== 开发团队 ==================== -->
+  <view class="about-card card">
+    <text class="about-title">开发团队</text>
+    <view class="feature-list">
+      <view class="feature-item">
+        <text class="feature-text">程序开发: @yanqs</text>
+      </view>
+      <view class="feature-item">
+        <text class="feature-text">初始信息录入: @无蔗糖</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== 开源信息 ==================== -->
+  <view class="about-card card">
+    <text class="about-title">开源地址</text>
+    <view class="github-row" bind:tap="onCopyGithub">
+      <text class="github-url">{{githubUrl}}</text>
+      <text class="copy-hint">点击复制</text>
+    </view>
+    <text class="opensource-note">本项目开源，欢迎 Star & Contribute</text>
+  </view>
+
+  <!-- ==================== 技术栈 ==================== -->
+  <view class="about-card card">
+    <text class="about-title">技术栈</text>
+    <view class="tech-list">
+      <text class="tech-tag">微信小程序原生</text>
+      <text class="tech-tag">TypeScript</text>
+      <text class="tech-tag">Vant Weapp</text>
+      <text class="tech-tag">微信云开发</text>
+      <text class="tech-tag">CloudBase</text>
+    </view>
+  </view>
+
+  <!-- ==================== 底部 ==================== -->
+  <view class="about-footer">
+    <text class="footer-text">紫喵园 · 记录校园里的每一只小猫</text>
+    <text class="icp-text">粤ICP备2025496586号-3X</text>
+    <text class="copyright-text">© 2026 ZiMiaoYuan</text>
+  </view>
+
+</view>

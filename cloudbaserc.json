@@ -1,5 +1,5 @@
 {
-  "version": "2.0",
+  "version": "1.3.0",
   "envId": "cloud2-d1gbjipxm9c21dd8d",
   "functionRoot": "./cloudfunctions",
   "functions": [
@@ -25,6 +25,11 @@
     },
     {
       "name": "getFeedbacks",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getMySubmissions",
       "runtime": "Nodejs20.19",
       "installDependency": true
     },
