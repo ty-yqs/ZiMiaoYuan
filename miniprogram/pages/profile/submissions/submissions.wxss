@@ -112,3 +112,23 @@
 .reject-label {
   font-weight: 500;
 }
+
+/* ========== 加载更多 ========== */
+.load-more {
+  padding: 32rpx 0;
+  text-align: center;
+}
+
+.load-more-text {
+  font-size: var(--font-sm);
+  color: var(--color-primary);
+}
+
+.load-more-text:active {
+  opacity: 0.7;
+}
+
+.load-more-end {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}

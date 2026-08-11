@@ -122,7 +122,7 @@ Page({
   /** 触底加载更多 */
   onReachBottom() {
     // 只在全部猫咪 tab 时加载更多
-    if (this.data.activeTab === 2 && this.data.allCatsHasMore) {
+    if (this.data.activeTab === 3 && this.data.allCatsHasMore) {
       this.loadAllCats(false);
     }
   },

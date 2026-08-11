@@ -1,6 +1,6 @@
 <!--
   我的提交页
-  展示当前用户的所有提交记录及审核状态
+  展示当前用户的所有提交记录及审核状态，支持分页加载，标签栏吸顶
 -->
 <view class="page-container">
 
@@ -21,10 +21,11 @@
     <van-tabs
       active="{{activeTab}}"
       color="#7EC8A8"
+      sticky
       bind:change="onTabChange"
     >
       <!-- ==================== Tab 1: 猫咪提交 ==================== -->
-      <van-tab title="新增猫咪 ({{cats.length}})">
+      <van-tab title="新增猫咪 ({{catsTotal}})">
         <view wx:if="{{cats.length === 0}}" class="empty-tab">
           <van-empty description="暂无猫咪提交" />
         </view>
@@ -59,11 +60,18 @@
               <text>{{item.rejectReason}}</text>
             </view>
           </view>
+
+          <!-- 加载更多 -->
+          <view class="load-more">
+            <van-loading wx:if="{{catsLoadingMore}}" type="spinner" size="32rpx" color="#7EC8A8" />
+            <text wx:elif="{{catsHasMore}}" class="load-more-text" data-type="cats" bind:tap="onTapLoadMore">加载更多</text>
+            <text wx:else class="load-more-end">—— 已经到底了 ——</text>
+          </view>
         </view>
       </van-tab>
 
       <!-- ==================== Tab 2: 记录提交 ==================== -->
-      <van-tab title="提交记录 ({{records.length}})">
+      <van-tab title="提交记录 ({{recordsTotal}})">
         <view wx:if="{{records.length === 0}}" class="empty-tab">
           <van-empty description="暂无记录提交" />
         </view>
@@ -97,11 +105,18 @@
               <text>{{item.rejectReason}}</text>
             </view>
           </view>
+
+          <!-- 加载更多 -->
+          <view class="load-more">
+            <van-loading wx:if="{{recordsLoadingMore}}" type="spinner" size="32rpx" color="#7EC8A8" />
+            <text wx:elif="{{recordsHasMore}}" class="load-more-text" data-type="records" bind:tap="onTapLoadMore">加载更多</text>
+            <text wx:else class="load-more-end">—— 已经到底了 ——</text>
+          </view>
         </view>
       </van-tab>
 
       <!-- ==================== Tab 3: 编辑提案 ==================== -->
-      <van-tab title="信息编辑 ({{editProposals.length}})">
+      <van-tab title="信息编辑 ({{editsTotal}})">
         <view wx:if="{{editProposals.length === 0}}" class="empty-tab">
           <van-empty description="暂无编辑提案" />
         </view>
@@ -132,6 +147,13 @@
               <text class="reject-label">拒绝原因：</text>
               <text>{{item.rejectReason}}</text>
             </view>
+          </view>
+
+          <!-- 加载更多 -->
+          <view class="load-more">
+            <van-loading wx:if="{{editsLoadingMore}}" type="spinner" size="32rpx" color="#7EC8A8" />
+            <text wx:elif="{{editsHasMore}}" class="load-more-text" data-type="editProposals" bind:tap="onTapLoadMore">加载更多</text>
+            <text wx:else class="load-more-end">—— 已经到底了 ——</text>
           </view>
         </view>
       </van-tab>

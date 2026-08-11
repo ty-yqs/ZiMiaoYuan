@@ -2,10 +2,13 @@
  * 我的提交页
  *
  * 展示当前用户的所有提交记录（猫咪、记录、编辑提案）及其审核状态
+ * 支持分页加载，标签栏吸顶
  */
 import { apiGetMySubmissions } from '../../../utils/api';
 
 const app = getApp<IAppOption>();
+
+const PAGE_SIZE = 10;
 
 // 状态标签映射
 const STATUS_TAG_MAP: Record<string, { type: string; text: string }> = {
@@ -29,6 +32,24 @@ Page({
     records: [] as any[],
     editProposals: [] as any[],
 
+    // 总数（用于标签栏显示）
+    catsTotal: 0,
+    recordsTotal: 0,
+    editsTotal: 0,
+
+    // 分页状态
+    catsPage: 1,
+    catsHasMore: true,
+    catsLoadingMore: false,
+
+    recordsPage: 1,
+    recordsHasMore: true,
+    recordsLoadingMore: false,
+
+    editsPage: 1,
+    editsHasMore: true,
+    editsLoadingMore: false,
+
     loading: true,
     error: '',
   },
@@ -37,19 +58,29 @@ Page({
     this.loadSubmissions();
   },
 
+  /** 首次加载：拉取三个集合首页数据 */
   async loadSubmissions() {
     this.setData({ loading: true, error: '' });
 
     try {
-      const res = await apiGetMySubmissions();
+      const res = await apiGetMySubmissions({ page: 1, pageSize: PAGE_SIZE });
 
       if (res.code === 0) {
         const { cats, records, editProposals } = res.data;
 
         this.setData({
-          cats: this.formatCats(cats || []),
-          records: this.formatRecords(records || []),
-          editProposals: this.formatEditProposals(editProposals || []),
+          cats: this.formatCats(cats.data || []),
+          records: this.formatRecords(records.data || []),
+          editProposals: this.formatEditProposals(editProposals.data || []),
+          catsTotal: cats.total || 0,
+          recordsTotal: records.total || 0,
+          editsTotal: editProposals.total || 0,
+          catsPage: 2,
+          catsHasMore: cats.hasMore || false,
+          recordsPage: 2,
+          recordsHasMore: records.hasMore || false,
+          editsPage: 2,
+          editsHasMore: editProposals.hasMore || false,
           loading: false,
         });
       } else {
@@ -67,6 +98,71 @@ Page({
     }
   },
 
+  /** 加载更多 */
+  async loadMore(type: 'cats' | 'records' | 'editProposals') {
+    const pageKey = type === 'editProposals' ? 'editsPage' : `${type}Page`;
+    const hasMoreKey = type === 'editProposals' ? 'editsHasMore' : `${type}HasMore`;
+    const loadingKey = type === 'editProposals' ? 'editsLoadingMore' : `${type}LoadingMore`;
+    const currentPage = (this.data as any)[pageKey];
+
+    if ((this.data as any)[loadingKey] || !(this.data as any)[hasMoreKey]) return;
+
+    this.setData({ [loadingKey]: true });
+
+    try {
+      const cloudType = type === 'editProposals' ? 'editProposals' : type;
+      const res = await apiGetMySubmissions({ type: cloudType, page: currentPage, pageSize: PAGE_SIZE });
+
+      if (res.code === 0) {
+        const { data, hasMore } = res.data;
+        let formatted: any[];
+        if (type === 'cats') {
+          formatted = this.formatCats(data || []);
+        } else if (type === 'records') {
+          formatted = this.formatRecords(data || []);
+        } else {
+          formatted = this.formatEditProposals(data || []);
+        }
+
+        const listKey = type === 'editProposals' ? 'editProposals' : type;
+        const existing = this.data[listKey as keyof typeof this.data] as any[];
+        this.setData({
+          [listKey]: [...existing, ...formatted],
+          [pageKey]: currentPage + 1,
+          [hasMoreKey]: hasMore || false,
+          [loadingKey]: false,
+        });
+      } else {
+        this.setData({ [loadingKey]: false });
+        wx.showToast({ title: res.message || '加载失败', icon: 'none' });
+      }
+    } catch (err) {
+      console.error('[MySubmissions] 加载更多失败:', err);
+      this.setData({ [loadingKey]: false });
+      wx.showToast({ title: '网络异常，请重试', icon: 'none' });
+    }
+  },
+
+  /** 触底加载更多 */
+  onReachBottom() {
+    const tab = this.data.activeTab;
+    if (tab === 0) {
+      this.loadMore('cats');
+    } else if (tab === 1) {
+      this.loadMore('records');
+    } else if (tab === 2) {
+      this.loadMore('editProposals');
+    }
+  },
+
+  /** 点击加载更多（手动） */
+  onTapLoadMore(e: WechatMiniprogram.TouchEvent) {
+    const { type } = e.currentTarget.dataset;
+    this.loadMore(type);
+  },
+
+  // ==================== 格式化 ====================
+
   /** 格式化猫咪列表 */
   formatCats(cats: any[]): any[] {
     return cats.map(cat => ({
@@ -83,14 +179,13 @@ Page({
       ...record,
       statusTag: STATUS_TAG_MAP[record.status] || { type: 'default', text: record.status || '未知' },
       createTimeText: this.formatTime(record.createTime),
-      typeLabel: RECORD_TYPE_LABELS[record.type] || (record.type || '📸 照片'),
+      typeLabel: RECORD_TYPE_LABELS[record.type] || (record.type || '照片'),
     }));
   },
 
   /** 格式化编辑提案列表 */
   formatEditProposals(proposals: any[]): any[] {
     return proposals.map(proposal => {
-      // 提取变更字段摘要
       const changes: string[] = [];
       if (proposal.proposedChanges) {
         const fieldLabels: Record<string, string> = {
@@ -131,13 +226,9 @@ Page({
     const now = new Date();
     const diff = now.getTime() - d.getTime();
 
-    // 1分钟内
     if (diff < 60 * 1000) return '刚刚';
-    // 1小时内
     if (diff < 60 * 60 * 1000) return `${Math.floor(diff / (60 * 1000))}分钟前`;
-    // 24小时内
     if (diff < 24 * 60 * 60 * 1000) return `${Math.floor(diff / (60 * 60 * 1000))}小时前`;
-    // 7天内
     if (diff < 7 * 24 * 60 * 60 * 1000) return `${Math.floor(diff / (24 * 60 * 60 * 1000))}天前`;
 
     const month = d.getMonth() + 1;
@@ -145,8 +236,10 @@ Page({
     return `${month}月${day}日`;
   },
 
+  // ==================== Tab 和导航 ====================
+
   /** Tab 切换 */
-  onTabChange(e: WechatMiniprogram.TouchEvent) {
+  onTabChange(e: WechatMiniprogram.CustomEvent) {
     this.setData({ activeTab: e.detail.index });
   },
 

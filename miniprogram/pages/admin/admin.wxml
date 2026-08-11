@@ -216,36 +216,48 @@
       <block wx:if="{{allCats.length > 0}}">
         <view wx:for="{{allCats}}" wx:key="_id">
           <cat-card cat="{{item}}" showLocation="{{false}}" />
-          <view class="admin-card-actions flex-row">
-            <van-button
-              type="{{item.adopted ? 'default' : 'primary'}}"
-              size="small"
-              color="#E8A87C"
-              data-cat-id="{{item._id}}"
-              bind:click="onToggleAdopted"
-            >{{item.adopted ? '取消领养' : '标记已领养'}}</van-button>
-            <van-button
-              type="{{item.passedAway ? 'default' : 'primary'}}"
-              size="small"
-              color="#9B9B9B"
-              data-cat-id="{{item._id}}"
-              bind:click="onTogglePassedAway"
-            >{{item.passedAway ? '取消去喵星' : '标记去喵星'}}</van-button>
-            <van-button
-              type="{{item.missing ? 'default' : 'primary'}}"
-              size="small"
-              color="#9B9B9B"
-              data-cat-id="{{item._id}}"
-              bind:click="onToggleMissing"
-            >{{item.missing ? '取消失踪' : '标记失踪'}}</van-button>
-            <van-button
-              type="danger"
-              size="small"
-              plain
-              hairline
-              data-cat-id="{{item._id}}"
-              bind:click="onDelete"
-            >删除</van-button>
+          <view class="admin-card-actions">
+            <view class="action-cell">
+              <van-button
+                type="{{item.adopted ? 'default' : 'primary'}}"
+                size="small"
+                color="#E8A87C"
+                block
+                data-cat-id="{{item._id}}"
+                bind:click="onToggleAdopted"
+              >{{item.adopted ? '取消领养' : '标记已领养'}}</van-button>
+            </view>
+            <view class="action-cell">
+              <van-button
+                type="{{item.passedAway ? 'default' : 'primary'}}"
+                size="small"
+                color="#9B9B9B"
+                block
+                data-cat-id="{{item._id}}"
+                bind:click="onTogglePassedAway"
+              >{{item.passedAway ? '取消去喵星' : '标记去喵星'}}</van-button>
+            </view>
+            <view class="action-cell">
+              <van-button
+                type="{{item.missing ? 'default' : 'primary'}}"
+                size="small"
+                color="#9B9B9B"
+                block
+                data-cat-id="{{item._id}}"
+                bind:click="onToggleMissing"
+              >{{item.missing ? '取消失踪' : '标记失踪'}}</van-button>
+            </view>
+            <view class="action-cell">
+              <van-button
+                type="danger"
+                size="small"
+                plain
+                hairline
+                block
+                data-cat-id="{{item._id}}"
+                bind:click="onDelete"
+              >删除</van-button>
+            </view>
           </view>
         </view>
 
