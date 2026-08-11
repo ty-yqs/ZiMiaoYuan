@@ -1,6 +1,6 @@
 {
   "name": "getPendingEdits",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "管理员获取待审核编辑提案",
   "main": "index.js",
   "dependencies": {

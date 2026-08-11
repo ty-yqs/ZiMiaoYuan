@@ -1,6 +1,6 @@
 {
   "name": "uploadRecord",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "上传发现记录（针对已有猫咪）",
   "main": "index.js",
   "dependencies": {

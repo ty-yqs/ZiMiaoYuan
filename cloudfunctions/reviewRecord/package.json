@@ -1,6 +1,6 @@
 {
   "name": "reviewRecord",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "管理员审核记录（新照片/便利贴）",
   "main": "index.js",
   "dependencies": {

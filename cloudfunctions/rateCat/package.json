@@ -1,6 +1,6 @@
 {
   "name": "rateCat",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "猫咪亲人指数评分",
   "main": "index.js",
   "dependencies": {
