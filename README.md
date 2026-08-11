@@ -1,6 +1,6 @@
 # 紫喵园 (ZiMiaoYuan)
 
-![Shen Xiao Li](miniprogram/images/banner-cat.png)
+![Shen Xiao Li](logo.jpg)
 
 紫喵园是一款专注校园流浪猫管理的公益小程序。用户可拍照记录校园猫咪、建立数字档案，标记绝育和疫苗状态，为猫咪评分亲人指数、贴上便利贴分享观察。支持毛色/性别/年龄筛选、数据统计看板、管理员审核机制，助力校园TNR（诱捕-绝育-放归）科学管理。
 
