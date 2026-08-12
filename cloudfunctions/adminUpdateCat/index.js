@@ -10,7 +10,7 @@
 const cloud = require('wx-server-sdk');
 const {
   COLLECTIONS, CAT_STATUS, ROLES,
-  success, fail, getCollection, getDB, getUserByOpenid,
+  success, fail, getCollection, getDB, getUserByOpenid, deleteCloudFiles,
 } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -126,6 +126,25 @@ exports.main = async (event, context) => {
             updateTime: now,
           },
         });
+
+        // 关联记录（如 addCat 创建的首条记录）一并标记为 rejected
+        const recordsColl = getCollection(COLLECTIONS.RECORDS);
+        const relatedRecords = await recordsColl.where({ catId }).get();
+        const fileIds = [...(catData.photos || []), catData.avatar].filter(Boolean);
+        if (relatedRecords.data.length > 0) {
+          await Promise.all(relatedRecords.data.map(r =>
+            recordsColl.doc(r._id).update({ data: { status: 'rejected', rejectReason: reason.trim() } })
+          ));
+          for (const r of relatedRecords.data) {
+            fileIds.push(...(r.photos || []), r.photo);
+          }
+          console.log('[adminUpdateCat] 已同步标记关联记录为 rejected:', relatedRecords.data.length, '条');
+        }
+
+        // 拒绝后清理该猫咪及其记录上传的图片（自动去重）
+        const delRes = await deleteCloudFiles(fileIds);
+        console.log('[adminUpdateCat] 已清理拒绝猫咪图片:', catId, '删除', delRes.deleted, '失败', delRes.failed);
+
         const rejectOpenid = catData.creator || catData._openid;
         console.log('[adminUpdateCat] 准备发送拒绝通知, openid:', rejectOpenid, 'creator:', catData.creator, '_openid:', catData._openid);
         await sendReviewNotification(rejectOpenid, '拒绝', catData.createTime, reason || '未填写', `/pages/index/index`);
@@ -165,6 +184,12 @@ exports.main = async (event, context) => {
           .where({ catId })
           .get();
 
+        // 收集所有待删除的图片（猫咪 photos + avatar + 关联记录 photos/photo）
+        const fileIds = [...(catData.photos || []), catData.avatar].filter(Boolean);
+        for (const r of recordsRes.data) {
+          fileIds.push(...(r.photos || []), r.photo);
+        }
+
         if (recordsRes.data.length > 0) {
           // 云数据库批量删除需要逐个进行（或通过云端事务）
           const deletePromises = recordsRes.data.map(r =>
@@ -190,6 +215,11 @@ exports.main = async (event, context) => {
 
         // 删除猫咪档案
         await catsColl.doc(catId).remove();
+
+        // 删除云存储图片（自动去重）
+        const delRes = await deleteCloudFiles(fileIds);
+        console.log('[adminUpdateCat] 已清理删除猫咪图片:', catId, '删除', delRes.deleted, '失败', delRes.failed);
+
         console.log('[adminUpdateCat] 猫咪已删除:', catId);
         return success(null, '已删除');
       }

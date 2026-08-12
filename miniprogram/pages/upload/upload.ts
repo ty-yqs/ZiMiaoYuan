@@ -28,11 +28,6 @@ Page({
     gender: '',
     age: '',
     description: '',
-    location: {
-      name: '',
-      latitude: 0,
-      longitude: 0,
-    },
     health: {
       sterilized: false,
       vaccinated: false,
@@ -101,33 +96,14 @@ Page({
     );
   },
 
-  /** 选择位置 */
-  onChooseLocation() {
-    wx.chooseLocation({
-      success: (res) => {
-        this.setData({
-          location: {
-            name: res.name || res.address || '',
-            latitude: res.latitude,
-            longitude: res.longitude,
-          },
-        });
-      },
-    });
-  },
-
   /** 提交表单 */
   async onSubmit() {
     // 检查是否已设置昵称和头像
     if (!requireProfile()) return;
 
-    // 验证：图片和位置始终必填
+    // 验证：图片始终必填
     if (this.data.photos.length === 0) {
       showToast('请至少选择一张图片', 'error');
-      return;
-    }
-    if (!this.data.location.name) {
-      showToast('请选择发现地点', 'error');
       return;
     }
 
@@ -174,7 +150,6 @@ Page({
           catId: this.data.targetCatId,
           photos: cloudFileIds,
           description: this.data.description,
-          location: this.data.location,
         });
 
         hideLoading();
@@ -195,7 +170,6 @@ Page({
           age: this.data.age || 'unknown',
           color: this.data.color,
           description: this.data.description,
-          location: this.data.location,
           health: this.data.health,
         });
 

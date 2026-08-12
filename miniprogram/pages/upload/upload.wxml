@@ -83,15 +83,6 @@
     </view>
   </view>
 
-  <!-- ==================== 位置 ==================== -->
-  <view class="card">
-    <view class="section-title">发现地点</view>
-    <view class="location-picker" bind:tap="onChooseLocation">
-      <text class="location-text">{{location.name || '点击选择位置'}}</text>
-      <text class="location-arrow">›</text>
-    </view>
-  </view>
-
   <!-- ==================== 描述 ==================== -->
   <view class="card">
     <van-field

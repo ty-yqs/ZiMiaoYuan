@@ -71,10 +71,12 @@ Page({
       // 上传头像到云存储（仅当选择了新头像，临时文件才需要上传）
       if (this.data.avatarUrl) {
         if (this.data.isNewAvatar) {
+          // 先压缩头像（减少存储和流量）
+          const compressRes = await wx.compressImage({ src: this.data.avatarUrl, quality: 80 });
           const cloudPath = `users/avatars/${Date.now()}.jpg`;
           const uploadRes = await wx.cloud.uploadFile({
             cloudPath,
-            filePath: this.data.avatarUrl,
+            filePath: compressRes.tempFilePath,
           });
           avatar = uploadRes.fileID;
         } else {

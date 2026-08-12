@@ -10,7 +10,7 @@
  */
 const cloud = require('wx-server-sdk');
 const {
-  COLLECTIONS, ROLES, success, fail, getCollection, getUserByOpenid,
+  COLLECTIONS, ROLES, success, fail, getCollection, getUserByOpenid, deleteCloudFiles,
 } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -106,6 +106,11 @@ exports.main = async (event, context) => {
       await getCollection(COLLECTIONS.RECORDS).doc(recordId).update({
         data: { status: 'rejected', rejectReason: reason.trim() },
       });
+
+      // 拒绝后清理该记录上传的图片（photos + 旧记录的单张 photo，自动去重）
+      const fileIds = [...(record.photos || []), record.photo].filter(Boolean);
+      const delRes = await deleteCloudFiles(fileIds);
+      console.log('[reviewRecord] 已清理拒绝记录图片:', recordId, '删除', delRes.deleted, '失败', delRes.failed);
 
       console.log('[reviewRecord] 准备发送拒绝通知, openid:', submitterOpenid);
       await sendReviewNotification(submitterOpenid, '拒绝', record.createTime, reason || '未填写', `/pages/index/index`);

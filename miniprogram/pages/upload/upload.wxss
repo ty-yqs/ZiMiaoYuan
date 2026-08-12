@@ -113,30 +113,6 @@
   font-weight: 500;
 }
 
-/* ========== 位置选择 ========== */
-.location-picker {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: var(--spacing-sm) 0;
-}
-
-.location-icon {
-  font-size: var(--font-md);
-  margin-right: var(--spacing-xs);
-}
-
-.location-text {
-  flex: 1;
-  font-size: var(--font-sm);
-  color: var(--color-text-secondary);
-}
-
-.location-arrow {
-  font-size: var(--font-lg);
-  color: var(--color-text-hint);
-}
-
 /* ========== 提交区域 ========== */
 .submit-area {
   padding: var(--spacing-md);
