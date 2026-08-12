@@ -1,6 +1,6 @@
 {
   "name": "getMySubmissions",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "获取当前用户的所有提交记录及审核状态",
   "main": "index.js",
   "dependencies": {

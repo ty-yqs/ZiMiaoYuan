@@ -86,11 +86,12 @@ exports.main = async (event, context) => {
         data: { status: 'approved' },
       });
 
-      // 如果是照片记录，追加照片到猫咪的 photos 数组
-      if (record.type === 'photo' && record.photo) {
+      // 如果是照片记录，追加所有照片到猫咪的 photos 数组
+      const recordPhotos = record.photos || (record.photo ? [record.photo] : []);
+      if (record.type === 'photo' && recordPhotos.length > 0) {
         const _ = cloud.database().command;
         await getCollection(COLLECTIONS.CATS).doc(record.catId).update({
-          data: { photos: _.push([record.photo]) },
+          data: { photos: _.push(recordPhotos) },
         });
       }
 

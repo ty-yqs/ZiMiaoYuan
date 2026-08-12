@@ -1,0 +1,9 @@
+{
+  "name": "getCatRecords",
+  "version": "2.0.0",
+  "description": "分页获取猫咪的发现记录（含发表者头像）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

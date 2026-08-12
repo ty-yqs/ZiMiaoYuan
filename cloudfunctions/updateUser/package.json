@@ -1,6 +1,6 @@
 {
   "name": "updateUser",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "更新用户昵称和头像",
   "main": "index.js",
   "dependencies": {

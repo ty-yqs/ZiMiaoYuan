@@ -61,27 +61,27 @@ Page({
 
   /** 缓存记录中的照片到本地 */
   async cacheRecordPhotos(records: IRecord[]) {
-    const cloudIDs = records
-      .map((r) => r.photo)
-      .filter((photo) => photo && photo.startsWith('cloud://'));
-
-    if (cloudIDs.length === 0) return;
-
-    const cachedUrls = await getCachedImageUrls(cloudIDs);
-
-    // 构建 cloudID → cachedURL 映射
-    const urlMap: Record<string, string> = {};
-    for (let i = 0; i < cloudIDs.length; i++) {
-      if (cachedUrls[i]) {
-        urlMap[cloudIDs[i]] = cachedUrls[i];
+    const allIDs: string[] = [];
+    for (const r of records) {
+      const rPhotos = (r as any).photos || (r.photo ? [r.photo] : []);
+      for (const p of rPhotos) {
+        if (p && p.startsWith('cloud://')) allIDs.push(p);
       }
     }
+    if (allIDs.length === 0) return;
 
-    // 更新 items 中的 photo 字段
-    const updatedItems = records.map((item) => ({
-      ...item,
-      photo: urlMap[item.photo] || item.photo,
-    }));
+    const cachedUrls = await getCachedImageUrls(allIDs);
+    const urlMap: Record<string, string> = {};
+    for (let i = 0; i < allIDs.length; i++) {
+      if (cachedUrls[i]) urlMap[allIDs[i]] = cachedUrls[i];
+    }
+
+    // 更新 items 中的 photos 数组
+    const updatedItems = records.map((item) => {
+      const rPhotos = (item as any).photos || (item.photo ? [item.photo] : []);
+      const newPhotos = rPhotos.map((p: string) => urlMap[p] || p);
+      return { ...item, photos: newPhotos };
+    });
 
     this.setData({ items: updatedItems });
   },

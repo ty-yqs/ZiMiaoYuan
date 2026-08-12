@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/feed/feed",
     "pages/cats/list/list",
     "pages/cats/detail/detail",
     "pages/cats/records/records",
@@ -8,6 +9,7 @@
     "pages/upload/upload",
     "pages/profile/profile",
     "pages/profile/submissions/submissions",
+    "pages/profile/submissions/recordDetail/recordDetail",
     "pages/admin/admin",
     "pages/stats/stats",
     "pages/login/login",
@@ -41,6 +43,12 @@
         "text": "档案",
         "iconPath": "images/icons/list.clipboard@4x.png",
         "selectedIconPath": "images/icons/list.clipboard.fill@4x.png"
+      },
+      {
+        "pagePath": "pages/feed/feed",
+        "text": "动态",
+        "iconPath": "images/icons/camera.aperture@4x.png",
+        "selectedIconPath": "images/icons/camera.aperture.fill@4x.png"
       },
       {
         "pagePath": "pages/stats/stats",

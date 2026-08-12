@@ -143,14 +143,14 @@
     </view>
 
     <!-- ==================== 发现记录 ==================== -->
-    <view class="card records-card" wx:if="{{records.length > 0}}">
-      <view class="section-title-row">
+    <view class="card records-card" wx:if="{{cat}}">
+      <view class="section-title-row" bind:tap="onTapRecordsCard">
         <text class="section-title-sm">发现记录 ({{totalRecords}})</text>
-        <text class="section-more" wx:if="{{hasMoreRecords}}" data-type="photo" bind:tap="onTapMoreRecords">查看更多 ›</text>
+        <text class="section-more">查看全部 ›</text>
       </view>
 
-      <view class="record-item" wx:for="{{cachedRecords}}" wx:key="_id">
-        <image class="record-photo" src="{{item.photo}}" mode="aspectFill" />
+      <view class="record-item" wx:for="{{cachedRecords}}" wx:key="_id" bind:tap="onTapRecordsCard">
+        <image class="record-photo" src="{{item.photos[0] || item.photo}}" mode="aspectFill" />
         <view class="record-info">
           <text class="record-nickname">{{item.nickname || '匿名猫友'}}</text>
           <text class="record-desc">{{item.description || '发现记录'}}</text>

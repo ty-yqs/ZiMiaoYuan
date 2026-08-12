@@ -14,7 +14,17 @@
       "installDependency": true
     },
     {
+      "name": "getAllRecords",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
       "name": "getCatDetail",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getCatRecords",
       "runtime": "Nodejs20.19",
       "installDependency": true
     },

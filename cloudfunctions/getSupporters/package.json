@@ -1,6 +1,6 @@
 {
   "name": "getSupporters",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "获取赞助名单",
   "main": "index.js",
   "dependencies": {

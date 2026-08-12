@@ -33,7 +33,7 @@ Page({
     cacheCount: 0,
 
     loading: true,
-    showVersion: '1.3.0',
+    showVersion: '2.0.0',
   },
 
   onLoad() {
@@ -42,7 +42,7 @@ Page({
 
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ selected: 3 });
+      this.getTabBar().setData({ selected: 4 });
     }
 
     // 检查是否已设置昵称和头像

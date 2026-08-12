@@ -1,6 +1,6 @@
 {
   "name": "getFeedbacks",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "获取用户反馈列表（管理员）",
   "main": "index.js",
   "dependencies": {

@@ -149,10 +149,11 @@ Page({
       cloudIDs.push(...cat.photos);
     }
 
-    // 发现记录中的照片
+    // 发现记录中的照片（兼容 photos 数组和单个 photo）
     for (const record of photoRecords) {
-      if (record.photo) {
-        cloudIDs.push(record.photo);
+      const rPhotos = (record as any).photos || (record.photo ? [record.photo] : []);
+      for (const p of rPhotos) {
+        if (p && p.startsWith('cloud://')) cloudIDs.push(p);
       }
     }
 
@@ -160,22 +161,19 @@ Page({
 
     // 批量缓存
     const cachedUrls = await getCachedImageUrls(cloudIDs);
-
-    // 将缓存结果映射回去（仅替换成功缓存的项目）
     let urlIndex = 0;
 
     // 猫咪照片
-    const photoCount = cat.photos ? cat.photos.length : 0;
     const cachedPhotos = cat.photos
-      ? cat.photos.map((originalUrl, i) => cachedUrls[i] || originalUrl)
+      ? cat.photos.map(originalUrl => cachedUrls[urlIndex++] || originalUrl)
       : [];
-    urlIndex = photoCount;
 
-    // 记录中的照片
-    const cachedRecords = photoRecords.map((record, i) => ({
-      ...record,
-      photo: cachedUrls[urlIndex + i] || record.photo,
-    }));
+    // 记录中的照片 — 每条记录可能有多个 photos
+    const cachedRecords = photoRecords.map(record => {
+      const rPhotos = (record as any).photos || (record.photo ? [record.photo] : []);
+      const newPhotos = rPhotos.map((p: string) => cachedUrls[urlIndex++] || p);
+      return { ...record, photos: newPhotos };
+    });
 
     this.setData({
       cachedPhotos,
@@ -190,6 +188,12 @@ Page({
       urls: urls || [url],
       current: url,
     });
+  },
+
+  /** 点击发现记录卡片，跳转瀑布流记录页 */
+  onTapRecordsCard() {
+    const { catId } = this.data;
+    wx.navigateTo({ url: `/pages/profile/submissions/recordDetail/recordDetail?catId=${catId}` });
   },
 
   /** 跳转编辑页 */

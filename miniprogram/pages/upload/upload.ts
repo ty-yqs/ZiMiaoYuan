@@ -172,12 +172,11 @@ Page({
       if (this.data.targetCatId) {
         const res = await apiUploadRecord({
           catId: this.data.targetCatId,
-          photo: cloudFileIds[0],
+          photos: cloudFileIds,
           description: this.data.description,
           location: this.data.location,
         });
 
-        // 先隐藏 loading，再显示结果 toast（两者共享原生组件，否则 hideLoading 会关掉 toast）
         hideLoading();
 
         if (res.code === 0) {

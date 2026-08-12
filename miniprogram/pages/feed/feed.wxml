@@ -1,0 +1,109 @@
+<!--
+  动态页 — 全局发现记录瀑布流
+-->
+<view class="page-container">
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrapper">
+    <van-loading type="spinner" size="48rpx" color="#7EC8A8" />
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view wx:elif="{{error}}" class="error-wrapper">
+    <text class="error-text">{{error}}</text>
+    <view class="retry-btn" bind:tap="loadRecords">点击重试</view>
+  </view>
+
+  <!-- 动态列表 -->
+  <view wx:else class="feed-list">
+
+    <!-- 空态 -->
+    <view wx:if="{{records.length === 0}}" class="empty-feed">
+      <text class="empty-text">暂无动态</text>
+    </view>
+
+    <!-- 记录卡片 -->
+    <view
+      wx:for="{{records}}"
+      wx:key="_id"
+      class="feed-card card"
+    >
+      <!-- 头部：头像 + 昵称 + 时间 -->
+      <view class="feed-header">
+        <image
+          wx:if="{{item.userAvatar}}"
+          class="feed-avatar"
+          src="{{item.userAvatar}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="feed-avatar-placeholder">
+          <text class="avatar-letter">{{item.nicknameFirstLetter}}</text>
+        </view>
+        <view class="feed-user-info">
+          <text class="feed-nickname">{{item.nickname || '匿名猫友'}}</text>
+          <text class="feed-time">{{item._time}}</text>
+        </view>
+      </view>
+
+      <!-- 描述文字 -->
+      <view wx:if="{{item.description}}" class="feed-desc">
+        <text>{{item.description}}</text>
+      </view>
+      <view wx:else class="feed-desc feed-desc-empty">
+        <text>发现记录</text>
+      </view>
+
+      <!-- 照片网格（三列正方形） -->
+      <view wx:if="{{item.type !== 'note' && item.photos && item.photos.length > 0}}" class="feed-photos-grid">
+        <view
+          wx:for="{{item.photos}}"
+          wx:for-item="pic"
+          wx:key="*this"
+          class="feed-photo-box"
+        >
+          <image
+            class="feed-photo-img"
+            src="{{pic}}"
+            mode="aspectFill"
+            bind:tap="onPreviewPhoto"
+            data-url="{{pic}}"
+            data-urls="{{item.photos}}"
+          />
+        </view>
+      </view>
+
+      <!-- 猫咪小卡片 -->
+      <view
+        wx:if="{{item.cat}}"
+        class="feed-cat-row"
+        bind:tap="onTapCat"
+        data-cat-id="{{item.cat._id}}"
+      >
+        <image
+          class="feed-cat-avatar"
+          src="{{item.cat.avatar || '/images/avatar.png'}}"
+          mode="aspectFill"
+        />
+        <view class="feed-cat-info">
+          <text class="feed-cat-name">{{item.cat.cat_name || '未命名猫咪'}}</text>
+          <text class="feed-cat-tags">{{item.cat.color}}{{item.cat.adopted ? ' · 已领养' : ''}}</text>
+        </view>
+        <text class="feed-cat-arrow">›</text>
+      </view>
+
+      <!-- 底部时间 -->
+      <view class="feed-footer">
+        <text class="feed-fulltime">{{item._fullTime}}</text>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more">
+      <van-loading wx:if="{{loadingMore}}" type="spinner" size="32rpx" color="#7EC8A8" />
+      <text wx:elif="{{hasMore}}" class="load-more-text" bind:tap="loadMore">加载更多</text>
+      <text wx:else class="load-more-end">—— 已经到底了 ——</text>
+    </view>
+
+  </view>
+</view>

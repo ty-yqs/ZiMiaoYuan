@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "动态",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "van-loading": "@vant/weapp/loading/index"
+  }
+}

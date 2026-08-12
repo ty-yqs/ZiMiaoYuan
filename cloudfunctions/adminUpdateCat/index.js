@@ -98,6 +98,18 @@ exports.main = async (event, context) => {
             updateTime: now,
           },
         });
+
+        // 同时将该猫咪关联的所有记录也标记为 approved
+        const recordsColl = getCollection(COLLECTIONS.RECORDS);
+        const relatedRecords = await recordsColl.where({ catId }).get();
+        if (relatedRecords.data.length > 0) {
+          const updateRecordPromises = relatedRecords.data.map(r =>
+            recordsColl.doc(r._id).update({ data: { status: 'approved' } })
+          );
+          await Promise.all(updateRecordPromises);
+          console.log('[adminUpdateCat] 已同步更新关联记录状态:', relatedRecords.data.length, '条');
+        }
+
         const submitterOpenid = catData.creator || catData._openid;
         console.log('[adminUpdateCat] 准备发送通过通知, openid:', submitterOpenid, 'creator:', catData.creator, '_openid:', catData._openid);
         await sendReviewNotification(submitterOpenid, '通过', catData.createTime, '无', `/pages/index/index`);

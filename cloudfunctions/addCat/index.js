@@ -71,15 +71,17 @@ exports.main = async (event, context) => {
 
     console.log('[addCat] 猫咪档案已创建:', catId, '名称:', cat_name);
 
-    // 查询用户昵称
+    // 查询用户昵称和头像
     let nickname = '匿名猫友';
+    let userAvatar = '';
     try {
       const userRes = await getCollection(COLLECTIONS.USERS)
         .where({ _openid: OPENID })
         .limit(1)
         .get();
-      if (userRes.data && userRes.data.length > 0 && userRes.data[0].nickname) {
-        nickname = userRes.data[0].nickname;
+      if (userRes.data && userRes.data.length > 0) {
+        nickname = userRes.data[0].nickname || nickname;
+        userAvatar = userRes.data[0].avatar || '';
       }
     } catch (e) {
       // 查不到用户就用默认昵称
@@ -90,7 +92,8 @@ exports.main = async (event, context) => {
       catId,
       userId: OPENID,
       nickname,
-      photo: photos[0],
+      userAvatar,
+      photos,
       location: catData.location,
       description: description || '首次发现',
       createTime: now,

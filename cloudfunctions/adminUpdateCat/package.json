@@ -1,6 +1,6 @@
 {
   "name": "adminUpdateCat",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "管理员：审核/修改/删除猫咪",
   "main": "index.js",
   "dependencies": {

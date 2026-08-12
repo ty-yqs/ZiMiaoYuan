@@ -1,0 +1,9 @@
+{
+  "name": "getAllRecords",
+  "version": "2.0.0",
+  "description": "分页获取所有猫咪的已审核发现记录（动态流，含发表者头像与猫咪卡片）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

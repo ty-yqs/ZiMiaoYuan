@@ -181,15 +181,22 @@
               <text>{{item.description}}</text>
             </view>
 
-            <image
-              wx:if="{{item.type === 'photo' && item.photo}}"
-              class="record-review-photo"
-              src="{{item.photo}}"
-              mode="aspectFill"
-              data-url="{{item.photo}}"
-              data-urls="{{[item.photo]}}"
-              bind:tap="onPreviewPhotos"
-            />
+            <view
+              wx:if="{{item.type === 'photo' && (item.photos || item.photo)}}"
+              class="records-review-photos"
+            >
+              <image
+                wx:for="{{item.photos || [item.photo]}}"
+                wx:for-item="pic"
+                wx:key="*this"
+                class="records-review-photo"
+                src="{{pic}}"
+                mode="aspectFill"
+                data-url="{{pic}}"
+                data-urls="{{item.photos || [item.photo]}}"
+                bind:tap="onPreviewPhotos"
+              />
+            </view>
           </view>
 
           <view class="admin-actions flex-row">

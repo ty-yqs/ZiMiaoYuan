@@ -276,12 +276,24 @@
   line-height: 1.5;
 }
 
-.record-review-photo {
-  width: 200rpx;
-  height: 200rpx;
-  border-radius: var(--radius-sm);
+.records-review-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
   margin-top: var(--spacing-sm);
+}
+
+.records-review-photo {
+  width: calc((100% - 8rpx) / 2);
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
   background: var(--color-bg-warm);
+}
+
+.records-review-photo:only-child {
+  width: 100%;
+  aspect-ratio: auto;
+  height: 320rpx;
 }
 
 /* ========== 驳回弹窗 ========== */

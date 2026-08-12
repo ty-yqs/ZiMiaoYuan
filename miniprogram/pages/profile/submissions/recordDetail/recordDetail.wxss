@@ -1,0 +1,186 @@
+/**
+ * 发现记录瀑布流页样式 — 朋友圈式
+ */
+
+/* ========== 加载 & 错误 ========== */
+.loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.loading-text {
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+  margin-top: var(--spacing-md);
+}
+
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 200rpx;
+}
+
+.error-text {
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+}
+
+.retry-btn {
+  display: inline-block;
+  margin-top: var(--spacing-md);
+  padding: 12rpx 40rpx;
+  color: var(--color-primary);
+  font-size: var(--font-md);
+  border: 1rpx solid var(--color-primary);
+  border-radius: var(--radius-round);
+}
+
+/* ========== 空态 ========== */
+.empty-feed {
+  display: flex;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.empty-text {
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+}
+
+/* ========== 列表 ========== */
+.feed-list {
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* ========== 卡片 ========== */
+.feed-card {
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-md);
+}
+
+/* ========== 头部：头像 + 昵称 + 时间 ========== */
+.feed-header {
+  display: flex;
+  align-items: center;
+}
+
+.feed-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  margin-right: var(--spacing-sm);
+  flex-shrink: 0;
+  background: var(--color-bg-warm);
+}
+
+.feed-avatar-placeholder {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  margin-right: var(--spacing-sm);
+  flex-shrink: 0;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-letter {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.feed-user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.feed-nickname {
+  font-size: var(--font-md);
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.feed-time {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin-top: 4rpx;
+}
+
+/* ========== 描述 ========== */
+.feed-desc {
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-md);
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.feed-desc-empty {
+  color: var(--color-text-primary);
+}
+
+/* ========== 照片网格（三列正方形） ========== */
+.feed-photos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: var(--spacing-sm);
+  gap: 6rpx;
+}
+
+.feed-photo-box {
+  width: calc((100% - 12rpx) / 3);
+  height: 0;
+  padding-bottom: calc((100% - 12rpx) / 3);
+  position: relative;
+  border-radius: 4rpx;
+  background: var(--color-bg-warm);
+  overflow: hidden;
+}
+
+.feed-photo-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========== 底部时间 ========== */
+.feed-footer {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1rpx solid var(--color-border-light);
+}
+
+.feed-fulltime {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
+
+/* ========== 加载更多 ========== */
+.load-more {
+  padding: 32rpx 0;
+  text-align: center;
+}
+
+.load-more-text {
+  font-size: var(--font-sm);
+  color: var(--color-primary);
+}
+
+.load-more-text:active {
+  opacity: 0.7;
+}
+
+.load-more-end {
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+}
