@@ -5,9 +5,9 @@
       <el-menu :default-active="activePath" router class="menu">
         <el-sub-menu index="review">
           <template #title>审核中心</template>
-          <el-menu-item index="/review/cats">待审核猫咪</el-menu-item>
-          <el-menu-item index="/review/edits">编辑提案</el-menu-item>
-          <el-menu-item index="/review/records">记录审核</el-menu-item>
+          <el-menu-item index="/review/cats">待审核猫咪（{{ counts.cats }}）</el-menu-item>
+          <el-menu-item index="/review/edits">编辑提案（{{ counts.edits }}）</el-menu-item>
+          <el-menu-item index="/review/records">记录审核（{{ counts.records }}）</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="/cats">全部猫咪</el-menu-item>
         <el-menu-item index="/records">记录管理</el-menu-item>
@@ -32,16 +32,40 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { clearAuth, getUsername } from '../auth';
 import { clearImageCache } from '../imageCache';
+import { callFunction } from '../api';
 
 const route = useRoute();
 const router = useRouter();
 const username = getUsername() || '管理员';
 const activePath = computed(() => route.path);
+
+// 审核中心三个标签的待审核数量（无则显示 0）
+const counts = reactive({ cats: 0, edits: 0, records: 0 });
+
+async function loadPendingCounts() {
+  try {
+    const res = await callFunction<{ cats: number; edits: number; records: number }>(
+      'getPendingCounts',
+      {}
+    );
+    if (res.code === 0 && res.data) {
+      counts.cats = res.data.cats || 0;
+      counts.edits = res.data.edits || 0;
+      counts.records = res.data.records || 0;
+    }
+  } catch (err) {
+    console.error('[Layout] 获取待审核数量失败:', err);
+  }
+}
+
+loadPendingCounts();
+// 路由变化后刷新数量（审核操作后返回会重新统计）
+watch(() => route.path, loadPendingCounts);
 
 function onClearImageCache() {
   clearImageCache();
