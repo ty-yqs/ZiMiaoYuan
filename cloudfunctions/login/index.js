@@ -35,6 +35,13 @@ exports.main = async (event, context) => {
     // 用户已存在，更新最后登录时间并返回
     if (userRes.data.length > 0) {
       const user = userRes.data[0];
+
+      // 封禁用户拒绝登录
+      if (user.banned) {
+        console.warn('[login] 封禁用户尝试登录:', user._openid);
+        return { code: -403, message: '账号已被封禁，如有疑问请联系管理员', data: { banned: true } };
+      }
+
       const lastLoginTime = new Date();
       await usersColl.doc(user._id).update({
         data: { lastLoginTime },
@@ -50,6 +57,7 @@ exports.main = async (event, context) => {
       nickname: '',
       avatar: '',
       role: 'student',
+      banned: false,
       createTime: now,
       lastLoginTime: now,
     };

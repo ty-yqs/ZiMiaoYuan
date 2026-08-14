@@ -67,6 +67,15 @@ App<IAppOption>({
         return result.data;
       }
 
+      // 封禁用户：清除本地登录态，禁止使用
+      if (result.data && (result.data as any).banned) {
+        this.globalData.userInfo = null;
+        this.globalData.isAdmin = false;
+        wx.removeStorageSync('userInfo');
+        console.warn('[App] 账号已被封禁');
+        return null;
+      }
+
       console.warn('[App] 登录异常:', result.message);
       return null;
     } catch (err) {

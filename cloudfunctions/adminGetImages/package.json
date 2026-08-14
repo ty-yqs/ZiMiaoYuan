@@ -1,0 +1,9 @@
+{
+  "name": "adminGetImages",
+  "version": "1.0.0",
+  "description": "批量转换云存储 fileID 为临时链接（管理员）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "getUsers",
+  "version": "1.0.0",
+  "description": "管理员分页获取用户列表（搜索/角色筛选/贡献统计）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

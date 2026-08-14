@@ -1,0 +1,9 @@
+{
+  "name": "adminLogin",
+  "version": "1.0.0",
+  "description": "后台管理员账号密码登录",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

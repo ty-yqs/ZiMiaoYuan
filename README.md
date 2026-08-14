@@ -25,6 +25,7 @@
 - **我的提交** — 查看自己提交的猫咪、记录、编辑提案的审核状态（审核中/已通过/已拒绝），已通过的卡片可点击跳转猫咪详情
 - **审核通知** — 提交内容审核通过或拒绝后，通过微信订阅消息通知用户审核结果
 - **管理审核** — 管理员审批新猫咪、编辑提案、发现记录，支持审核时查看完整猫咪信息和照片
+- **网页管理后台** — 独立的 Vue3 + Element Plus 网页后台（CloudBase 静态托管），与小程序共用云开发后端：审核猫咪/编辑提案/记录、编辑猫咪内容与照片、记录管理、用户管理（角色/封禁）、数据看板、反馈查看，账号密码 + token 登录
 - **反馈系统** — 用户提交意见反馈与建议，管理员后台查看处理
 - **赞助支持** — 投喂罐头页面，展示赞赏码和支持者列表
 
@@ -38,6 +39,7 @@
 | 数据库 | 云数据库 (NoSQL 文档型) |
 | 存储 | 云存储 (图片上传) |
 | 云函数 | Node.js + wx-server-sdk |
+| 网页后台 | Vue3 + Vite + Element Plus |
 
 ## 📁 项目结构
 
@@ -94,11 +96,22 @@ SUATCat/
 │   ├── getSupporters/         # 获取赞助支持者列表
 │   ├── getSponsorQR/          # 获取赞助收款二维码
 │   ├── getPendingRecords/     # 获取待审核发现记录
-│   ├── reviewRecord/          # 审核发现记录（通过/拒绝）
+│   ├── reviewRecord/          # 审核发现记录（通过/拒绝）+ 编辑/删除记录
 │   ├── getAllRecords/         # 分页获取所有已审核发现记录（动态流）
 │   ├── getCatRecords/         # 分页获取某只猫的已审核发现记录
 │   ├── getPendingCounts/      # 获取各类型待审核数量
-│   └── getMySubmissions/      # 获取当前用户的所有提交及审核状态
+│   ├── getMySubmissions/      # 获取当前用户的所有提交及审核状态
+│   ├── adminLogin/            # 网页后台账号密码登录（生成 token）
+│   ├── adminGetImages/        # fileID 批量转临时链接（网页后台图片展示）
+│   ├── initAdmin/             # 一次性初始化后台管理员账号
+│   ├── getRecords/            # 管理员分页获取记录列表（状态筛选）
+│   ├── getUsers/              # 管理员分页获取用户列表（搜索/角色/贡献统计）
+│   └── adminUpdateUser/       # 修改用户角色 / 封禁解封
+├── web-admin/                 # 网页管理后台（Vue3 + Element Plus）
+│   ├── src/api.ts             # callFunction 封装（匿名登录 + token 注入）
+│   ├── src/auth.ts            # token 的 localStorage 存取
+│   ├── src/components/CloudImage.vue  # fileID → 临时链接图片组件（含放大预览）
+│   └── src/views/             # 登录、审核、猫咪管理、记录管理、用户管理、看板、反馈
 ├── tsconfig.json
 └── project.config.json        # 微信开发者工具配置
 ```
@@ -130,6 +143,8 @@ SUATCat/
 | `relationships` | 猫咪关系（双方猫咪ID、关系类型、备注） |
 | `supporters` | 赞助支持者（昵称、金额、月份） |
 | `feedbacks` | 用户反馈（内容、联系方式、提交者） |
+| `admins` | 网页后台管理员账号（用户名、密码哈希） |
+| `adminTokens` | 网页后台登录 token（7 天有效期） |
 
 ### 用户身份校验
 
@@ -156,6 +171,8 @@ SUATCat/
 - `admin` — 以上全部 + 审核 `新增猫咪` `信息编辑` `发现记录`、查看反馈
 
 手动在 `users` 集合中将 `role` 字段设为 `"admin"` 即可获得管理权限。
+
+网页后台使用独立的 `admins` 集合 + token 认证，与小程序用户体系解耦（详见 `web-admin/README.md`）。
 
 ## 📝 提交审核流程
 

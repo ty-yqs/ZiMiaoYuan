@@ -9,8 +9,8 @@
  */
 const cloud = require('wx-server-sdk');
 const {
-  COLLECTIONS, CAT_STATUS, ROLES,
-  success, fail, getCollection, getDB, getUserByOpenid, deleteCloudFiles,
+  COLLECTIONS, CAT_STATUS,
+  success, fail, getCollection, getDB, requireAdmin, deleteCloudFiles,
 } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -55,11 +55,9 @@ async function sendReviewNotification(openid, result, submitTime, reason, page =
 }
 
 exports.main = async (event, context) => {
-  const { OPENID } = cloud.getWXContext();
-
   // ==================== 权限校验 ====================
-  const user = await getUserByOpenid(OPENID);
-  if (!user || user.role !== ROLES.ADMIN) {
+  const admin = await requireAdmin(event);
+  if (!admin) {
     return fail('权限不足，仅管理员可操作', -403);
   }
 
@@ -171,6 +169,57 @@ exports.main = async (event, context) => {
         }
 
         allowedUpdates.updateTime = now;
+
+        // 照片列表发生变更时：清理被删除的云存储文件，并从关联记录里移除被删照片
+        if (Array.isArray(allowedUpdates.photos)) {
+          const newPhotos = allowedUpdates.photos.filter(p => p && typeof p === 'string');
+          const oldPhotos = (catData.photos || []).filter(p => p && typeof p === 'string');
+          const removedPhotos = oldPhotos.filter(p => !newPhotos.includes(p));
+
+          // 统一存过滤后的干净列表
+          allowedUpdates.photos = newPhotos;
+
+          // 1) 旧头像被替换且不再被引用时，旧头像文件一并删除
+          const oldAvatar = catData.avatar;
+          const newAvatar = allowedUpdates.avatar !== undefined ? allowedUpdates.avatar : oldAvatar;
+          const filesToDelete = new Set(removedPhotos);
+          if (oldAvatar && oldAvatar !== newAvatar && !newPhotos.includes(oldAvatar)) {
+            filesToDelete.add(oldAvatar);
+          }
+
+          // 2) 删除云存储文件
+          if (filesToDelete.size > 0) {
+            const delRes = await deleteCloudFiles([...filesToDelete]);
+            console.log('[adminUpdateCat] 已清理被删照片文件:', catId, '删除', delRes.deleted, '失败', delRes.failed);
+          }
+
+          // 3) 从关联记录中移除被删除的照片
+          if (removedPhotos.length > 0) {
+            const removedSet = new Set(removedPhotos);
+            const recordsColl = getCollection(COLLECTIONS.RECORDS);
+            const relatedRecords = await recordsColl.where({ catId }).get();
+
+            for (const r of relatedRecords.data) {
+              const rPhotos = r.photos || (r.photo ? [r.photo] : []);
+              const remaining = rPhotos.filter(p => !removedSet.has(p));
+              if (remaining.length === rPhotos.length) continue; // 该记录不受影响
+
+              const recUpdate = {};
+              if (Array.isArray(r.photos)) {
+                recUpdate.photos = remaining;
+              } else if (r.photo) {
+                recUpdate.photo = remaining[0] || '';
+              }
+              // 照片被清空的照片记录降级为 note
+              if (remaining.length === 0 && r.type === 'photo') {
+                recUpdate.type = 'note';
+              }
+              recUpdate.updateTime = now;
+              await recordsColl.doc(r._id).update({ data: recUpdate });
+            }
+            console.log('[adminUpdateCat] 已同步移除关联记录中的照片:', catId);
+          }
+        }
 
         await catsColl.doc(catId).update({ data: allowedUpdates });
         console.log('[adminUpdateCat] 信息已修改:', catId, Object.keys(allowedUpdates));

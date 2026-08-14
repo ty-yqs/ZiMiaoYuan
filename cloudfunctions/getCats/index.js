@@ -5,7 +5,7 @@
  * 仅返回已审核通过的猫咪
  */
 const cloud = require('wx-server-sdk');
-const { COLLECTIONS, CAT_STATUS, success, fail, paginatedQuery, getCollection } = require('./db');
+const { COLLECTIONS, CAT_STATUS, success, fail, paginatedQuery, getCollection, requireAdmin } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
@@ -24,6 +24,14 @@ exports.main = async (event, context) => {
   } = event;
 
   try {
+    // 管理端专用查询（pending/all/rejected）需管理员权限
+    if (status === 'all' || status === 'pending' || status === 'rejected') {
+      const admin = await requireAdmin(event);
+      if (!admin) {
+        return fail('权限不足，仅管理员可操作', -403);
+      }
+    }
+
     // 构建查询条件
     const where = {};
 
@@ -93,7 +101,6 @@ exports.main = async (event, context) => {
 
     return success({
       cats,
-      cats: result.list,
       total: result.total,
       page: result.page,
       pageSize: result.pageSize,

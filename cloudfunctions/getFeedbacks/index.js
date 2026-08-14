@@ -5,17 +5,15 @@
  */
 const cloud = require('wx-server-sdk');
 const {
-  COLLECTIONS, ROLES, success, fail, getCollection, getUserByOpenid,
+  COLLECTIONS, success, fail, getCollection, requireAdmin,
 } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 exports.main = async (event, context) => {
-  const { OPENID } = cloud.getWXContext();
-
   // 权限校验：仅管理员
-  const user = await getUserByOpenid(OPENID);
-  if (!user || user.role !== ROLES.ADMIN) {
+  const admin = await requireAdmin(event);
+  if (!admin) {
     return fail('权限不足，仅管理员可操作', -403);
   }
 

@@ -1,0 +1,9 @@
+{
+  "name": "getRecords",
+  "version": "1.0.0",
+  "description": "管理员分页获取记录列表（支持状态筛选）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "initAdmin",
+  "version": "1.0.0",
+  "description": "一次性初始化后台管理员账号",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
