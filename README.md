@@ -106,7 +106,8 @@ SUATCat/
 │   ├── initAdmin/             # 一次性初始化后台管理员账号
 │   ├── getRecords/            # 管理员分页获取记录列表（状态筛选）
 │   ├── getUsers/              # 管理员分页获取用户列表（搜索/角色/贡献统计）
-│   └── adminUpdateUser/       # 修改用户角色 / 封禁解封
+│   ├── adminUpdateUser/       # 修改用户角色 / 封禁解封
+│   └── adminSupporter/        # 管理员新增/删除赞助记录
 ├── web-admin/                 # 网页管理后台（Vue3 + Element Plus）
 │   ├── src/api.ts             # callFunction 封装（匿名登录 + token 注入）
 │   ├── src/auth.ts            # token 的 localStorage 存取

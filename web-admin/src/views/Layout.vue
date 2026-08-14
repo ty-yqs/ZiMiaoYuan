@@ -12,6 +12,7 @@
         <el-menu-item index="/cats">全部猫咪</el-menu-item>
         <el-menu-item index="/records">记录管理</el-menu-item>
         <el-menu-item index="/users">用户管理</el-menu-item>
+        <el-menu-item index="/supporters">赞助管理</el-menu-item>
         <el-menu-item index="/dashboard">数据看板</el-menu-item>
         <el-menu-item index="/feedbacks">用户反馈</el-menu-item>
       </el-menu>
@@ -20,6 +21,7 @@
     <el-container>
       <el-header class="header">
         <span class="username">{{ username }}</span>
+        <el-button link @click="onClearImageCache">清除图片缓存</el-button>
         <el-button link type="danger" @click="onLogout">退出登录</el-button>
       </el-header>
       <el-main class="main">
@@ -32,12 +34,19 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import { clearAuth, getUsername } from '../auth';
+import { clearImageCache } from '../imageCache';
 
 const route = useRoute();
 const router = useRouter();
 const username = getUsername() || '管理员';
 const activePath = computed(() => route.path);
+
+function onClearImageCache() {
+  clearImageCache();
+  ElMessage.success('图片缓存已清除');
+}
 
 function onLogout() {
   clearAuth();

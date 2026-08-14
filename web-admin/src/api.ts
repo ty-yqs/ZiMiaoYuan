@@ -56,11 +56,29 @@ export async function callFunction<T = any>(
   const token = getToken();
   const payload = token ? { ...data, token } : data;
 
-  const res = await app.callFunction({ name, data: payload });
-  const result = res.result as CloudResult<T>;
+  let res: any;
+  try {
+    res = await app.callFunction({ name, data: payload });
+  } catch (err: any) {
+    console.error('[api] callFunction 调用异常:', name, err);
+    return {
+      code: -1,
+      message: `调用 ${name} 失败：${err?.errMsg || err?.message || '网络异常'}`,
+      data: null as any,
+    };
+  }
+
+  const result = res?.result as CloudResult<T> | undefined;
+
+  // 云函数未返回 result（常见于安全规则拒绝 invoke、函数未部署或云端报错）
+  if (!result) {
+    const msg = res?.errMsg || res?.error?.message || res?.message || '无返回结果';
+    console.error('[api] callFunction 无返回结果:', name, res);
+    return { code: -1, message: `调用 ${name} 失败：${msg}`, data: null as any };
+  }
 
   // 登录态失效：清除本地 token（由调用方决定是否跳转）
-  if (result && result.code === -403) {
+  if (result.code === -403) {
     clearAuth();
   }
 

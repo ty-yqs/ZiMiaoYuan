@@ -39,7 +39,7 @@ web-admin/
 
 ### 1. 部署云函数
 
-在微信开发者工具里，把 `cloudfunctions/` 目录下的**所有**云函数逐个「上传并部署（云端安装依赖）」（共 30 个，完整清单见根目录 `cloudbaserc.json`）。
+在微信开发者工具里，把 `cloudfunctions/` 目录下的**所有**云函数逐个「上传并部署（云端安装依赖）」（共 31 个，完整清单见根目录 `cloudbaserc.json`）。
 
 > 涉及网页后台的云函数已加 `requireAdmin` 双通道鉴权：网页走 token、小程序走 openid，小程序端原有管理功能不受影响。
 

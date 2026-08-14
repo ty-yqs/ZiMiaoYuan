@@ -24,3 +24,5 @@ project.private.config.json
 
 .claude/
 .cloudbase/
+
+web-admin/dist

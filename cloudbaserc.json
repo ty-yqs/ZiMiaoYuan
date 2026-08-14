@@ -19,6 +19,11 @@
       "installDependency": true
     },
     {
+      "name": "adminSupporter",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
       "name": "adminUpdateCat",
       "runtime": "Nodejs20.19",
       "installDependency": true
