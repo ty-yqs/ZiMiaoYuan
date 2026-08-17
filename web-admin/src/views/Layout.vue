@@ -13,6 +13,7 @@
         <el-menu-item index="/records">记录管理</el-menu-item>
         <el-menu-item index="/users">用户管理</el-menu-item>
         <el-menu-item index="/supporters">赞助管理</el-menu-item>
+        <el-menu-item v-if="isSuperAdmin" index="/admins">子管理员管理</el-menu-item>
         <el-menu-item index="/dashboard">数据看板</el-menu-item>
         <el-menu-item index="/feedbacks">用户反馈</el-menu-item>
       </el-menu>
@@ -20,28 +21,73 @@
 
     <el-container>
       <el-header class="header">
-        <span class="username">{{ username }}</span>
-        <el-button link @click="onClearImageCache">清除图片缓存</el-button>
-        <el-button link type="danger" @click="onLogout">退出登录</el-button>
+        <el-dropdown trigger="click" @command="onCommand">
+          <span class="user-trigger">
+            {{ username }}
+            <span class="caret">▾</span>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
+              <el-dropdown-item command="clearCache">清除图片缓存</el-dropdown-item>
+              <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </el-header>
       <el-main class="main">
         <router-view />
       </el-main>
     </el-container>
+
+    <!-- 修改密码对话框 -->
+    <el-dialog v-model="changeVisible" title="修改密码" width="420px">
+      <el-form label-width="80px">
+        <el-form-item label="原密码">
+          <el-input
+            v-model="changeForm.oldPassword"
+            type="password"
+            show-password
+            placeholder="请输入原密码"
+          />
+        </el-form-item>
+        <el-form-item label="新密码">
+          <el-input
+            v-model="changeForm.newPassword"
+            type="password"
+            show-password
+            placeholder="至少 6 位"
+          />
+        </el-form-item>
+        <el-form-item label="确认新密码">
+          <el-input
+            v-model="changeForm.confirmPassword"
+            type="password"
+            show-password
+            placeholder="再次输入新密码"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="changeVisible = false">取消</el-button>
+        <el-button type="primary" :loading="changing" @click="onSavePassword">保存</el-button>
+      </template>
+    </el-dialog>
   </el-container>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import { clearAuth, getUsername } from '../auth';
+import { clearAuth, getUsername, isSuper } from '../auth';
 import { clearImageCache } from '../imageCache';
 import { callFunction } from '../api';
 
 const route = useRoute();
 const router = useRouter();
 const username = getUsername() || '管理员';
+const isSuperAdmin = isSuper();
 const activePath = computed(() => route.path);
 
 // 审核中心三个标签的待审核数量（无则显示 0）
@@ -66,6 +112,61 @@ async function loadPendingCounts() {
 loadPendingCounts();
 // 路由变化后刷新数量（审核操作后返回会重新统计）
 watch(() => route.path, loadPendingCounts);
+
+const changeVisible = ref(false);
+const changing = ref(false);
+const changeForm = reactive({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+});
+
+function onChangePassword() {
+  changeForm.oldPassword = '';
+  changeForm.newPassword = '';
+  changeForm.confirmPassword = '';
+  changeVisible.value = true;
+}
+
+async function onSavePassword() {
+  if (!changeForm.oldPassword) {
+    ElMessage.warning('请输入原密码');
+    return;
+  }
+  if (!changeForm.newPassword || changeForm.newPassword.length < 6) {
+    ElMessage.warning('新密码至少 6 位');
+    return;
+  }
+  if (changeForm.newPassword !== changeForm.confirmPassword) {
+    ElMessage.warning('两次输入的新密码不一致');
+    return;
+  }
+  changing.value = true;
+  try {
+    const res = await callFunction('adminManageAdmins', {
+      action: 'changePassword',
+      oldPassword: changeForm.oldPassword,
+      newPassword: changeForm.newPassword,
+    });
+    if (res.code === 0) {
+      ElMessage.success(res.message || '密码已修改');
+      changeVisible.value = false;
+    } else {
+      ElMessage.error(res.message || '修改失败');
+    }
+  } catch (err: any) {
+    console.error('[Layout] 修改密码失败:', err);
+    ElMessage.error(err?.message || '网络异常');
+  } finally {
+    changing.value = false;
+  }
+}
+
+function onCommand(cmd: string) {
+  if (cmd === 'changePassword') onChangePassword();
+  else if (cmd === 'clearCache') onClearImageCache();
+  else if (cmd === 'logout') onLogout();
+}
 
 function onClearImageCache() {
   clearImageCache();
@@ -106,9 +207,18 @@ function onLogout() {
   justify-content: flex-end;
   gap: 16px;
 }
-.username {
+.user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   color: #666;
   font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+.caret {
+  font-size: 12px;
+  color: #999;
 }
 .main {
   padding: 20px;

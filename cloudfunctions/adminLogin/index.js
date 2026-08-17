@@ -36,6 +36,15 @@ exports.main = async (event) => {
       return fail('用户名或密码错误');
     }
 
+    // 兼容旧账号：无 role 字段视为最高管理员（仅 initAdmin 创建的首个账号），并回填落库
+    let role = admin.role;
+    if (!role) {
+      role = 'super';
+      await getCollection(COLLECTIONS.ADMINS).doc(admin._id).update({
+        data: { role: 'super' },
+      });
+    }
+
     // 生成 token 并落库
     const token = crypto.randomBytes(32).toString('hex');
     const now = new Date();
@@ -58,6 +67,7 @@ exports.main = async (event) => {
     return success({
       token,
       username: admin.username,
+      role,
       expiresAt: expiresAt.getTime(),
     }, '登录成功');
 

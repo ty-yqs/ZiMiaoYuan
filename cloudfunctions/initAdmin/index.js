@@ -36,6 +36,8 @@ exports.main = async (event) => {
       data: {
         username: usernameTrimmed,
         passwordHash: hashPassword(String(password)),
+        // 首个账号为最高管理员，后续管理员由其在后台添加
+        role: 'super',
         createTime: now,
         lastLoginTime: now,
       },

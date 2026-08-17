@@ -55,13 +55,18 @@ async function onSubmit() {
 
   loading.value = true;
   try {
-    const res = await callFunction<{ token: string; username: string; expiresAt: number }>(
+    const res = await callFunction<{
+      token: string;
+      username: string;
+      role: string;
+      expiresAt: number;
+    }>(
       'adminLogin',
       { username: username.value.trim(), password: password.value }
     );
 
     if (res.code === 0 && res.data) {
-      setAuth(res.data.token, res.data.username, res.data.expiresAt);
+      setAuth(res.data.token, res.data.username, res.data.expiresAt, res.data.role);
       ElMessage.success('登录成功');
       router.push('/');
     } else {
