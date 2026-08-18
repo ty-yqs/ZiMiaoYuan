@@ -15,6 +15,11 @@
     <view class="retry-btn" bind:tap="loadItems">点击重试</view>
   </view>
 
+  <!-- 功能未开放 -->
+  <view wx:elif="{{disabled}}" class="disabled-wrapper">
+    <text class="disabled-text">{{type === 'note' ? '便利贴功能暂未开放' : '发现记录功能暂未开放'}}</text>
+  </view>
+
   <!-- 列表 -->
   <block wx:elif="{{items.length > 0}}">
 

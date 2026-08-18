@@ -13,6 +13,7 @@ Page({
     loading: true,
     error: '',
     catName: '',
+    disabled: false,
   },
 
   onLoad(options: Record<string, string>) {
@@ -29,12 +30,21 @@ Page({
   },
 
   async loadItems() {
-    this.setData({ loading: true, error: '' });
+    this.setData({ loading: true, error: '', disabled: false });
 
     const res = await apiGetCatDetail(this.data.catId);
 
     if (res.code === 0) {
-      const { cat, records } = res.data;
+      const { cat, records, settings } = res.data;
+      const recordsOpen = settings ? settings.recordsOpen !== false : true;
+      const notesOpen = settings ? settings.notesOpen !== false : true;
+      const closed = this.data.type === 'note' ? !notesOpen : !recordsOpen;
+
+      if (closed) {
+        this.setData({ disabled: true, loading: false });
+        return;
+      }
+
       const allRecords = (records || []).map((r: IRecord) => ({
         ...r,
         _time: formatDate(r.createTime, 'YYYY-MM-DD HH:mm'),

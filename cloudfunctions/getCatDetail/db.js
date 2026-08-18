@@ -14,6 +14,7 @@ const COLLECTIONS = {
   RECORDS: 'records',
   RATINGS: 'ratings',
   RELATIONSHIPS: 'relationships',
+  SETTINGS: 'settings',
 };
 
 // 用户角色
@@ -128,6 +129,26 @@ async function paginatedQuery(collectionName, {
   };
 }
 
+/**
+ * 读取全局功能开关（缺失时返回默认值，默认全部开放）
+ */
+async function getAppSettings() {
+  const defaults = { feedOpen: true, recordsOpen: true, notesOpen: true };
+  try {
+    const res = await getCollection(COLLECTIONS.SETTINGS).doc('global').get();
+    if (res && res.data) {
+      return {
+        feedOpen: res.data.feedOpen !== false,
+        recordsOpen: res.data.recordsOpen !== false,
+        notesOpen: res.data.notesOpen !== false,
+      };
+    }
+  } catch (e) {
+    // 文档不存在或读取失败时走默认值
+  }
+  return defaults;
+}
+
 module.exports = {
   COLLECTIONS,
   ROLES,
@@ -139,4 +160,6 @@ module.exports = {
   getUserByOpenid,
   isAdmin,
   paginatedQuery,
+  getAppSettings,
 };
+

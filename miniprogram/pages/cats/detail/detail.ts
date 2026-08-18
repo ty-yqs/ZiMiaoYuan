@@ -53,6 +53,10 @@ Page({
 
     // 猫咪关系
     relationships: [] as IRelationship[],
+
+    // 功能开关（发现记录 / 便利贴）
+    recordsOpen: true,
+    notesOpen: true,
   },
 
   onLoad(options: Record<string, string>) {
@@ -83,7 +87,9 @@ Page({
     const res = await apiGetCatDetail(this.data.catId);
 
     if (res.code === 0) {
-      const { cat, records, myRating } = res.data;
+      const { cat, records, myRating, settings } = res.data;
+      const recordsOpen = settings ? settings.recordsOpen !== false : true;
+      const notesOpen = settings ? settings.notesOpen !== false : true;
 
       // 年龄段中文映射
       const AGE_LABEL_MAP: Record<string, string> = {
@@ -121,6 +127,9 @@ Page({
         ratingCount: cat.ratingCount || 0,
         // 关系数据（已在云函数中填充对方猫咪信息）
         relationships: res.data.relationships || [],
+        // 功能开关
+        recordsOpen,
+        notesOpen,
         loading: false,
       });
 

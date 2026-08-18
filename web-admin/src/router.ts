@@ -21,6 +21,7 @@ const router = createRouter({
         { path: 'supporters', component: () => import('./views/Supporters.vue') },
         { path: 'banners', component: () => import('./views/Banners.vue') },
         { path: 'articles', component: () => import('./views/Articles.vue') },
+        { path: 'settings', component: () => import('./views/Settings.vue') },
         { path: 'admins', component: () => import('./views/Admins.vue'), meta: { superOnly: true } },
         { path: 'feedbacks', component: () => import('./views/Feedbacks.vue') },
       ],

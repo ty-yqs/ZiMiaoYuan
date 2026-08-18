@@ -37,7 +37,7 @@ function getLabel(type, parentGender, childGender, gender1, gender2) {
  * getCatDetail 云函数 — 获取猫咪详情 + 关联发现记录
  */
 const cloud = require('wx-server-sdk');
-const { COLLECTIONS, success, fail, getCollection, getDB } = require('./db');
+const { COLLECTIONS, success, fail, getCollection, getDB, getAppSettings } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
@@ -60,6 +60,11 @@ exports.main = async (event, context) => {
 
     const cat = catRes.data;
 
+    // 读取功能开关
+    const settings = await getAppSettings();
+    const recordsOpen = settings.recordsOpen !== false;
+    const notesOpen = settings.notesOpen !== false;
+
     // 查询关联的发现记录（按时间倒序，仅展示审核通过的）
     const _ = cloud.database().command;
     const recordsRes = await getCollection(COLLECTIONS.RECORDS)
@@ -67,6 +72,16 @@ exports.main = async (event, context) => {
       .orderBy('createTime', 'desc')
       .limit(50)
       .get();
+
+    // 按开关过滤记录：便利贴 type === 'note'，其余为发现记录
+    let records = recordsRes.data || [];
+    if (!recordsOpen && !notesOpen) {
+      records = [];
+    } else if (!recordsOpen) {
+      records = records.filter(r => r.type === 'note');
+    } else if (!notesOpen) {
+      records = records.filter(r => !r.type || r.type !== 'note');
+    }
 
     // 查询当前用户对该猫的评分
     const { OPENID } = cloud.getWXContext();
@@ -144,10 +159,11 @@ exports.main = async (event, context) => {
 
     return success({
       cat,
-      records: recordsRes.data,
-      recordCount: recordsRes.data.length,
+      records,
+      recordCount: records.length,
       myRating,
       relationships,
+      settings: { recordsOpen, notesOpen },
     });
 
   } catch (err) {

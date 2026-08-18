@@ -127,7 +127,7 @@
     </view>
 
     <!-- ==================== 便利贴 ==================== -->
-    <view class="card notes-card" wx:if="{{notes.length > 0}}">
+    <view class="card notes-card" wx:if="{{notesOpen && notes.length > 0}}">
       <view class="section-title-row">
         <text class="section-title-sm">便利贴 ({{totalNotes}})</text>
         <text class="section-more" wx:if="{{hasMoreNotes}}" data-type="note" bind:tap="onTapMoreRecords">查看更多 ›</text>
@@ -143,7 +143,7 @@
     </view>
 
     <!-- ==================== 发现记录 ==================== -->
-    <view class="card records-card" wx:if="{{cat}}">
+    <view class="card records-card" wx:if="{{recordsOpen}}">
       <view class="section-title-row" bind:tap="onTapRecordsCard">
         <text class="section-title-sm">发现记录 ({{totalRecords}})</text>
         <text class="section-more">查看全部 ›</text>
@@ -172,7 +172,7 @@
       <view class="bottom-btn-row">
         <button class="edit-btn" bind:tap="onTapEdit">编辑</button>
         <button class="upload-record-btn" bind:tap="onUploadRecord">上传猫照</button>
-        <button class="sticky-note-btn" bind:tap="onShowStickyNote">写便利贴</button>
+        <button class="sticky-note-btn" wx:if="{{notesOpen}}" bind:tap="onShowStickyNote">写便利贴</button>
       </view>
     </view>
 

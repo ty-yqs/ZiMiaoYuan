@@ -51,6 +51,25 @@
   color: var(--color-text-hint);
 }
 
+/* ========== 功能未开放 ========== */
+.disabled-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 240rpx;
+}
+
+.disabled-icon {
+  font-size: 96rpx;
+}
+
+.disabled-text {
+  margin-top: var(--spacing-md);
+  font-size: var(--font-sm);
+  color: var(--color-text-hint);
+}
+
 /* ========== 列表 ========== */
 .feed-list {
   padding: var(--spacing-sm) var(--spacing-md);

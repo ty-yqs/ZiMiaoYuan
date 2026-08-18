@@ -15,6 +15,7 @@
         <el-menu-item index="/supporters">赞助管理</el-menu-item>
         <el-menu-item index="/banners">首页头图</el-menu-item>
         <el-menu-item index="/articles">文章管理</el-menu-item>
+        <el-menu-item index="/settings">功能设置</el-menu-item>
         <el-menu-item v-if="isSuperAdmin" index="/admins">子管理员管理</el-menu-item>
         <el-menu-item index="/dashboard">数据看板</el-menu-item>
         <el-menu-item index="/feedbacks">用户反馈</el-menu-item>

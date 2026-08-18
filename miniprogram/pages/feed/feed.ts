@@ -17,6 +17,7 @@ Page({
     loading: true,
     loadingMore: false,
     error: '',
+    disabled: false,
   },
 
   onLoad() {
@@ -31,11 +32,16 @@ Page({
 
   /** 首次加载 */
   async loadRecords() {
-    this.setData({ loading: true, error: '' });
+    this.setData({ loading: true, error: '', disabled: false });
 
     try {
       const res = await apiGetAllRecords({ page: 1, pageSize: PAGE_SIZE });
       if (res.code === 0) {
+        // 动态功能未开放
+        if (res.data.disabled) {
+          this.setData({ disabled: true, loading: false });
+          return;
+        }
         const { records, hasMore } = res.data;
         const formatted = this.formatRecords(records || []);
         this.setData({

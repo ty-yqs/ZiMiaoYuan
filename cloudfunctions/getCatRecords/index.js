@@ -11,6 +11,24 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const db = cloud.database();
 
+/** 读取全局功能开关（缺失时返回默认值，默认全部开放） */
+async function getAppSettings() {
+  const defaults = { feedOpen: true, recordsOpen: true, notesOpen: true };
+  try {
+    const res = await db.collection('settings').doc('global').get();
+    if (res && res.data) {
+      return {
+        feedOpen: res.data.feedOpen !== false,
+        recordsOpen: res.data.recordsOpen !== false,
+        notesOpen: res.data.notesOpen !== false,
+      };
+    }
+  } catch (e) {
+    // 文档不存在或读取失败时走默认值
+  }
+  return defaults;
+}
+
 exports.main = async (event, context) => {
   const { catId, page = 1, pageSize = 10 } = event;
 
@@ -19,6 +37,12 @@ exports.main = async (event, context) => {
   }
 
   try {
+    // 发现记录未开放时直接返回空列表
+    const settings = await getAppSettings();
+    if (settings.recordsOpen === false) {
+      return { code: 0, message: 'ok', data: { records: [], total: 0, hasMore: false, disabled: true } };
+    }
+
     const _ = db.command;
 
     // 分页查询已审核的记录

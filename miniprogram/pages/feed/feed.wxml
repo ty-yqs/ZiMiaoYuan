@@ -15,6 +15,11 @@
     <view class="retry-btn" bind:tap="loadRecords">点击重试</view>
   </view>
 
+  <!-- 功能未开放 -->
+  <view wx:elif="{{disabled}}" class="disabled-wrapper">
+    <text class="disabled-text">动态功能暂未开放</text>
+  </view>
+
   <!-- 动态列表 -->
   <view wx:else class="feed-list">
 

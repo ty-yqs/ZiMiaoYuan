@@ -6,7 +6,7 @@
  */
 const cloud = require('wx-server-sdk');
 const {
-  COLLECTIONS, success, fail, getCollection,
+  COLLECTIONS, success, fail, getCollection, getAppSettings,
 } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -15,6 +15,12 @@ exports.main = async (event, context) => {
   const { page = 1, pageSize = 10 } = event;
 
   try {
+    // 动态页未开放时直接返回空列表
+    const settings = await getAppSettings();
+    if (settings.feedOpen === false) {
+      return success({ records: [], total: 0, hasMore: false, disabled: true });
+    }
+
     const _ = cloud.database().command;
     const skip = (page - 1) * pageSize;
 
