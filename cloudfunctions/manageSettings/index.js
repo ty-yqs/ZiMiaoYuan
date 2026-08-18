@@ -19,7 +19,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const ACTIONS = ['get', 'update'];
 const SETTINGS_ID = 'global';
-const DEFAULT_SETTINGS = { feedOpen: true, recordsOpen: true, notesOpen: true };
+const DEFAULT_SETTINGS = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true };
 
 /** 确保 settings 集合存在（首次保存时自动创建，已存在则忽略） */
 async function ensureCollection() {
@@ -41,6 +41,7 @@ async function readSettings() {
         feedOpen: res.data.feedOpen !== false,
         recordsOpen: res.data.recordsOpen !== false,
         notesOpen: res.data.notesOpen !== false,
+        guestBrowseOpen: res.data.guestBrowseOpen !== false,
       };
     }
   } catch (e) {
@@ -78,6 +79,9 @@ exports.main = async (event) => {
       }
       if (event.notesOpen !== undefined && event.notesOpen !== null) {
         updates.notesOpen = event.notesOpen !== false;
+      }
+      if (event.guestBrowseOpen !== undefined && event.guestBrowseOpen !== null) {
+        updates.guestBrowseOpen = event.guestBrowseOpen !== false;
       }
 
       if (Object.keys(updates).length === 0) {

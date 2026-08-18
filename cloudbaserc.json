@@ -99,6 +99,11 @@
       "installDependency": true
     },
     {
+      "name": "getSettings",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
       "name": "getSponsorQR",
       "runtime": "Nodejs20.19",
       "installDependency": true

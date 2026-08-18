@@ -6,7 +6,7 @@
  */
 const cloud = require('wx-server-sdk');
 const {
-  COLLECTIONS, success, fail, getCollection, getAppSettings,
+  COLLECTIONS, success, fail, getCollection, getAppSettings, isGuestUser,
 } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -15,9 +15,12 @@ exports.main = async (event, context) => {
   const { page = 1, pageSize = 10 } = event;
 
   try {
-    // 动态页未开放时直接返回空列表
+    // 动态页未开放（或游客不可见）时直接返回空列表
     const settings = await getAppSettings();
-    if (settings.feedOpen === false) {
+    const { OPENID } = cloud.getWXContext();
+    const isGuest = await isGuestUser(OPENID);
+    const feedOpen = settings.feedOpen && (!isGuest || settings.guestBrowseOpen);
+    if (!feedOpen) {
       return success({ records: [], total: 0, hasMore: false, disabled: true });
     }
 

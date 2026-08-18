@@ -13,7 +13,7 @@ const db = cloud.database();
 
 /** 读取全局功能开关（缺失时返回默认值，默认全部开放） */
 async function getAppSettings() {
-  const defaults = { feedOpen: true, recordsOpen: true, notesOpen: true };
+  const defaults = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true };
   try {
     const res = await db.collection('settings').doc('global').get();
     if (res && res.data) {
@@ -21,12 +21,26 @@ async function getAppSettings() {
         feedOpen: res.data.feedOpen !== false,
         recordsOpen: res.data.recordsOpen !== false,
         notesOpen: res.data.notesOpen !== false,
+        guestBrowseOpen: res.data.guestBrowseOpen !== false,
       };
     }
   } catch (e) {
     // 文档不存在或读取失败时走默认值
   }
   return defaults;
+}
+
+/** 判断是否为「未设置昵称头像」的游客 */
+async function isGuestUser(openid) {
+  if (!openid) return true;
+  try {
+    const res = await db.collection('users').where({ _openid: openid }).limit(1).get();
+    const user = res.data && res.data.length > 0 ? res.data[0] : null;
+    if (!user) return true;
+    return !user.nickname || !user.avatar;
+  } catch (e) {
+    return true;
+  }
 }
 
 exports.main = async (event, context) => {
@@ -37,9 +51,12 @@ exports.main = async (event, context) => {
   }
 
   try {
-    // 发现记录未开放时直接返回空列表
+    // 发现记录未开放（或游客不可见）时直接返回空列表
     const settings = await getAppSettings();
-    if (settings.recordsOpen === false) {
+    const { OPENID } = cloud.getWXContext();
+    const isGuest = await isGuestUser(OPENID);
+    const recordsOpen = settings.recordsOpen !== false && (!isGuest || settings.guestBrowseOpen);
+    if (!recordsOpen) {
       return { code: 0, message: 'ok', data: { records: [], total: 0, hasMore: false, disabled: true } };
     }
 

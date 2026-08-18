@@ -37,7 +37,7 @@ function getLabel(type, parentGender, childGender, gender1, gender2) {
  * getCatDetail 云函数 — 获取猫咪详情 + 关联发现记录
  */
 const cloud = require('wx-server-sdk');
-const { COLLECTIONS, success, fail, getCollection, getDB, getAppSettings } = require('./db');
+const { COLLECTIONS, success, fail, getCollection, getDB, getAppSettings, isGuestUser } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
@@ -60,10 +60,13 @@ exports.main = async (event, context) => {
 
     const cat = catRes.data;
 
-    // 读取功能开关
+    // 读取功能开关（游客不可见时整体隐藏记录与便利贴）
     const settings = await getAppSettings();
-    const recordsOpen = settings.recordsOpen !== false;
-    const notesOpen = settings.notesOpen !== false;
+    const { OPENID } = cloud.getWXContext();
+    const isGuest = await isGuestUser(OPENID);
+    const guestAllowed = !isGuest || settings.guestBrowseOpen;
+    const recordsOpen = settings.recordsOpen !== false && guestAllowed;
+    const notesOpen = settings.notesOpen !== false && guestAllowed;
 
     // 查询关联的发现记录（按时间倒序，仅展示审核通过的）
     const _ = cloud.database().command;
@@ -83,8 +86,7 @@ exports.main = async (event, context) => {
       records = records.filter(r => !r.type || r.type !== 'note');
     }
 
-    // 查询当前用户对该猫的评分
-    const { OPENID } = cloud.getWXContext();
+    // 查询当前用户对该猫的评分（OPENID 已在上方获取）
     let myRating = 0;
     if (OPENID) {
       const ratingRes = await getCollection(COLLECTIONS.RATINGS)

@@ -25,6 +25,12 @@
           <el-switch v-model="form.notesOpen" :disabled="loading" />
           <span class="hint">猫咪详情页的「便利贴」板块及「写便利贴」入口</span>
         </el-form-item>
+
+        <el-divider content-position="left">游客浏览权限</el-divider>
+        <el-form-item label="游客可浏览上述内容">
+          <el-switch v-model="form.guestBrowseOpen" :disabled="loading" />
+          <span class="hint">关闭后，未设置昵称头像的用户将无法浏览动态页、发现记录和便利贴</span>
+        </el-form-item>
       </el-form>
 
       <div class="actions">
@@ -46,6 +52,7 @@ const form = reactive({
   feedOpen: true,
   recordsOpen: true,
   notesOpen: true,
+  guestBrowseOpen: true,
 });
 
 async function load() {
@@ -55,11 +62,13 @@ async function load() {
       feedOpen: boolean;
       recordsOpen: boolean;
       notesOpen: boolean;
+      guestBrowseOpen: boolean;
     }>('manageSettings', { action: 'get' });
     if (res.code === 0 && res.data) {
       form.feedOpen = res.data.feedOpen !== false;
       form.recordsOpen = res.data.recordsOpen !== false;
       form.notesOpen = res.data.notesOpen !== false;
+      form.guestBrowseOpen = res.data.guestBrowseOpen !== false;
     } else {
       ElMessage.error(res.message || '加载失败');
     }
@@ -79,6 +88,7 @@ async function onSave() {
       feedOpen: form.feedOpen,
       recordsOpen: form.recordsOpen,
       notesOpen: form.notesOpen,
+      guestBrowseOpen: form.guestBrowseOpen,
     });
     if (res.code === 0) {
       ElMessage.success(res.message || '设置已保存');
