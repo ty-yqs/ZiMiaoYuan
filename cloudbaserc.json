@@ -44,6 +44,16 @@
       "installDependency": true
     },
     {
+      "name": "getArticle",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "getBanners",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
       "name": "getCatDetail",
       "runtime": "Nodejs20.19",
       "installDependency": true
@@ -120,6 +130,16 @@
     },
     {
       "name": "login",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "manageArticles",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "manageBanners",
       "runtime": "Nodejs20.19",
       "installDependency": true
     },

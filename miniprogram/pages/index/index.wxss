@@ -18,46 +18,92 @@
   border-radius: var(--radius-round);
 }
 
-/* ========== Banner 区域 ========== */
-.banner {
+/* ========== 轮播头图 ========== */
+.banner-swiper {
+  margin: var(--spacing-md);
+  height: 360rpx;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.banner-placeholder {
+  background: linear-gradient(90deg, #eef0f2 25%, #f6f7f8 37%, #eef0f2 63%);
+  background-size: 400% 100%;
+  animation: sk-shimmer 1.4s ease infinite;
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ========== 今日推荐 加载骨架 ========== */
+.cat-card-skeleton {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-xl) var(--spacing-lg);
-  margin: var(--spacing-md);
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-  border-radius: var(--radius-lg);
-  color: #fff;
-  overflow: hidden;
-  position: relative;
+  padding: 20rpx;
+  margin: 16rpx 24rpx;
+  background: #fffffffa;
+  border: 2rpx solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
-.banner-content {
+.sk-avatar,
+.sk-line {
+  background: linear-gradient(90deg, #eef0f2 25%, #f6f7f8 37%, #eef0f2 63%);
+  background-size: 400% 100%;
+  animation: sk-shimmer 1.4s ease infinite;
+}
+
+.sk-avatar {
+  flex-shrink: 0;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: var(--radius-md);
+}
+
+.sk-body {
+  flex: 1;
+  margin-left: 20rpx;
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  min-width: 0;
 }
 
-.banner-title {
-  font-size: var(--font-xxl);
-  font-weight: 700;
-  margin-bottom: var(--spacing-xs);
+.sk-line {
+  border-radius: 8rpx;
 }
 
-.banner-subtitle {
-  font-size: var(--font-sm);
-  opacity: 0.9;
+/* 行高与 cat-card 一致：name 44 / desc 36 / loc 36 / footer 36 */
+.sk-name {
+  height: 32rpx;
+  width: 60%;
+  margin-bottom: 12rpx;
+}
+.sk-desc {
+  height: 22rpx;
+  width: 90%;
+  margin-bottom: 14rpx;
+}
+.sk-loc {
+  height: 22rpx;
+  width: 70%;
+  margin-bottom: 14rpx;
+}
+.sk-footer {
+  height: 22rpx;
+  width: 40%;
+  margin-bottom: 14rpx;
 }
 
-.banner-decor {
-  position: absolute;
-  right: 20rpx;
-  top: 20rpx;
-  width: 150rpx;
-  height: 150rpx;
-  opacity: 0.9;
-  z-index: 0;
+@keyframes sk-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
 }
 
 /* ========== 区块通用 ========== */

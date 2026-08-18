@@ -33,7 +33,7 @@ Page({
     cacheCount: 0,
 
     loading: true,
-    showVersion: '2.0.0',
+    showVersion: '2.1.0',
   },
 
   onLoad() {

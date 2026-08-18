@@ -1,7 +1,7 @@
 /**
  * 关于紫喵园
  */
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 
 Page({
   data: {

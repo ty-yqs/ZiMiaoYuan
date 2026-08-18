@@ -1,19 +1,36 @@
 <!--
   首页 — 紫喵园
-  1. Banner 区域
+  1. 轮播头图
   2. 今日猫咪推荐
   3. 快捷入口
 -->
 <view class="page-container">
 
-  <!-- ==================== Banner 区域 ==================== -->
-  <view class="banner">
-    <view class="banner-content">
-      <text class="banner-title">{{bannerTitle}}</text>
-      <text class="banner-subtitle">{{bannerSubtitle}}</text>
-    </view>
-    <image class="banner-decor" src="/images/banner-cat.png" mode="aspectFit" />
-  </view>
+  <!-- ==================== 轮播头图 ==================== -->
+  <!-- 加载占位：预留头图空间，避免加载完成后整体内容下移 -->
+  <view wx:if="{{bannersLoading}}" class="banner-swiper banner-placeholder" />
+
+  <swiper
+    wx:elif="{{banners.length > 0}}"
+    class="banner-swiper"
+    indicator-dots
+    indicator-color="rgba(255,255,255,0.5)"
+    indicator-active-color="#ffffff"
+    autoplay
+    circular
+    interval="{{4000}}"
+    duration="{{500}}"
+  >
+    <swiper-item wx:for="{{banners}}" wx:key="_id">
+      <image
+        class="banner-img"
+        src="{{item.src}}"
+        mode="aspectFill"
+        bind:tap="onTapBanner"
+        data-link="{{item.link}}"
+      />
+    </swiper-item>
+  </swiper>
 
   <!-- ==================== 今日猫咪推荐 ==================== -->
   <view class="section">
@@ -25,10 +42,16 @@
       <text class="section-more" bind:tap="onTapAllCats">查看全部 ›</text>
     </view>
 
-    <!-- 加载骨架 -->
+    <!-- 加载骨架：模拟猫咪卡片布局，与真实猫卡同尺寸，避免加载后内容位移 -->
     <block wx:if="{{loading}}">
-      <view class="card" wx:for="{{[1,2]}}" wx:key="*this">
-        <van-skeleton row="{{2}}" />
+      <view class="cat-card-skeleton" wx:for="{{[1,2]}}" wx:key="*this">
+        <view class="sk-avatar" />
+        <view class="sk-body">
+          <view class="sk-line sk-name" />
+          <view class="sk-line sk-desc" />
+          <view class="sk-line sk-loc" />
+          <view class="sk-line sk-footer" />
+        </view>
       </view>
     </block>
 

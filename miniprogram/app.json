@@ -16,7 +16,8 @@
     "pages/feedback/feedback",
     "pages/support/support",
     "pages/admin/feedbacks/feedbacks",
-    "pages/about/about"
+    "pages/about/about",
+    "pages/article/article"
   ],
   "window": {
     "backgroundColor": "#FFF8EC",

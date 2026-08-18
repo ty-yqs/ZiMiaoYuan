@@ -1,0 +1,30 @@
+<!--
+  文章详情页
+  仅通过首页头图跳转进入，展示标题、封面、富文本正文。
+-->
+<view class="page-container article-page">
+
+  <!-- 加载骨架屏：模拟封面 + 标题 + 正文行，带流光动画 -->
+  <view wx:if="{{loading}}" class="article-skeleton">
+    <view class="skeleton skeleton-cover" />
+    <view class="skeleton skeleton-title" />
+    <view class="skeleton skeleton-line" style="width: 96%;" />
+    <view class="skeleton skeleton-line" style="width: 100%;" />
+    <view class="skeleton skeleton-line" style="width: 82%;" />
+    <view class="skeleton skeleton-line" style="width: 92%;" />
+    <view class="skeleton skeleton-line" style="width: 64%;" />
+  </view>
+
+  <view wx:elif="{{error}}" class="article-empty">
+    <van-empty description="{{error}}" />
+  </view>
+
+  <block wx:else>
+    <image wx:if="{{cover}}" class="article-cover" src="{{cover}}" mode="aspectFill" />
+    <view class="article-body">
+      <text wx:if="{{title}}" class="article-title">{{title}}</text>
+      <rich-text class="article-content" nodes="{{content}}" space="nbsp" user-select />
+    </view>
+  </block>
+
+</view>

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "文章",
+  "usingComponents": {
+    "van-empty": "@vant/weapp/empty/index"
+  }
+}

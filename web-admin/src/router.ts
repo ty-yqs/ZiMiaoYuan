@@ -19,6 +19,8 @@ const router = createRouter({
         { path: 'records', component: () => import('./views/Records.vue') },
         { path: 'users', component: () => import('./views/Users.vue') },
         { path: 'supporters', component: () => import('./views/Supporters.vue') },
+        { path: 'banners', component: () => import('./views/Banners.vue') },
+        { path: 'articles', component: () => import('./views/Articles.vue') },
         { path: 'admins', component: () => import('./views/Admins.vue'), meta: { superOnly: true } },
         { path: 'feedbacks', component: () => import('./views/Feedbacks.vue') },
       ],

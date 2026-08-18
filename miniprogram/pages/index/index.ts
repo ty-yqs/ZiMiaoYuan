@@ -2,18 +2,23 @@
  * 首页 — 紫喵园
  *
  * 包含：
- * 1. Banner 区域
+ * 1. 轮播头图
  * 2. 今日猫咪推荐
  * 3. 快捷入口
  */
-import { apiGetCats } from '../../utils/api';
+import { apiGetCats, apiGetBanners } from '../../utils/api';
 import { ROUTES } from '../../utils/constants';
+import { getCachedImageUrls } from '../../utils/imageCache';
+
+// 5 个 tab 页，跳转时需用 switchTab
+const TAB_ROUTES = [ROUTES.INDEX, ROUTES.FEED, ROUTES.CAT_LIST, ROUTES.PROFILE, ROUTES.STATS];
 
 Page({
   data: {
-    // Banner
-    bannerTitle: '紫喵园 · 校园猫谱',
-    bannerSubtitle: '记录校园里的每一只小猫',
+    // 轮播头图（已解析为本地/临时路径）
+    banners: [] as { _id: string; src: string; link: string }[],
+    // 头图加载中（显示占位，避免加载完成后内容下移）
+    bannersLoading: true,
 
     // 推荐猫咪
     featuredCats: [] as ICat[],
@@ -31,6 +36,7 @@ Page({
   onLoad() {
     wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     this.loadFeaturedCats();
+    this.loadBanners();
   },
 
   onShow() {
@@ -67,24 +73,75 @@ Page({
     }
   },
 
+  /** 加载轮播头图（仅取启用项，解析 cloud:// 图片为本地路径） */
+  async loadBanners() {
+    // 首次加载（尚无头图）时显示占位；下拉刷新时保留已有头图，避免闪烁
+    if (this.data.banners.length === 0) {
+      this.setData({ bannersLoading: true });
+    }
+    try {
+      const res = await apiGetBanners();
+      if (res.code !== 0 || !Array.isArray(res.data)) return;
+
+      const list: any[] = res.data;
+      const fileIds = list.map((b) => b.image).filter(Boolean);
+      const urls = await getCachedImageUrls(fileIds);
+
+      this.setData({
+        banners: list.map((b, i) => ({ _id: b._id, src: urls[i] || '', link: b.link || '' })),
+      });
+    } finally {
+      this.setData({ bannersLoading: false });
+    }
+  },
+
   /** 查看全部猫咪 */
   onTapAllCats() {
     wx.switchTab({ url: ROUTES.CAT_LIST });
   },
 
-  /** 跳转快捷入口 */
-  onTapEntry(e: WechatMiniprogram.TouchEvent) {
-    const { url } = e.currentTarget.dataset;
-    if (url === ROUTES.CAT_LIST || url === ROUTES.PROFILE || url === ROUTES.INDEX || url === ROUTES.STATS) {
+  /** 页面跳转：外部网页用 openOfficialAccountArticle 打开公众号文章，tab 页用 switchTab，其余 navigateTo */
+  navigate(url: string) {
+    if (!url) return;
+    if (/^https?:\/\//i.test(url)) {
+      if (typeof (wx as any).openOfficialAccountArticle === 'function') {
+        (wx as any).openOfficialAccountArticle({
+          url,
+          fail: () => {
+            wx.setClipboardData({ data: url });
+            wx.showToast({ title: '打开失败，链接已复制', icon: 'none' });
+          },
+        });
+      } else {
+        wx.setClipboardData({ data: url });
+        wx.showToast({ title: '当前微信版本过低，无法打开', icon: 'none' });
+      }
+      return;
+    }
+    if (TAB_ROUTES.includes(url)) {
       wx.switchTab({ url });
     } else {
       wx.navigateTo({ url });
     }
   },
 
+  /** 跳转快捷入口 */
+  onTapEntry(e: WechatMiniprogram.TouchEvent) {
+    const { url } = e.currentTarget.dataset;
+    this.navigate(url);
+  },
+
+  /** 点击头图跳转（未配置 link 则不跳） */
+  onTapBanner(e: WechatMiniprogram.TouchEvent) {
+    const { link } = e.currentTarget.dataset;
+    if (link) {
+      this.navigate(link);
+    }
+  },
+
   /** 下拉刷新 */
   async onPullDownRefresh() {
-    await this.loadFeaturedCats();
+    await Promise.all([this.loadFeaturedCats(), this.loadBanners()]);
     wx.stopPullDownRefresh();
   },
 

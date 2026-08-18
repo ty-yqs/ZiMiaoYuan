@@ -1,0 +1,9 @@
+{
+  "name": "manageBanners",
+  "version": "1.0.0",
+  "description": "管理员管理首页轮播头图",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
