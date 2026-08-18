@@ -23,7 +23,6 @@ const router = createRouter({
         { path: 'articles', component: () => import('./views/Articles.vue') },
         { path: 'settings', component: () => import('./views/Settings.vue') },
         { path: 'admins', component: () => import('./views/Admins.vue'), meta: { superOnly: true } },
-        { path: 'feedbacks', component: () => import('./views/Feedbacks.vue') },
       ],
     },
   ],

@@ -3,7 +3,15 @@
 -->
 <view class="page-container">
 
+  <!-- ==================== 无法提交 ==================== -->
+  <view wx:if="{{submitDisabled}}" class="disabled-page">
+    <text class="disabled-icon">🚫</text>
+    <text class="disabled-title">无法提交</text>
+    <text class="disabled-desc">{{submitDisabledTip}}</text>
+  </view>
+
   <!-- ==================== 图片上传 ==================== -->
+  <block wx:else>
   <view class="card">
     <view class="section-title">选择照片</view>
     <view class="photo-grid">
@@ -111,7 +119,7 @@
       block
       round
       loading="{{submitting}}"
-      disabled="{{submitting}}"
+      disabled="{{submitting || submitDisabled}}"
       color="#7EC8A8"
       bind:click="onSubmit"
     >
@@ -175,5 +183,6 @@
       </view>
     </view>
   </van-action-sheet>
+  </block>
 
 </view>

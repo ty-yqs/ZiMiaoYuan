@@ -49,17 +49,3 @@ button::after {
   color: var(--color-text-hint);
   padding: 0 var(--spacing-md);
 }
-
-/* ========== 反馈状态 ========== */
-.error-tip {
-  text-align: center;
-  padding: 40rpx;
-  color: #E74C3C;
-  font-size: var(--font-sm);
-}
-
-.loading-tip {
-  text-align: center;
-  padding: 40rpx;
-  color: var(--color-text-hint);
-}

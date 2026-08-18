@@ -69,11 +69,6 @@
       "installDependency": true
     },
     {
-      "name": "getFeedbacks",
-      "runtime": "Nodejs20.19",
-      "installDependency": true
-    },
-    {
       "name": "getMySubmissions",
       "runtime": "Nodejs20.19",
       "installDependency": true
@@ -160,11 +155,6 @@
     },
     {
       "name": "reviewRecord",
-      "runtime": "Nodejs20.19",
-      "installDependency": true
-    },
-    {
-      "name": "submitFeedback",
       "runtime": "Nodejs20.19",
       "installDependency": true
     },

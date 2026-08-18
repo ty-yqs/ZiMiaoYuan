@@ -4,7 +4,7 @@
  * 显示用户信息、贡献统计、管理员入口
  */
 import { ROUTES } from '../../utils/constants';
-import { apiGetUserStats, apiGetPendingCounts, apiUpdateUser } from '../../utils/api';
+import { apiGetUserStats, apiGetPendingCounts, apiUpdateUser, apiGetSettings } from '../../utils/api';
 import { getCachedImageUrl, getCacheSize, clearImageCache } from '../../utils/imageCache';
 import { showToast, showConfirm, showLoading, hideLoading, requireProfile } from '../../utils/util';
 
@@ -34,10 +34,22 @@ Page({
 
     loading: true,
     showVersion: '2.1.0',
+
+    // 是否显示「投喂罐头 / 打赏」入口（受全局开关控制，加载设置前不显示）
+    supportOpen: false,
   },
 
   onLoad() {
     this.loadUserInfo();
+    this.loadSettings();
+  },
+
+  /** 加载功能开关，控制「投喂罐头 / 打赏」入口是否显示 */
+  async loadSettings() {
+    const res = await apiGetSettings();
+    if (res.code === 0 && res.data) {
+      this.setData({ supportOpen: res.data.supportOpen === true });
+    }
   },
 
   onShow() {
@@ -239,17 +251,9 @@ Page({
     }
   },
 
-  /** 跳转发现猫咪页 */
-  onUpload() {
-    wx.navigateTo({ url: ROUTES.UPLOAD });
-  },
-
   /** 跳转我的提交页 */
   onMySubmissions() {
     wx.navigateTo({ url: ROUTES.MY_SUBMISSIONS });
-  },
-  onFeedback() {
-    wx.navigateTo({ url: ROUTES.FEEDBACK });
   },
 
   /** 跳转投喂罐头页 */
@@ -260,11 +264,6 @@ Page({
   /** 跳转管理员页面 */
   onGoAdmin() {
     wx.navigateTo({ url: ROUTES.ADMIN });
-  },
-
-  /** 跳转查看反馈页面 */
-  onGoFeedbacks() {
-    wx.navigateTo({ url: ROUTES.ADMIN_FEEDBACKS });
   },
 
   /** 关于小程序 */

@@ -47,12 +47,6 @@
   <view class="menu-section">
     <van-cell-group>
       <van-cell
-        title="发现猫咪"
-        label="上传你发现的校园猫咪"
-        is-link
-        url="/pages/upload/upload"
-      />
-      <van-cell
         title="我的提交"
         label="查看提交记录与审核状态"
         is-link
@@ -72,12 +66,6 @@
           <text wx:if="{{pendingCount > 0}}" class="pending-badge">{{pendingCount > 99 ? '99+' : pendingCount}}</text>
         </view>
       </van-cell>
-      <van-cell
-        title="查看反馈"
-        label="查看用户反馈与建议"
-        is-link
-        bind:click="onGoFeedbacks"
-      />
     </van-cell-group>
 
     <van-cell-group title="其他">
@@ -88,12 +76,7 @@
         bind:click="onAbout"
       />
       <van-cell
-        title="反馈与建议"
-        label="提交 猫咪领养/去喵星/失踪反馈 或 小程序优化建议"
-        is-link
-        bind:click="onFeedback"
-      />
-      <van-cell
+        wx:if="{{supportOpen}}"
         title="投喂罐头"
         label="支持小程序运营维护"
         is-link

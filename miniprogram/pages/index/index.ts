@@ -6,7 +6,7 @@
  * 2. 今日猫咪推荐
  * 3. 快捷入口
  */
-import { apiGetCats, apiGetBanners } from '../../utils/api';
+import { apiGetCats, apiGetBanners, apiGetSettings } from '../../utils/api';
 import { ROUTES } from '../../utils/constants';
 import { getCachedImageUrls } from '../../utils/imageCache';
 
@@ -26,9 +26,8 @@ Page({
     error: '',
     showPoster: true,
 
-    // 快捷入口
+    // 快捷入口（发现猫咪入口受全局开关控制，加载设置后动态插入）
     quickEntries: [
-      { icon: '📸', label: '发现猫咪', url: ROUTES.UPLOAD },
       { icon: '📊', label: '数据统计', url: ROUTES.STATS },
     ],
   },
@@ -37,6 +36,7 @@ Page({
     wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     this.loadFeaturedCats();
     this.loadBanners();
+    this.loadSettings();
   },
 
   onShow() {
@@ -70,6 +70,18 @@ Page({
         error: res.message || '加载失败',
         loading: false,
       });
+    }
+  },
+
+  /** 加载功能开关，控制「发现猫咪」快捷入口是否显示 */
+  async loadSettings() {
+    const res = await apiGetSettings();
+    if (res.code === 0 && res.data) {
+      const base = [{ icon: '📊', label: '数据统计', url: ROUTES.STATS }];
+      const quickEntries = res.data.uploadOpen === true
+        ? [{ icon: '📸', label: '发现猫咪', url: ROUTES.UPLOAD }, ...base]
+        : base;
+      this.setData({ quickEntries });
     }
   },
 

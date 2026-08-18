@@ -7,7 +7,7 @@
  * - 上传到云存储
  * - 保存到数据库
  */
-import { apiAddCat, apiUploadRecord } from '../../utils/api';
+import { apiAddCat, apiUploadRecord, apiGetSettings } from '../../utils/api';
 import { showToast, showLoading, hideLoading, chooseImage, requireProfile } from '../../utils/util';
 const config = require('../../config/index');
 const app = getApp<IAppOption>();
@@ -43,6 +43,10 @@ Page({
     showColorPicker: false,
     showGenderPicker: false,
     showAgePicker: false,
+
+    // 提交开关（进入页面时再次校验，关闭则禁止提交）
+    submitDisabled: false,
+    submitDisabledTip: '',
   },
 
   onLoad(options: Record<string, string>) {
@@ -50,6 +54,23 @@ Page({
     if (options.catId) {
       this.setData({ targetCatId: options.catId, maxPhotos: 3 });
       wx.setNavigationBarTitle({ title: '记录发现' });
+    }
+    this.checkSubmitPermission();
+  },
+
+  /** 进入提交页时再次校验提交开关（新增猫咪→uploadOpen，发现记录→recordsOpen） */
+  async checkSubmitPermission() {
+    const res = await apiGetSettings();
+    if (res.code !== 0 || !res.data) return;
+    const isRecord = !!this.data.targetCatId;
+    const allowed = isRecord
+      ? res.data.recordsOpen === true
+      : res.data.uploadOpen === true;
+    if (!allowed) {
+      this.setData({
+        submitDisabled: true,
+        submitDisabledTip: isRecord ? '当前暂不开放提交发现记录' : '当前暂不开放提交新猫咪',
+      });
     }
   },
 
@@ -100,6 +121,12 @@ Page({
   async onSubmit() {
     // 检查是否已设置昵称和头像
     if (!requireProfile()) return;
+
+    // 提交开关已关闭则拦截
+    if (this.data.submitDisabled) {
+      showToast(this.data.submitDisabledTip);
+      return;
+    }
 
     // 验证：图片始终必填
     if (this.data.photos.length === 0) {

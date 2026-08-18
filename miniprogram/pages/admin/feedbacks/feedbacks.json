@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "查看反馈",
-  "usingComponents": {
-    "van-loading": "@vant/weapp/loading/index",
-    "van-empty": "@vant/weapp/empty/index"
-  }
-}

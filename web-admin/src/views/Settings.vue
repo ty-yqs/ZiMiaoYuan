@@ -31,6 +31,28 @@
           <el-switch v-model="form.guestBrowseOpen" :disabled="loading" />
           <span class="hint">关闭后，未设置昵称头像的用户将无法浏览动态页、发现记录和便利贴</span>
         </el-form-item>
+
+        <el-divider content-position="left">详情页显示</el-divider>
+        <el-form-item label="显示底部操作按钮">
+          <el-switch v-model="form.detailActionsOpen" :disabled="loading" />
+          <span class="hint">猫咪详情页底部的「编辑 / 上传猫照 / 写便利贴」操作栏</span>
+        </el-form-item>
+        <el-form-item label="显示亲人指数">
+          <el-switch v-model="form.ratingOpen" :disabled="loading" />
+          <span class="hint">猫咪详情页的「亲人指数」评分卡片（默认开启）</span>
+        </el-form-item>
+
+        <el-divider content-position="left">发布入口</el-divider>
+        <el-form-item label="显示发现猫咪入口">
+          <el-switch v-model="form.uploadOpen" :disabled="loading" />
+          <span class="hint">首页快捷入口与档案列表页的「发现猫咪」按钮（默认开启）</span>
+        </el-form-item>
+
+        <el-divider content-position="left">打赏入口</el-divider>
+        <el-form-item label="显示打赏入口">
+          <el-switch v-model="form.supportOpen" :disabled="loading" />
+          <span class="hint">个人中心「投喂罐头」入口（默认开启）</span>
+        </el-form-item>
       </el-form>
 
       <div class="actions">
@@ -53,6 +75,10 @@ const form = reactive({
   recordsOpen: true,
   notesOpen: true,
   guestBrowseOpen: true,
+  detailActionsOpen: true,
+  ratingOpen: true,
+  uploadOpen: true,
+  supportOpen: true,
 });
 
 async function load() {
@@ -63,12 +89,20 @@ async function load() {
       recordsOpen: boolean;
       notesOpen: boolean;
       guestBrowseOpen: boolean;
+      detailActionsOpen: boolean;
+      ratingOpen: boolean;
+      uploadOpen: boolean;
+      supportOpen: boolean;
     }>('manageSettings', { action: 'get' });
     if (res.code === 0 && res.data) {
       form.feedOpen = res.data.feedOpen !== false;
       form.recordsOpen = res.data.recordsOpen !== false;
       form.notesOpen = res.data.notesOpen !== false;
       form.guestBrowseOpen = res.data.guestBrowseOpen !== false;
+      form.detailActionsOpen = res.data.detailActionsOpen !== false;
+      form.ratingOpen = res.data.ratingOpen !== false;
+      form.uploadOpen = res.data.uploadOpen !== false;
+      form.supportOpen = res.data.supportOpen !== false;
     } else {
       ElMessage.error(res.message || '加载失败');
     }
@@ -89,6 +123,10 @@ async function onSave() {
       recordsOpen: form.recordsOpen,
       notesOpen: form.notesOpen,
       guestBrowseOpen: form.guestBrowseOpen,
+      detailActionsOpen: form.detailActionsOpen,
+      ratingOpen: form.ratingOpen,
+      uploadOpen: form.uploadOpen,
+      supportOpen: form.supportOpen,
     });
     if (res.code === 0) {
       ElMessage.success(res.message || '设置已保存');

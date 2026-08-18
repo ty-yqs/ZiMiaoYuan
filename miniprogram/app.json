@@ -13,9 +13,7 @@
     "pages/admin/admin",
     "pages/stats/stats",
     "pages/login/login",
-    "pages/feedback/feedback",
     "pages/support/support",
-    "pages/admin/feedbacks/feedbacks",
     "pages/about/about",
     "pages/article/article"
   ],

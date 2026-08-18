@@ -62,8 +62,8 @@
       <text class="desc-text">{{cat.description}}</text>
     </view>
 
-    <!-- 亲人指数卡片 -->
-    <view class="card rating-card">
+    <!-- 亲人指数卡片（受开关控制，默认不加载） -->
+    <view class="card rating-card" wx:if="{{ratingOpen}}">
       <view class="section-title-sm">亲人指数</view>
       <view class="rating-summary">
         <view class="rating-avg-row">
@@ -164,17 +164,19 @@
       <text class="vaccine-note-text">* 此处疫苗指狂犬疫苗</text>
     </view>
 
-    <!-- 底部留白（为固定按钮让位） -->
-    <view style="height: 100rpx;" />
-
     <!-- 底部操作按钮 -->
-    <view class="bottom-btn-fixed safe-bottom">
-      <view class="bottom-btn-row">
-        <button class="edit-btn" bind:tap="onTapEdit">编辑</button>
-        <button class="upload-record-btn" bind:tap="onUploadRecord">上传猫照</button>
-        <button class="sticky-note-btn" wx:if="{{notesOpen}}" bind:tap="onShowStickyNote">写便利贴</button>
+    <block wx:if="{{detailActionsOpen}}">
+      <!-- 底部留白（为固定按钮让位） -->
+      <view style="height: 100rpx;" />
+
+      <view class="bottom-btn-fixed safe-bottom">
+        <view class="bottom-btn-row">
+          <button class="edit-btn" bind:tap="onTapEdit">编辑</button>
+          <button class="upload-record-btn" bind:tap="onUploadRecord">上传猫照</button>
+          <button class="sticky-note-btn" wx:if="{{notesOpen}}" bind:tap="onShowStickyNote">写便利贴</button>
+        </view>
       </view>
-    </view>
+    </block>
 
   </block>
 

@@ -59,7 +59,7 @@
   <view wx:elif="{{cats.length === 0}}" class="empty-state">
     <text class="empty-icon">😿</text>
     <text class="empty-text">还没有猫咪档案</text>
-    <button class="add-btn" bind:tap="onTapUpload">去发现第一只猫</button>
+    <button wx:if="{{uploadOpen}}" class="add-btn" bind:tap="onTapUpload">去发现第一只猫</button>
   </view>
 
   <!-- ==================== 猫咪列表 ==================== -->
@@ -78,8 +78,8 @@
     </view>
   </block>
 
-  <!-- 发布按钮 -->
-  <view class="fab" bind:tap="onTapUpload">
+  <!-- 发布按钮（发现猫咪入口，受全局开关控制） -->
+  <view class="fab" wx:if="{{uploadOpen}}" bind:tap="onTapUpload">
     <text class="fab-icon">+</text>
   </view>
 

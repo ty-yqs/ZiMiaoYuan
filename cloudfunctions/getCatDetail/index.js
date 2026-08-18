@@ -67,6 +67,8 @@ exports.main = async (event, context) => {
     const guestAllowed = !isGuest || settings.guestBrowseOpen;
     const recordsOpen = settings.recordsOpen !== false && guestAllowed;
     const notesOpen = settings.notesOpen !== false && guestAllowed;
+    const detailActionsOpen = settings.detailActionsOpen !== false;
+    const ratingOpen = settings.ratingOpen !== false;
 
     // 查询关联的发现记录（按时间倒序，仅展示审核通过的）
     const _ = cloud.database().command;
@@ -165,7 +167,7 @@ exports.main = async (event, context) => {
       recordCount: records.length,
       myRating,
       relationships,
-      settings: { recordsOpen, notesOpen },
+      settings: { recordsOpen, notesOpen, detailActionsOpen, ratingOpen },
     });
 
   } catch (err) {

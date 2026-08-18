@@ -3,7 +3,7 @@
  *
  * 功能：查看所有猫咪，支持搜索和筛选
  */
-import { apiGetCats } from '../../../utils/api';
+import { apiGetCats, apiGetSettings } from '../../../utils/api';
 const config = require('../../../config/index');
 
 Page({
@@ -39,11 +39,23 @@ Page({
 
     // 分页
     page: 1,
+
+    // 是否显示「发现猫咪」入口（受全局开关控制，默认关闭）
+    uploadOpen: false,
   },
 
   onLoad() {
     wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
     this.loadCats(true);
+    this.loadSettings();
+  },
+
+  /** 加载功能开关，控制「发现猫咪」按钮是否显示 */
+  async loadSettings() {
+    const res = await apiGetSettings();
+    if (res.code === 0 && res.data) {
+      this.setData({ uploadOpen: res.data.uploadOpen === true });
+    }
   },
 
   onShow() {

@@ -54,9 +54,12 @@ Page({
     // 猫咪关系
     relationships: [] as IRelationship[],
 
-    // 功能开关（发现记录 / 便利贴）
+    // 功能开关（发现记录 / 便利贴 / 底部操作按钮 / 亲人指数）
     recordsOpen: true,
     notesOpen: true,
+    detailActionsOpen: true,
+    // 亲人指数默认不加载，等 settings 返回「可显示」信号后再渲染
+    ratingOpen: false,
   },
 
   onLoad(options: Record<string, string>) {
@@ -90,6 +93,8 @@ Page({
       const { cat, records, myRating, settings } = res.data;
       const recordsOpen = settings ? settings.recordsOpen !== false : true;
       const notesOpen = settings ? settings.notesOpen !== false : true;
+      const detailActionsOpen = settings ? settings.detailActionsOpen !== false : true;
+      const ratingOpen = settings ? settings.ratingOpen !== false : false;
 
       // 年龄段中文映射
       const AGE_LABEL_MAP: Record<string, string> = {
@@ -130,6 +135,8 @@ Page({
         // 功能开关
         recordsOpen,
         notesOpen,
+        detailActionsOpen,
+        ratingOpen,
         loading: false,
       });
 
@@ -269,6 +276,11 @@ Page({
 
   /** 显示便利贴弹窗 */
   onShowStickyNote() {
+    // 进入便利贴提交前再次校验开关
+    if (!this.data.notesOpen) {
+      showToast('当前暂不开放便利贴');
+      return;
+    }
     this.setData({ showStickyNote: true, stickyNoteText: '', stickyNoteValid: false });
   },
 
