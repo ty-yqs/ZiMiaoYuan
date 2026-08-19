@@ -232,23 +232,35 @@
   margin-top: var(--spacing-sm);
 }
 
-.record-item {
+.record-month {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--color-text-hint);
+  margin: var(--spacing-sm) 0 8rpx;
+}
+
+.record-grid {
   display: flex;
-  flex-direction: row;
-  padding: var(--spacing-sm) 0;
-  border-bottom: 1rpx solid var(--color-border);
+  flex-wrap: wrap;
+  gap: 6rpx;
 }
 
-.record-item:last-child {
-  border-bottom: none;
-}
-
-.record-photo {
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: var(--radius-sm);
-  flex-shrink: 0;
+.record-grid-item {
+  width: calc((100% - 12rpx) / 3);
+  height: 0;
+  padding-bottom: calc((100% - 12rpx) / 3);
+  position: relative;
+  border-radius: 4rpx;
   background: var(--color-bg-warm);
+  overflow: hidden;
+}
+
+.record-grid-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .record-note-icon {
@@ -366,36 +378,6 @@
   font-size: var(--font-sm);
   color: var(--color-text-primary);
   line-height: 1.6;
-}
-
-.record-info {
-  flex: 1;
-  margin-left: var(--spacing-sm);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-}
-
-.record-nickname {
-  font-size: var(--font-xs);
-  color: var(--color-accent);
-  font-weight: 600;
-  margin-bottom: 4rpx;
-}
-
-.record-desc {
-  font-size: var(--font-sm);
-  color: var(--color-text-primary);
-  margin-bottom: 4rpx;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.record-time {
-  font-size: var(--font-xs);
-  color: var(--color-text-hint);
 }
 
 /* ========== 疫苗说明 ========== */

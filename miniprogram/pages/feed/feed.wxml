@@ -34,33 +34,21 @@
       wx:key="_id"
       class="feed-card card"
     >
-      <!-- 头部：头像 + 昵称 + 时间 -->
-      <view class="feed-header">
+      <!-- 头部：猫头像 + 猫名 + 时间 -->
+      <view class="feed-header" bind:tap="onTapCat" data-cat-id="{{item.cat._id}}">
         <image
-          wx:if="{{item.userAvatar}}"
           class="feed-avatar"
-          src="{{item.userAvatar}}"
+          src="{{item.cat.avatar || '/images/avatar.png'}}"
           mode="aspectFill"
         />
-        <view wx:else class="feed-avatar-placeholder">
-          <text class="avatar-letter">{{item.nicknameFirstLetter}}</text>
-        </view>
         <view class="feed-user-info">
-          <text class="feed-nickname">{{item.nickname || '匿名猫友'}}</text>
+          <text class="feed-nickname">{{item.cat.cat_name || '未命名猫咪'}}</text>
           <text class="feed-time">{{item._time}}</text>
         </view>
       </view>
 
-      <!-- 描述文字 -->
-      <view wx:if="{{item.description}}" class="feed-desc">
-        <text>{{item.description}}</text>
-      </view>
-      <view wx:else class="feed-desc feed-desc-empty">
-        <text>发现记录</text>
-      </view>
-
       <!-- 照片网格（三列正方形） -->
-      <view wx:if="{{item.type !== 'note' && item.photos && item.photos.length > 0}}" class="feed-photos-grid">
+      <view wx:if="{{item.photos && item.photos.length > 0}}" class="feed-photos-grid">
         <view
           wx:for="{{item.photos}}"
           wx:for-item="pic"
@@ -76,30 +64,6 @@
             data-urls="{{item.photos}}"
           />
         </view>
-      </view>
-
-      <!-- 猫咪小卡片 -->
-      <view
-        wx:if="{{item.cat}}"
-        class="feed-cat-row"
-        bind:tap="onTapCat"
-        data-cat-id="{{item.cat._id}}"
-      >
-        <image
-          class="feed-cat-avatar"
-          src="{{item.cat.avatar || '/images/avatar.png'}}"
-          mode="aspectFill"
-        />
-        <view class="feed-cat-info">
-          <text class="feed-cat-name">{{item.cat.cat_name || '未命名猫咪'}}</text>
-          <text class="feed-cat-tags">{{item.cat.color}}{{item.cat.adopted ? ' · 已领养' : ''}}</text>
-        </view>
-        <text class="feed-cat-arrow">›</text>
-      </view>
-
-      <!-- 底部时间 -->
-      <view class="feed-footer">
-        <text class="feed-fulltime">{{item._fullTime}}</text>
       </view>
     </view>
 

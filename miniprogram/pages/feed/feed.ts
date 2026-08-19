@@ -117,14 +117,14 @@ Page({
     }
   },
 
-  /** 格式化记录 */
+  /** 格式化记录（动态页只展示照片记录，过滤掉便利贴） */
   formatRecords(records: any[]): any[] {
-    return records.map(r => ({
-      ...r,
-      _time: this.formatRelativeTime(r.createTime),
-      _fullTime: this.formatFullTime(r.createTime),
-      nicknameFirstLetter: (r.nickname || '匿').charAt(0),
-    }));
+    return records
+      .filter((r: any) => !r.type || r.type !== 'note')
+      .map((r: any) => ({
+        ...r,
+        _time: this.formatRelativeTime(r.createTime),
+      }));
   },
 
   /** 相对时间 */
@@ -142,18 +142,6 @@ Page({
     const M = d.getMonth() + 1;
     const day = d.getDate();
     return `${M}月${day}日`;
-  },
-
-  /** 完整时间 */
-  formatFullTime(dateStr: string): string {
-    if (!dateStr) return '';
-    const d = new Date(dateStr);
-    const y = d.getFullYear();
-    const M = d.getMonth() + 1;
-    const day = d.getDate();
-    const h = String(d.getHours()).padStart(2, '0');
-    const m = String(d.getMinutes()).padStart(2, '0');
-    return `${y}年${M}月${day}日 ${h}:${m}`;
   },
 
   /** 批量缓存图片（记录照片 + 猫咪头像） */

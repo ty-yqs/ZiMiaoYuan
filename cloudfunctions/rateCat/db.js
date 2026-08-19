@@ -12,6 +12,7 @@ const COLLECTIONS = {
   USERS: 'users',
   CATS: 'cats',
   RATINGS: 'ratings',
+  SETTINGS: 'settings',
 };
 
 /**

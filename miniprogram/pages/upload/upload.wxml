@@ -91,8 +91,8 @@
     </view>
   </view>
 
-  <!-- ==================== 描述 ==================== -->
-  <view class="card">
+  <!-- ==================== 描述（仅「发现猫咪」模式展示，作为猫咪简介） ==================== -->
+  <view class="card" wx:if="{{!targetCatId}}">
     <van-field
       value="{{description}}"
       type="textarea"
@@ -105,11 +105,11 @@
   </view>
 
   <view class="upload-hint" wx:if="{{!targetCatId}}">
-      <text>* 第一张照片建议选择猫咪正脸照，将默认设为头像。提交后需管理员审核，通过后才会更新显示。</text>
+      <text>* 第一张照片建议选择猫咪正脸照，将默认设为头像。提交后需管理员审核，由管理员进行后续操作更新展出。</text>
     </view>
 
   <view class="upload-hint" wx:if="{{targetCatId}}">
-      <text>* 提交后需管理员审核，通过后才会更新显示。</text>
+      <text>* 提交后需管理员审核，由管理员进行后续操作更新展出。</text>
     </view>
 
   <!-- ==================== 提交按钮 ==================== -->

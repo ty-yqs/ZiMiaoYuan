@@ -15,17 +15,17 @@ Page({
     isAdmin: false,
     catId: '',
     cat: null as ICat | null,
-    records: [] as IRecord[],
     notes: [] as IRecord[],
     totalRecords: 0,
     totalNotes: 0,
-    hasMoreRecords: false,
     hasMoreNotes: false,
 
     // 缓存后的图片
     cachedPhotos: [] as string[],
-    cachedRecords: [] as IRecord[],
     cachedNotes: [] as IRecord[],
+
+    // 发现记录：按月分组后的照片格
+    recordGroups: [] as { monthLabel: string; photos: string[] }[],
 
     // UI 状态
     loading: true,
@@ -60,6 +60,8 @@ Page({
     detailActionsOpen: true,
     // 亲人指数默认不加载，等 settings 返回「可显示」信号后再渲染
     ratingOpen: false,
+    // 公开评分：开关关闭时星星点击无反应
+    ratingPublicOpen: false,
   },
 
   onLoad(options: Record<string, string>) {
@@ -95,6 +97,7 @@ Page({
       const notesOpen = settings ? settings.notesOpen !== false : true;
       const detailActionsOpen = settings ? settings.detailActionsOpen !== false : true;
       const ratingOpen = settings ? settings.ratingOpen !== false : false;
+      const ratingPublicOpen = settings ? settings.ratingPublicOpen !== false : false;
 
       // 年龄段中文映射
       const AGE_LABEL_MAP: Record<string, string> = {
@@ -116,15 +119,12 @@ Page({
       const noteRecords = allRecords.filter((r: IRecord) => r.type === 'note');
       this.setData({
         cat,
-        records: photoRecords.slice(0, 3),
         notes: noteRecords.slice(0, 3),
         totalRecords: photoRecords.length,
         totalNotes: noteRecords.length,
-        hasMoreRecords: photoRecords.length > 3,
         hasMoreNotes: noteRecords.length > 3,
         // 先用原始数据初始化，等缓存加载后再替换
         cachedPhotos: cat.photos || [],
-        cachedRecords: photoRecords.slice(0, 3),
         // 评分数据
         myRating: myRating || 0,
         ratingAvg: cat.ratingAvg != null ? Number(cat.ratingAvg) : null,
@@ -137,6 +137,7 @@ Page({
         notesOpen,
         detailActionsOpen,
         ratingOpen,
+        ratingPublicOpen,
         loading: false,
       });
 
@@ -191,10 +192,28 @@ Page({
       return { ...record, photos: newPhotos };
     });
 
+    // 按月分组（记录已按时间倒序，分组结果天然月份倒序、组内照片倒序）
+    const recordGroups = this.groupRecordsByMonth(cachedRecords);
+
     this.setData({
       cachedPhotos,
-      cachedRecords: cachedRecords.slice(0, 3),
+      recordGroups,
     });
+  },
+
+  /** 按月份分组照片格 */
+  groupRecordsByMonth(records: IRecord[]): { monthLabel: string; photos: string[] }[] {
+    const map: Record<string, string[]> = {};
+    for (const r of records) {
+      const d = new Date((r as any).createTime);
+      if (isNaN(d.getTime())) continue;
+      const rPhotos = (r as any).photos || (r.photo ? [r.photo] : []);
+      if (!rPhotos || rPhotos.length === 0) continue;
+      const monthLabel = `${d.getFullYear()}年${d.getMonth() + 1}月`;
+      if (!map[monthLabel]) map[monthLabel] = [];
+      map[monthLabel].push(...rPhotos);
+    }
+    return Object.entries(map).map(([monthLabel, photos]) => ({ monthLabel, photos }));
   },
 
   /** 预览图片 */
@@ -204,12 +223,6 @@ Page({
       urls: urls || [url],
       current: url,
     });
-  },
-
-  /** 点击发现记录卡片，跳转瀑布流记录页 */
-  onTapRecordsCard() {
-    const { catId } = this.data;
-    wx.navigateTo({ url: `/pages/profile/submissions/recordDetail/recordDetail?catId=${catId}` });
   },
 
   /** 跳转编辑页 */
@@ -351,6 +364,8 @@ Page({
 
   /** 猫咪评分 */
   async onTapStar(e: WechatMiniprogram.TouchEvent) {
+    // 公开评分开关关闭：点击星星无任何反应
+    if (!this.data.ratingPublicOpen) return;
     if (!requireProfile()) return;
     if (this.data.rateLoading) return;
 

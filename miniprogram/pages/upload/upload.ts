@@ -176,7 +176,6 @@ Page({
         const res = await apiUploadRecord({
           catId: this.data.targetCatId,
           photos: cloudFileIds,
-          description: this.data.description,
         });
 
         hideLoading();

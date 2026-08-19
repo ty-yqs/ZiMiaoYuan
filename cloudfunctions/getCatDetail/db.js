@@ -143,7 +143,7 @@ async function isGuestUser(openid) {
  * 读取全局功能开关（缺失时返回默认值，默认全部开放）
  */
 async function getAppSettings() {
-  const defaults = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, detailActionsOpen: true, ratingOpen: true };
+  const defaults = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, detailActionsOpen: true, ratingOpen: true, ratingPublicOpen: true };
   try {
     const res = await getCollection(COLLECTIONS.SETTINGS).doc('global').get();
     if (res && res.data) {
@@ -154,6 +154,7 @@ async function getAppSettings() {
         guestBrowseOpen: res.data.guestBrowseOpen !== false,
         detailActionsOpen: res.data.detailActionsOpen !== false,
         ratingOpen: res.data.ratingOpen !== false,
+        ratingPublicOpen: res.data.ratingPublicOpen !== false,
       };
     }
   } catch (e) {

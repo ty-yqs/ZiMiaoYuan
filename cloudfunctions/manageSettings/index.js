@@ -7,6 +7,7 @@
  * - notesOpen          是否开放浏览便利贴
  * - detailActionsOpen  猫咪详情页是否显示底部操作按钮
  * - ratingOpen         猫咪详情页是否展示「亲人指数」卡片（默认开启）
+ * - ratingPublicOpen   是否开放「公开评分」（星星可点击评分，默认开启）
  * - uploadOpen         是否显示「发现猫咪」入口（默认开启）
  *
  * 支持：
@@ -22,7 +23,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const ACTIONS = ['get', 'update'];
 const SETTINGS_ID = 'global';
-const DEFAULT_SETTINGS = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, detailActionsOpen: true, ratingOpen: true, uploadOpen: true };
+const DEFAULT_SETTINGS = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, detailActionsOpen: true, ratingOpen: true, ratingPublicOpen: true, uploadOpen: true };
 
 /** 确保 settings 集合存在（首次保存时自动创建，已存在则忽略） */
 async function ensureCollection() {
@@ -47,6 +48,7 @@ async function readSettings() {
         guestBrowseOpen: res.data.guestBrowseOpen !== false,
         detailActionsOpen: res.data.detailActionsOpen !== false,
         ratingOpen: res.data.ratingOpen !== false,
+        ratingPublicOpen: res.data.ratingPublicOpen !== false,
         uploadOpen: res.data.uploadOpen !== false,
       };
     }
@@ -94,6 +96,9 @@ exports.main = async (event) => {
       }
       if (event.ratingOpen !== undefined && event.ratingOpen !== null) {
         updates.ratingOpen = event.ratingOpen !== false;
+      }
+      if (event.ratingPublicOpen !== undefined && event.ratingPublicOpen !== null) {
+        updates.ratingPublicOpen = event.ratingPublicOpen !== false;
       }
       if (event.uploadOpen !== undefined && event.uploadOpen !== null) {
         updates.uploadOpen = event.uploadOpen !== false;

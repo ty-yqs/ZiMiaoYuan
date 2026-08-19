@@ -41,6 +41,10 @@
           <el-switch v-model="form.ratingOpen" :disabled="loading" />
           <span class="hint">猫咪详情页的「亲人指数」评分卡片（默认开启）</span>
         </el-form-item>
+        <el-form-item label="开放公开评分">
+          <el-switch v-model="form.ratingPublicOpen" :disabled="loading" />
+          <span class="hint">开启后允许点击星星进行评分，关闭后星星点击无反应</span>
+        </el-form-item>
 
         <el-divider content-position="left">发布入口</el-divider>
         <el-form-item label="显示发现猫咪入口">
@@ -71,6 +75,7 @@ const form = reactive({
   guestBrowseOpen: true,
   detailActionsOpen: true,
   ratingOpen: true,
+  ratingPublicOpen: true,
   uploadOpen: true,
 });
 
@@ -84,6 +89,7 @@ async function load() {
       guestBrowseOpen: boolean;
       detailActionsOpen: boolean;
       ratingOpen: boolean;
+      ratingPublicOpen: boolean;
       uploadOpen: boolean;
     }>('manageSettings', { action: 'get' });
     if (res.code === 0 && res.data) {
@@ -93,6 +99,7 @@ async function load() {
       form.guestBrowseOpen = res.data.guestBrowseOpen !== false;
       form.detailActionsOpen = res.data.detailActionsOpen !== false;
       form.ratingOpen = res.data.ratingOpen !== false;
+      form.ratingPublicOpen = res.data.ratingPublicOpen !== false;
       form.uploadOpen = res.data.uploadOpen !== false;
     } else {
       ElMessage.error(res.message || '加载失败');
@@ -116,6 +123,7 @@ async function onSave() {
       guestBrowseOpen: form.guestBrowseOpen,
       detailActionsOpen: form.detailActionsOpen,
       ratingOpen: form.ratingOpen,
+      ratingPublicOpen: form.ratingPublicOpen,
       uploadOpen: form.uploadOpen,
     });
     if (res.code === 0) {

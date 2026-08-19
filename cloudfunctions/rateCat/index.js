@@ -39,6 +39,16 @@ exports.main = async (event, context) => {
       return fail('猫咪不存在');
     }
 
+    // ==================== 检查「公开评分」开关 ====================
+    try {
+      const settingsRes = await getCollection(COLLECTIONS.SETTINGS).doc('global').get();
+      if (settingsRes && settingsRes.data && settingsRes.data.ratingPublicOpen === false) {
+        return fail('评分功能暂未开放');
+      }
+    } catch (e) {
+      // 读取失败时不拦截（默认开放）
+    }
+
     // ==================== Upsert 评分记录 ====================
     const existRes = await ratingsColl
       .where({ catId, _openid: OPENID })

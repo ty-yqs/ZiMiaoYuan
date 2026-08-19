@@ -28,12 +28,12 @@ exports.main = async (event, context) => {
     const skip = (page - 1) * pageSize;
 
     const countRes = await getCollection(COLLECTIONS.RECORDS)
-      .where({ status: 'approved' })
+      .where({ status: 'approved', type: _.neq('note') })
       .count();
     const total = countRes.total;
 
     const recordsRes = await getCollection(COLLECTIONS.RECORDS)
-      .where({ status: 'approved' })
+      .where({ status: 'approved', type: _.neq('note') })
       .orderBy('createTime', 'desc')
       .skip(skip)
       .limit(pageSize)
