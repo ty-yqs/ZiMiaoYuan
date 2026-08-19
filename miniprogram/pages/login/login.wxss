@@ -109,3 +109,19 @@
   color: #fff;
 }
 
+.skip-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  margin-top: 24rpx;
+  font-size: var(--font-md);
+  color: var(--color-text-hint);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.skip-btn::after {
+  border: none;
+}
+

@@ -100,6 +100,7 @@ interface IAppOption {
     userInfo?: IUser;
     isAdmin: boolean;
     needRefreshDetail?: boolean; // 是否需要刷新详情页
+    skipProfileCheck?: boolean;  // 登录页“暂不设置”后跳过本次个人中心校验
   };
   checkLoginStatus: () => Promise<IUser | null>;
 }

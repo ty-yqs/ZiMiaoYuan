@@ -41,6 +41,7 @@
     <button class="submit-btn" bind:tap="onSubmit" disabled="{{!canSubmit}}" loading="{{submitting}}">
       {{submitting ? '保存中...' : '完成设置'}}
     </button>
+    <button class="skip-btn" bind:tap="onSkip">暂不设置</button>
   </view>
 
 </view>

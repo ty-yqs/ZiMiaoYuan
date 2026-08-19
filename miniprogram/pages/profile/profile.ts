@@ -33,7 +33,7 @@ Page({
     cacheCount: 0,
 
     loading: true,
-    showVersion: '2.1.0',
+    showVersion: '2.2.0',
   },
 
   onLoad() {
@@ -43,6 +43,12 @@ Page({
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 4 });
+    }
+
+    // 登录页点击“暂不设置”返回时，跳过本次登录状态校验
+    if (app.globalData.skipProfileCheck) {
+      app.globalData.skipProfileCheck = false;
+      return;
     }
 
     // 检查是否已设置昵称和头像

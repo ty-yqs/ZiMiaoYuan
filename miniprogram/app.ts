@@ -14,6 +14,7 @@ App<IAppOption>({
     userInfo: undefined,
     isAdmin: false,
     needRefreshDetail: false,
+    skipProfileCheck: false,
   },
 
   onLaunch() {

@@ -4,6 +4,7 @@
  * 首次使用或未设置昵称/头像时弹出，
  * 引导用户设置昵称和头像。
  */
+import { ROUTES } from '../../utils/constants';
 import { apiUpdateUser } from '../../utils/api';
 import { showToast, showLoading, hideLoading } from '../../utils/util';
 
@@ -55,6 +56,15 @@ Page({
   checkCanSubmit() {
     const { avatarUrl, nickname } = this.data;
     this.setData({ canSubmit: !!(avatarUrl && nickname.trim()) });
+  },
+
+  /** 暂不设置，直接返回个人中心 */
+  onSkip() {
+    // 标记本次跳过，返回后个人中心不再重新校验登录状态
+    app.globalData.skipProfileCheck = true;
+    wx.navigateBack({
+      fail: () => wx.switchTab({ url: ROUTES.PROFILE }),
+    });
   },
 
   /** 提交 */
