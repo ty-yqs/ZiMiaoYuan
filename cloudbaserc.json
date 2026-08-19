@@ -24,11 +24,6 @@
       "installDependency": true
     },
     {
-      "name": "adminSupporter",
-      "runtime": "Nodejs20.19",
-      "installDependency": true
-    },
-    {
       "name": "adminUpdateCat",
       "runtime": "Nodejs20.19",
       "installDependency": true
@@ -99,17 +94,7 @@
       "installDependency": true
     },
     {
-      "name": "getSponsorQR",
-      "runtime": "Nodejs20.19",
-      "installDependency": true
-    },
-    {
       "name": "getStats",
-      "runtime": "Nodejs20.19",
-      "installDependency": true
-    },
-    {
-      "name": "getSupporters",
       "runtime": "Nodejs20.19",
       "installDependency": true
     },
@@ -140,6 +125,11 @@
     },
     {
       "name": "manageBanners",
+      "runtime": "Nodejs20.19",
+      "installDependency": true
+    },
+    {
+      "name": "manageSettings",
       "runtime": "Nodejs20.19",
       "installDependency": true
     },

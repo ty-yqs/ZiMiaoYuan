@@ -18,7 +18,6 @@ const router = createRouter({
         { path: 'cats', component: () => import('./views/AllCats.vue') },
         { path: 'records', component: () => import('./views/Records.vue') },
         { path: 'users', component: () => import('./views/Users.vue') },
-        { path: 'supporters', component: () => import('./views/Supporters.vue') },
         { path: 'banners', component: () => import('./views/Banners.vue') },
         { path: 'articles', component: () => import('./views/Articles.vue') },
         { path: 'settings', component: () => import('./views/Settings.vue') },

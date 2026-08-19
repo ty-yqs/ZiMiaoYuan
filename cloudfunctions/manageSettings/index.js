@@ -8,7 +8,6 @@
  * - detailActionsOpen  猫咪详情页是否显示底部操作按钮
  * - ratingOpen         猫咪详情页是否展示「亲人指数」卡片（默认开启）
  * - uploadOpen         是否显示「发现猫咪」入口（默认开启）
- * - supportOpen        是否显示「打赏 / 投喂罐头」入口（默认开启）
  *
  * 支持：
  * - get:    获取当前设置（缺失时返回默认值，默认全部开放）
@@ -23,7 +22,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const ACTIONS = ['get', 'update'];
 const SETTINGS_ID = 'global';
-const DEFAULT_SETTINGS = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, detailActionsOpen: true, ratingOpen: true, uploadOpen: true, supportOpen: true };
+const DEFAULT_SETTINGS = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, detailActionsOpen: true, ratingOpen: true, uploadOpen: true };
 
 /** 确保 settings 集合存在（首次保存时自动创建，已存在则忽略） */
 async function ensureCollection() {
@@ -49,7 +48,6 @@ async function readSettings() {
         detailActionsOpen: res.data.detailActionsOpen !== false,
         ratingOpen: res.data.ratingOpen !== false,
         uploadOpen: res.data.uploadOpen !== false,
-        supportOpen: res.data.supportOpen !== false,
       };
     }
   } catch (e) {
@@ -99,9 +97,6 @@ exports.main = async (event) => {
       }
       if (event.uploadOpen !== undefined && event.uploadOpen !== null) {
         updates.uploadOpen = event.uploadOpen !== false;
-      }
-      if (event.supportOpen !== undefined && event.supportOpen !== null) {
-        updates.supportOpen = event.supportOpen !== false;
       }
 
       if (Object.keys(updates).length === 0) {

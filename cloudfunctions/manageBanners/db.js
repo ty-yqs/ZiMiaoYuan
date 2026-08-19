@@ -5,7 +5,6 @@ const COLLECTIONS = {
   USERS: 'users',
   CATS: 'cats',
   RECORDS: 'records',
-  SUPPORTERS: 'supporters',
   BANNERS: 'banners',
   ADMIN_TOKENS: 'adminTokens',
 };

@@ -12,7 +12,6 @@
         <el-menu-item index="/cats">全部猫咪</el-menu-item>
         <el-menu-item index="/records">记录管理</el-menu-item>
         <el-menu-item index="/users">用户管理</el-menu-item>
-        <el-menu-item index="/supporters">赞助管理</el-menu-item>
         <el-menu-item index="/banners">首页头图</el-menu-item>
         <el-menu-item index="/articles">文章管理</el-menu-item>
         <el-menu-item index="/settings">功能设置</el-menu-item>

@@ -5,14 +5,14 @@
  * - 对已设置昵称头像的用户：返回全局开关原值
  * - 对未设置昵称头像的游客：仅在 guestBrowseOpen 开放时才可见
  *
- * 返回 { feedOpen, recordsOpen, notesOpen, uploadOpen, supportOpen }（均为生效值）。
+ * 返回 { feedOpen, recordsOpen, notesOpen, uploadOpen }（均为生效值）。
  */
 const cloud = require('wx-server-sdk');
 const { COLLECTIONS, success, getCollection, isGuestUser } = require('./db');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
-const DEFAULTS = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, uploadOpen: true, supportOpen: true };
+const DEFAULTS = { feedOpen: true, recordsOpen: true, notesOpen: true, guestBrowseOpen: true, uploadOpen: true };
 
 async function readSettings() {
   try {
@@ -24,7 +24,6 @@ async function readSettings() {
         notesOpen: res.data.notesOpen !== false,
         guestBrowseOpen: res.data.guestBrowseOpen !== false,
         uploadOpen: res.data.uploadOpen !== false,
-        supportOpen: res.data.supportOpen !== false,
       };
     }
   } catch (e) {
@@ -45,9 +44,8 @@ exports.main = async () => {
       recordsOpen: raw.recordsOpen && guestAllowed,
       notesOpen: raw.notesOpen && guestAllowed,
       uploadOpen: raw.uploadOpen !== false,
-      supportOpen: raw.supportOpen !== false,
     });
   } catch (err) {
-    return success({ feedOpen: true, recordsOpen: true, notesOpen: true, uploadOpen: true, supportOpen: true });
+    return success({ feedOpen: true, recordsOpen: true, notesOpen: true, uploadOpen: true });
   }
 };

@@ -47,12 +47,6 @@
           <el-switch v-model="form.uploadOpen" :disabled="loading" />
           <span class="hint">首页快捷入口与档案列表页的「发现猫咪」按钮（默认开启）</span>
         </el-form-item>
-
-        <el-divider content-position="left">打赏入口</el-divider>
-        <el-form-item label="显示打赏入口">
-          <el-switch v-model="form.supportOpen" :disabled="loading" />
-          <span class="hint">个人中心「投喂罐头」入口（默认开启）</span>
-        </el-form-item>
       </el-form>
 
       <div class="actions">
@@ -78,7 +72,6 @@ const form = reactive({
   detailActionsOpen: true,
   ratingOpen: true,
   uploadOpen: true,
-  supportOpen: true,
 });
 
 async function load() {
@@ -92,7 +85,6 @@ async function load() {
       detailActionsOpen: boolean;
       ratingOpen: boolean;
       uploadOpen: boolean;
-      supportOpen: boolean;
     }>('manageSettings', { action: 'get' });
     if (res.code === 0 && res.data) {
       form.feedOpen = res.data.feedOpen !== false;
@@ -102,7 +94,6 @@ async function load() {
       form.detailActionsOpen = res.data.detailActionsOpen !== false;
       form.ratingOpen = res.data.ratingOpen !== false;
       form.uploadOpen = res.data.uploadOpen !== false;
-      form.supportOpen = res.data.supportOpen !== false;
     } else {
       ElMessage.error(res.message || '加载失败');
     }
@@ -126,7 +117,6 @@ async function onSave() {
       detailActionsOpen: form.detailActionsOpen,
       ratingOpen: form.ratingOpen,
       uploadOpen: form.uploadOpen,
-      supportOpen: form.supportOpen,
     });
     if (res.code === 0) {
       ElMessage.success(res.message || '设置已保存');
