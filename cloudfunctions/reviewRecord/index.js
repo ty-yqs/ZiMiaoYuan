@@ -6,6 +6,8 @@
  * - reject:  审核拒绝（清理该记录上传的图片）
  * - edit:    编辑记录（描述 / 照片，自动清理被移除的图片并同步猫咪图库）
  * - delete:  删除记录（清理图片并同步猫咪图库）
+ *
+ * 批量审核：传入 recordIds 数组（仅支持 approve / reject），逐条处理并返回汇总。
  */
 const cloud = require('wx-server-sdk');
 const {
@@ -74,6 +76,65 @@ async function syncCatPhotos(catId, oldPhotos, newPhotos) {
   }
 }
 
+/**
+ * 审核单条记录（通过 / 拒绝），供单条与批量复用。
+ * @returns {Promise<{ok: boolean, message: string}>}
+ */
+async function reviewOne(recordId, action, reason) {
+  const recordRes = await getCollection(COLLECTIONS.RECORDS).doc(recordId).get();
+  if (!recordRes.data) {
+    return { ok: false, message: '记录不存在' };
+  }
+
+  const record = recordRes.data;
+  const recordPhotos = record.photos || (record.photo ? [record.photo] : []);
+
+  // 审核通过/拒绝仅对 pending 生效
+  if (record.status !== 'pending') {
+    return { ok: false, message: '该记录已处理' };
+  }
+
+  // 获取提交者 openid（新记录有 userId，旧记录回退 _openid）
+  const submitterOpenid = record.userId || record._openid;
+
+  if (action === 'approve') {
+    // 通过：更新记录状态
+    await getCollection(COLLECTIONS.RECORDS).doc(recordId).update({
+      data: { status: 'approved' },
+    });
+
+    // 如果是照片记录，追加所有照片到猫咪的 photos 数组
+    if (record.type === 'photo' && recordPhotos.length > 0) {
+      const _ = cloud.database().command;
+      await getCollection(COLLECTIONS.CATS).doc(record.catId).update({
+        data: { photos: _.push(recordPhotos) },
+      });
+    }
+
+    await sendReviewNotification(submitterOpenid, '通过', record.createTime, '无', `/pages/index/index`);
+    console.log('[reviewRecord] 记录已通过:', recordId);
+    return { ok: true, message: '记录已通过审核' };
+  }
+
+  if (action === 'reject') {
+    // 拒绝：更新记录状态并存储驳回理由
+    await getCollection(COLLECTIONS.RECORDS).doc(recordId).update({
+      data: { status: 'rejected', rejectReason: reason.trim() },
+    });
+
+    // 拒绝后清理该记录上传的图片（photos + 旧记录的单张 photo，自动去重）
+    const fileIds = [...(record.photos || []), record.photo].filter(Boolean);
+    const delRes = await deleteCloudFiles(fileIds);
+    console.log('[reviewRecord] 已清理拒绝记录图片:', recordId, '删除', delRes.deleted, '失败', delRes.failed);
+
+    await sendReviewNotification(submitterOpenid, '拒绝', record.createTime, reason || '未填写', `/pages/index/index`);
+    console.log('[reviewRecord] 记录已拒绝:', recordId);
+    return { ok: true, message: '记录已拒绝' };
+  }
+
+  return { ok: false, message: '不支持的操作' };
+}
+
 exports.main = async (event, context) => {
   // 权限校验：仅管理员
   const admin = await requireAdmin(event);
@@ -81,14 +142,47 @@ exports.main = async (event, context) => {
     return fail('权限不足，仅管理员可操作', -403);
   }
 
-  const { recordId, action, reason = '', description, photos } = event;
+  const { recordId, recordIds, action, reason = '', description, photos } = event;
 
-  if (!recordId || !['approve', 'reject', 'edit', 'delete'].includes(action)) {
+  if (!action || !['approve', 'reject', 'edit', 'delete'].includes(action)) {
     return fail('参数错误');
   }
 
   try {
-    // 查找记录
+    // 批量审核（仅支持通过 / 拒绝）
+    if (Array.isArray(recordIds) && recordIds.length > 0) {
+      if (action !== 'approve' && action !== 'reject') {
+        return fail('批量操作仅支持通过或拒绝');
+      }
+
+      const ids = recordIds.filter(id => id && typeof id === 'string');
+      const result = { action, total: ids.length, succeeded: 0, failed: 0, failures: [] };
+
+      for (const id of ids) {
+        const r = await reviewOne(id, action, reason);
+        if (r.ok) {
+          result.succeeded++;
+        } else {
+          result.failed++;
+          result.failures.push({ recordId: id, message: r.message });
+        }
+      }
+
+      const verb = action === 'approve' ? '通过' : '拒绝';
+      return success(result, `批量${verb}完成`);
+    }
+
+    // 单条通过 / 拒绝
+    if (action === 'approve' || action === 'reject') {
+      if (!recordId) return fail('参数错误');
+      const r = await reviewOne(recordId, action, reason);
+      if (!r.ok) return fail(r.message);
+      return success(null, r.message);
+    }
+
+    // 编辑 / 删除：仅单条，需先查找记录
+    if (!recordId) return fail('参数错误');
+
     const recordRes = await getCollection(COLLECTIONS.RECORDS).doc(recordId).get();
     if (!recordRes.data) {
       return fail('记录不存在');
@@ -96,52 +190,6 @@ exports.main = async (event, context) => {
 
     const record = recordRes.data;
     const recordPhotos = record.photos || (record.photo ? [record.photo] : []);
-
-    // 审核通过/拒绝仅对 pending 生效；编辑/删除不受状态限制
-    if ((action === 'approve' || action === 'reject') && record.status !== 'pending') {
-      return fail('该记录已处理');
-    }
-
-    // 获取提交者 openid（新记录有 userId，旧记录回退 _openid）
-    const submitterOpenid = record.userId || record._openid;
-    console.log('[reviewRecord] 提交者 openid:', submitterOpenid, 'record.userId:', record.userId, 'record._openid:', record._openid);
-
-    if (action === 'approve') {
-      // 通过：更新记录状态
-      await getCollection(COLLECTIONS.RECORDS).doc(recordId).update({
-        data: { status: 'approved' },
-      });
-
-      // 如果是照片记录，追加所有照片到猫咪的 photos 数组
-      if (record.type === 'photo' && recordPhotos.length > 0) {
-        const _ = cloud.database().command;
-        await getCollection(COLLECTIONS.CATS).doc(record.catId).update({
-          data: { photos: _.push(recordPhotos) },
-        });
-      }
-
-      console.log('[reviewRecord] 准备发送通过通知, openid:', submitterOpenid);
-      await sendReviewNotification(submitterOpenid, '通过', record.createTime, '无', `/pages/index/index`);
-      console.log('[reviewRecord] 记录已通过:', recordId);
-      return success(null, '记录已通过审核');
-    }
-
-    if (action === 'reject') {
-      // 拒绝：更新记录状态并存储驳回理由
-      await getCollection(COLLECTIONS.RECORDS).doc(recordId).update({
-        data: { status: 'rejected', rejectReason: reason.trim() },
-      });
-
-      // 拒绝后清理该记录上传的图片（photos + 旧记录的单张 photo，自动去重）
-      const fileIds = [...(record.photos || []), record.photo].filter(Boolean);
-      const delRes = await deleteCloudFiles(fileIds);
-      console.log('[reviewRecord] 已清理拒绝记录图片:', recordId, '删除', delRes.deleted, '失败', delRes.failed);
-
-      console.log('[reviewRecord] 准备发送拒绝通知, openid:', submitterOpenid);
-      await sendReviewNotification(submitterOpenid, '拒绝', record.createTime, reason || '未填写', `/pages/index/index`);
-      console.log('[reviewRecord] 记录已拒绝:', recordId);
-      return success(null, '记录已拒绝');
-    }
 
     if (action === 'edit') {
       const updateData = {};
