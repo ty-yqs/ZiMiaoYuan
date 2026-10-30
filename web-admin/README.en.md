@@ -31,7 +31,7 @@ web-admin/
 │       ├── ReviewCats.vue   # Pending cats
 │       ├── ReviewEdits.vue  # Edit proposal review
 │       ├── ReviewRecords.vue# Record review
-│       ├── AllCats.vue      # All cats (edit content/photos, toggle adopted/rainbow bridge/missing, delete)
+│       ├── AllCats.vue      # All cats (edit content/photos, download photo archive, toggle adopted/rainbow bridge/missing, delete)
 │       ├── Records.vue      # Record management (review + edit description/photos + delete)
 │       ├── Users.vue        # User management (role toggle + ban/unban + contribution stats)
 │       ├── Supporters.vue   # Sponsorship management (add/edit/delete sponsorship records)

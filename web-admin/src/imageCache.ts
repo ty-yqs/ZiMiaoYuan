@@ -85,6 +85,72 @@ export async function resolveImageUrl(fileId: string): Promise<string> {
 }
 
 /**
+ * 批量解析图片，返回 fileId -> 临时链接 的映射。
+ *
+ * 与逐张调用 resolveImageUrl 不同，这里会按 adminGetImages 的单次上限
+ * （50 个）分批请求，适合打包下载整只猫咪的照片时一次性解析。
+ * 解析失败或文件不存在时不会出现在结果 Map 中。
+ */
+export async function resolveImageUrlMap(fileIds: string[]): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  const ids = [...new Set((fileIds || []).filter(Boolean))];
+  const missing: string[] = [];
+
+  for (const id of ids) {
+    // 非 cloud:// 开头（https / 相对路径）直接使用
+    if (!id.startsWith('cloud://')) {
+      result.set(id, id);
+      continue;
+    }
+
+    if (memCache.has(id)) {
+      result.set(id, memCache.get(id)!);
+      continue;
+    }
+
+    const cached = loadStore()[id];
+    if (cached && cached.url && cached.expiresAt > Date.now()) {
+      memCache.set(id, cached.url);
+      result.set(id, cached.url);
+      continue;
+    }
+
+    missing.push(id);
+  }
+
+  // adminGetImages 单次最多处理 50 个 fileID
+  const BATCH_SIZE = 50;
+  for (let i = 0; i < missing.length; i += BATCH_SIZE) {
+    const chunk = missing.slice(i, i + BATCH_SIZE);
+    try {
+      const res = await callFunction<Array<{ fileId: string; tempFileURL: string }>>(
+        'adminGetImages',
+        { fileIds: chunk }
+      );
+      if (res.code !== 0 || !Array.isArray(res.data)) continue;
+
+      const store = loadStore();
+      let changed = false;
+      for (const item of res.data) {
+        if (!item?.fileId || !item?.tempFileURL) continue;
+        memCache.set(item.fileId, item.tempFileURL);
+        store[item.fileId] = {
+          url: item.tempFileURL,
+          expiresAt: Date.now() + TTL_MS,
+        };
+        result.set(item.fileId, item.tempFileURL);
+        changed = true;
+      }
+      if (changed) saveStore(store);
+    } catch (err) {
+      console.error('[imageCache] 批量解析失败:', err);
+    }
+  }
+
+  return result;
+}
+
+/**
  * 批量解析图片（内部复用单张缓存）
  */
 export async function resolveImageUrls(fileIds: string[]): Promise<string[]> {

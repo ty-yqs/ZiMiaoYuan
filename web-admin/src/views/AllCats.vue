@@ -38,9 +38,17 @@
             <el-tag v-if="row.missing" size="small" type="warning">失踪</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" min-width="300" fixed="right">
+        <el-table-column label="操作" min-width="380" fixed="right">
           <template #default="{ row }">
             <el-button size="small" type="primary" @click="onEdit(row)">编辑</el-button>
+            <el-button
+              size="small"
+              :loading="downloadingId === row._id"
+              :disabled="!!downloadingId && downloadingId !== row._id"
+              @click="onDownloadPhotos(row)"
+            >
+              下载照片
+            </el-button>
             <el-button size="small" @click="toggle(row, 'toggleAdopted')">
               {{ row.adopted ? '取消领养' : '标记领养' }}
             </el-button>
@@ -141,10 +149,11 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElLoading, ElMessage, ElMessageBox } from 'element-plus';
 import CloudImage from '../components/CloudImage.vue';
 import { callFunction, uploadImage } from '../api';
 import { AGE_LABEL, GENDER_LABEL } from '../labels';
+import { downloadCatPhotos } from '../downloadCatPhotos';
 
 // 毛色选项（与小程序 constants.js 的 COLOR_TAG_MAP 保持一致）
 const COLORS = [
@@ -157,6 +166,7 @@ const loading = ref(false);
 const page = ref(1);
 const pageSize = 20;
 const total = ref(0);
+const downloadingId = ref(''); // 正在下载照片的猫咪 _id，防止重复点击
 
 // 编辑弹窗
 const editVisible = ref(false);
@@ -227,6 +237,43 @@ function onEdit(cat: any) {
   editForm.photos = [...(cat.photos || [])];
   editAvatar.value = cat.avatar || '';
   editVisible.value = true;
+}
+
+async function onDownloadPhotos(cat: any) {
+  if (downloadingId.value) return;
+
+  downloadingId.value = cat._id;
+  const loadingInstance = ElLoading.service({
+    lock: true,
+    text: '正在获取照片链接…',
+    background: 'rgba(0, 0, 0, 0.35)',
+  });
+
+  try {
+    const result = await downloadCatPhotos(cat, (progress) => {
+      if (progress.stage === 'resolve') {
+        loadingInstance.setText('正在获取照片链接…');
+      } else if (progress.stage === 'download') {
+        loadingInstance.setText(`正在下载照片 ${progress.current}/${progress.total}…`);
+      } else {
+        loadingInstance.setText(`正在打包压缩包 ${Math.min(100, progress.current)}%…`);
+      }
+    });
+
+    if (result.failedCount > 0) {
+      ElMessage.warning(
+        `已打包 ${result.photoCount} 张照片，另有 ${result.failedCount} 张下载失败`
+      );
+    } else {
+      ElMessage.success(`已打包 ${result.photoCount} 张照片`);
+    }
+  } catch (err: any) {
+    console.error('[AllCats] 下载照片失败:', err);
+    ElMessage.error(err?.message || '下载照片失败');
+  } finally {
+    loadingInstance.close();
+    downloadingId.value = '';
+  }
 }
 
 function removePhoto(i: number) {

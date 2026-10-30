@@ -31,7 +31,7 @@ web-admin/
 │       ├── ReviewCats.vue   # 待审核猫咪
 │       ├── ReviewEdits.vue  # 编辑提案审核
 │       ├── ReviewRecords.vue# 记录审核
-│       ├── AllCats.vue      # 全部猫咪（编辑内容/照片、切换领养/去喵星/失踪、删除）
+│       ├── AllCats.vue      # 全部猫咪（编辑内容/照片、下载照片压缩包、切换领养/去喵星/失踪、删除）
 │       ├── Records.vue      # 记录管理（审核 + 编辑描述/照片 + 删除）
 │       ├── Users.vue        # 用户管理（角色切换 + 封禁/解封 + 贡献统计）
 │       ├── Supporters.vue   # 赞助管理（新增/编辑/删除赞助记录）
